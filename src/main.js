@@ -1,51 +1,7 @@
-import { Clerk } from '@clerk/clerk-js';
+
 import './style.css';
 import { createPostComponent } from './components/createPostComponent.js';
 
-const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-
-console.log('Publishable Key:', clerkPubKey);
-
-async function initializeClerk() {
-    try {
-        // Show loading state
-        document.getElementById('app').innerHTML = `
-            <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-                <p>Loading authentication...</p>
-            </div>
-        `;
-
-        const clerk = new Clerk(clerkPubKey);
-        await clerk.load();
-
-        if (clerk.user) {
-            // Redirect to home page after successful sign-in
-            window.location.href = '/home'; // Change '/home' to your actual home page URL
-            document.getElementById('app').innerHTML = `
-                <div id="user-button"></div>
-                <div id="navbarContainer"></div>
-                <div id="createPostFormContainer"></div>
-            `;
-
-            const userButtonDiv = document.getElementById('user-button');
-            clerk.mountUserButton(userButtonDiv);
-        } else {
-            document.getElementById('app').innerHTML = `
-                <div id="sign-in"></div>
-            `;
-
-            const signInDiv = document.getElementById('sign-in');
-            clerk.mountSignIn(signInDiv);
-        }
-    } catch (error) {
-        console.error('Error initializing Clerk:', error);
-        document.getElementById('app').innerHTML = `
-            <div style="color: red; text-align: center; padding: 20px;">
-                Error loading authentication: ${error.message}
-            </div>
-        `;
-    }
-}
 
 // Function to toggle between dark and light mode
 function toggleDarkMode() {
@@ -98,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Initialize when the page loads
 window.addEventListener('load', initializeClerk);
-
 // Function to initialize editor functionality
 function initializeEditor() {
     const editor = document.getElementById('editor');
@@ -466,3 +421,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
