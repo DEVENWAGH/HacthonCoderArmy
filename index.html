@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EchoBlogs</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <div class="navbar-container">
+          <!-- Logo -->
+          <a href="/"><img class="logo" src="./logo.svg" alt="Logo"></a>
+          <!-- Search Bar -->
+          <div class="search-bar">
+            <input type="text" placeholder="Search posts..." id="search-input" />
+            <i class="fas fa-search" id="search-icon"></i>
+          </div>
+      
+          <!-- Navigation Links and Create Post Button -->
+          <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/blogs">Blog</a></li>
+            <li>
+              <button class="create-post-btn" id="loadCreatePostBtn">Create Post</button>
+            </li>
+          </ul>
+      
+          <!-- User Profile -->
+          <div class="user-profile">
+            <img src="path/to/profile-image.jpg" alt="User Profile" class="profile-img" id="profile-img" />
+          </div>
+      
+          <!-- Dark Mode Toggle Button -->
+          <div class="dark-mode-toggle">
+            <i id="mode-icon" class="fas fa-moon"></i>
+          </div>
+        </div>
+      </nav>
+      <!-- Container for dynamically loaded component -->
+      <div id="createPostFormContainer"></div>
+    </header>
+
+    <!-- Clerk User Button -->
+    <div id="user-button"></div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
