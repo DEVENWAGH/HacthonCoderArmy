@@ -101,13 +101,12 @@ export function createPostComponent() {
         const toolbarButtons = document.querySelectorAll('.editor-toolbar button');
         const contentTextarea = document.getElementById('content');
         const insertImageBtn = document.getElementById('insertImageBtn');
-        const uploadedImagesContainer = document.getElementById('uploadedImagesList');
 
         toolbarButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const command = button.getAttribute('data-command');
                 const value = button.getAttribute('data-value') || null;
-                document.execCommand(command, false, value);
+                executeCommand(command, value);
                 editor.focus();
             });
         });
@@ -116,56 +115,7 @@ export function createPostComponent() {
             const imageInput = document.createElement('input');
             imageInput.type = 'file';
             imageInput.accept = 'image/*';
-            imageInput.onchange = (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        const img = document.createElement('img');
-                        img.src = event.target.result;
-                        img.style.maxWidth = '100px';
-                        img.style.height = 'auto';
-                        img.style.cursor = 'pointer';
-                        img.classList.add('thumbnail');
-                        img.addEventListener('click', () => {
-                            const modal = document.createElement('div');
-                            modal.style.cssText = `
-                                display: flex;
-                                position: fixed;
-                                top: 0;
-                                left: 0;
-                                width: 100%;
-                                height: 100%;
-                                background: rgba(0,0,0,0.9);
-                                z-index: 1000;
-                                justify-content: center;
-                                align-items: center;
-                                cursor: pointer;
-                            `;
-                            modal.innerHTML = `<img src="${event.target.result}" style="max-width: 90%; max-height: 90%; object-fit: contain;">`;
-                            modal.addEventListener('click', () => {
-                                modal.style.display = 'none';
-                            });
-                            document.body.appendChild(modal);
-                        });
-
-                        const uploadedImageDiv = document.createElement('div');
-                        uploadedImageDiv.className = 'uploaded-image-item';
-                        uploadedImageDiv.style.position = 'relative';
-                        uploadedImageDiv.appendChild(img);
-                        uploadedImageDiv.innerHTML += `
-                            <button type="button" class="remove-image-btn">×</button>
-                        `;
-                        uploadedImagesContainer.appendChild(uploadedImageDiv);
-
-                        uploadedImageDiv.querySelector('.remove-image-btn').addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            uploadedImagesContainer.removeChild(uploadedImageDiv);
-                        });
-                    };
-                    reader.readAsDataURL(file);
-                }
-            };
+            imageInput.onchange = handleImageUpload;
             imageInput.click();
         });
 
@@ -212,7 +162,7 @@ export function createPostComponent() {
         function handleCoverImage(file) {
             const reader = new FileReader();
             reader.onload = (event) => {
-                coverImagePreview.src = event.target.result;
+                coverImagePreview.src = typeof event.target.result === 'string' ? event.target.result : '';
                 coverImagePreview.style.display = 'block';
                 coverImagePlaceholder.style.display = 'none';
                 removeCoverImageBtn.style.display = 'flex';
@@ -229,6 +179,68 @@ export function createPostComponent() {
             removeCoverImageBtn.style.display = 'none';
         });
     };
+
+    function executeCommand(command, value = null) {
+        if (document.queryCommandSupported(command)) {
+            if (command === 'bold' || command === 'italic' || command === 'insertOrderedList' || command === 'insertUnorderedList' || command === 'formatBlock') {
+                document.execCommand(command, false, value);
+            } else {
+                console.warn(`Command "${command}" is not supported.`);
+            }
+        }
+    }
+
+    function handleImageUpload(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = document.createElement('img');
+                img.src = event.target.result.toString();
+                img.style.maxWidth = '100px';
+                img.style.height = 'auto';
+                img.style.cursor = 'pointer';
+                img.classList.add('thumbnail');
+                img.addEventListener('click', () => handleImageClick(event));
+
+function createImageModal(imageSrc) {
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.9);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    `;
+    modal.innerHTML = `<img src="${imageSrc}" style="max-width: 90%; max-height: 90%; object-fit: contain;">`;
+    modal.addEventListener('click', () => {
+        modal.style.display = 'none';
+    modal.addEventListener('click', hideModal);
+    document.body.appendChild(modal);
+}
+
+function hideModal() {
+    modal.style.display = 'none';
+}               const uploadedImageDiv = document.createElement('div');
+                uploadedImageDiv.className = 'uploaded-image-item';
+                uploadedImageDiv.style.position = 'relative';
+                uploadedImageDiv.appendChild(img);
+                uploadedImageDiv.innerHTML += `
+                    <button type="button" class="remove-image-btn">×</button>
+                `;
+                document.getElementById('uploadedImagesList').appendChild(uploadedImageDiv);
+
+                uploadedImageDiv.querySelector('.remove-image-btn').addEventListener('click', (e) => handleRemoveImage(e, uploadedImageDiv));
+            };
+            reader.readAsDataURL(file);
+        }
+    }
 
     return { template, initializeCreatePost };
 }

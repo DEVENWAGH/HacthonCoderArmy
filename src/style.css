@@ -669,16 +669,31 @@ body:not(.dark-mode) .darklogo {
   margin-left: 20px;
 }
 
-.profile-img {
-  width: 40px;
-  height: 40px;
+.profile-img:hover {
+  opacity: 0.8;
+}
+
+
+#user-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cl-userButton {
+  width: 50px; /* Increase the size */
+  height: 50px; /* Increase the size */
+}
+
+.cl-userButton img {
+  width: 100%; /* Ensure the image fits the container */
+  height: 100%; /* Ensure the image fits the container */
   border-radius: 50%;
-  border: 2px solid #ffffff;
   object-fit: cover;
   cursor: pointer;
 }
 
-.profile-img:hover {
+.cl-userButton img:hover {
   opacity: 0.8;
 }
 
@@ -701,10 +716,12 @@ body:not(.dark-mode) .darklogo {
 
 #createPostFormContainer {
   margin: 0;
-  padding: 0;
 }
 
-/* Form Elements */
+#createPostForm#createPostFormContainer {
+  margin: 0;
+  padding: 0;
+}nts */
 .form-group {
   margin-bottom: 20px;
 }

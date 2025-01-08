@@ -56,7 +56,7 @@ window.addEventListener('load', initializeClerk);
 // Function to initialize editor functionality
 function initializeEditor() {
     const editor = document.getElementById('editor');
-    const toolbar = document.querySelector('.editor-toolbar');
+
     const contentTextarea = document.getElementById('content');
     const insertImageBtn = document.getElementById('insertImageBtn');
     const uploadedImagesContainer = document.getElementById('uploadedImagesList');
@@ -150,36 +150,28 @@ function initializeEditor() {
                     img.style.cursor = 'pointer'; // Add pointer cursor
                     
                     // Add click event to show full size image
-                    img.addEventListener('click', () => {
-                        modal.innerHTML = `<img src="${event.target.result}" style="max-width: 90%; max-height: 90%; object-fit: contain;">`;
-                        modal.style.display = 'flex';
-                    });
+                    img.addEventListener('click', handleImageClick.bind(null, event, modal));
                     
-                    document.execCommand('insertHTML', false, img.outerHTML); // Insert the image into the editor
+                    editor.appendChild(img); // Insert the image into the editor
 
                     // Display the uploaded image in the uploaded images container
                     const uploadedImageDiv = document.createElement('div');
                     uploadedImageDiv.className = 'uploaded-image-item';
                     uploadedImageDiv.innerHTML = `
                         <div style="position: relative; display: inline-block;">
-                            <img src="${event.target.result}" alt="Uploaded Image" style="max-width: 100px; height: auto; cursor: pointer;">
+                            <img src="${String(event.target.result)}" alt="Uploaded Image" style="max-width: 100px; height: auto; cursor: pointer;">
                             <button type="button" class="remove-image-btn" style="position: absolute; top: 0; right: 0; background: red; color: white; border: none; cursor: pointer;">×</button>
                         </div>
                     `;
                     
                     // Add click event to thumbnail for full size view
-                    uploadedImageDiv.querySelector('img').addEventListener('click', () => {
-                        modal.innerHTML = `<img src="${event.target.result}" style="max-width: 90%; max-height: 90%; object-fit: contain;">`;
-                        modal.style.display = 'flex';
-                    });
+                    uploadedImageDiv.querySelector('img').addEventListener('click', handleImageClick.bind(null, event, modal));
                     
                     uploadedImagesContainer.appendChild(uploadedImageDiv);
 
                     // Add event listener to remove the image
-                    uploadedImageDiv.querySelector('.remove-image-btn').addEventListener('click', (e) => {
-                        e.stopPropagation(); // Prevent the click event from bubbling up
-                        uploadedImagesContainer.removeChild(uploadedImageDiv);
-                    });
+                    uploadedImageDiv.querySelector('.remove-image-btn').addEventListener('click', handleRemoveImageClick.bind(null, uploadedImagesContainer, uploadedImageDiv));
+                    uploadedImageDiv.querySelector('.remove-image-btn').addEventListener('click', handleRemoveImageClick.bind(null, uploadedImagesContainer, uploadedImageDiv));
                 };
                 reader.readAsDataURL(file);
             }
@@ -237,12 +229,6 @@ function handleCoverImageUpload() {
     });
 }
 
-// Initialize when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-    initializeEditor();
-    handleCoverImageUpload();
-});
-
 // Initialize create post button
 document.addEventListener('DOMContentLoaded', () => {
     const createPostBtn = document.querySelector('.create-post-btn') || document.getElementById('loadCreatePostBtn');
@@ -263,6 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 createPostFormContainer.style.display = 'block';
                 initializeCreatePost();
                 initializeEditor();
+                initializeTagsInput(); // Make sure this is called
             }
         });
     }
@@ -418,7 +405,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (createPostFormContainer) {
                 const { template, initializeCreatePost } = createPostComponent();
                 createPostFormContainer.innerHTML = template;
-                createPostFormContainer.style.display = 'block';
                 initializeCreatePost();
                 initializeEditor();
                 initializeTagsInput(); // Make sure this is called
