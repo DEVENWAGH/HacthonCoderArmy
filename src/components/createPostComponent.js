@@ -181,12 +181,10 @@ export function createPostComponent() {
     };
 
     function executeCommand(command, value = null) {
-        if (document.queryCommandSupported(command)) {
-            if (command === 'bold' || command === 'italic' || command === 'insertOrderedList' || command === 'insertUnorderedList' || command === 'formatBlock') {
-                document.execCommand(command, false, value);
-            } else {
-                console.warn(`Command "${command}" is not supported.`);
-            }
+        if (command === 'bold' || command === 'italic' || command === 'insertOrderedList' || command === 'insertUnorderedList' || command === 'formatBlock') {
+            document.execCommand(command, false, value);
+        } else {
+            console.warn(`Command "${command}" is not supported.`);
         }
     }
 
@@ -196,14 +194,16 @@ export function createPostComponent() {
             const reader = new FileReader();
             reader.onload = (event) => {
                 const img = document.createElement('img');
-                img.src = event.target.result.toString();
+                img.src = typeof event.target.result === 'string' ? event.target.result : '';
                 img.style.maxWidth = '100px';
                 img.style.height = 'auto';
                 img.style.cursor = 'pointer';
                 img.classList.add('thumbnail');
-                img.addEventListener('click', () => {
-                    createImageModal(event.target.result.toString());
-                });
+                img.addEventListener('click', handleImageClick);
+
+function handleImageClick() {
+    createImageModal(typeof event.target.result === 'string' ? event.target.result : '');
+}
 
 function createImageModal(imageSrc) {
     const modal = document.createElement('div');
@@ -221,10 +221,12 @@ function createImageModal(imageSrc) {
         cursor: pointer;
     `;
     modal.innerHTML = `<img src="${imageSrc}" style="max-width: 90%; max-height: 90%; object-fit: contain;">`;
-    modal.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
+    modal.addEventListener('click', closeModal);
     document.body.appendChild(modal);
+}
+
+function closeModal() {
+    modal.style.display = 'none';
 }
 
                 const uploadedImageDiv = document.createElement('div');
