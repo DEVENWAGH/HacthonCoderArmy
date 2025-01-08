@@ -58,7 +58,7 @@ export function createPostComponent() {
                 </div>
                 <div class="uploaded-images-container" id="uploadedImagesContainer">
                     <h4>Uploaded Images</h4>
-                    <div id="uploadedImagesList"></div>
+                    <div id="uploadedImagesList" class="uploaded-images-list"></div>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="preview-btn" id="previewPostBtn">Preview</button>
@@ -95,6 +95,139 @@ export function createPostComponent() {
                 initializePreview();
             });
         }
+
+        // Initialize editor functionality
+        const editor = document.getElementById('editor');
+        const toolbarButtons = document.querySelectorAll('.editor-toolbar button');
+        const contentTextarea = document.getElementById('content');
+        const insertImageBtn = document.getElementById('insertImageBtn');
+        const uploadedImagesContainer = document.getElementById('uploadedImagesList');
+
+        toolbarButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const command = button.getAttribute('data-command');
+                const value = button.getAttribute('data-value') || null;
+                document.execCommand(command, false, value);
+                editor.focus();
+            });
+        });
+
+        insertImageBtn.addEventListener('click', () => {
+            const imageInput = document.createElement('input');
+            imageInput.type = 'file';
+            imageInput.accept = 'image/*';
+            imageInput.onchange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const img = document.createElement('img');
+                        img.src = event.target.result;
+                        img.style.maxWidth = '100px';
+                        img.style.height = 'auto';
+                        img.style.cursor = 'pointer';
+                        img.classList.add('thumbnail');
+                        img.addEventListener('click', () => {
+                            const modal = document.createElement('div');
+                            modal.style.cssText = `
+                                display: flex;
+                                position: fixed;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background: rgba(0,0,0,0.9);
+                                z-index: 1000;
+                                justify-content: center;
+                                align-items: center;
+                                cursor: pointer;
+                            `;
+                            modal.innerHTML = `<img src="${event.target.result}" style="max-width: 90%; max-height: 90%; object-fit: contain;">`;
+                            modal.addEventListener('click', () => {
+                                modal.style.display = 'none';
+                            });
+                            document.body.appendChild(modal);
+                        });
+
+                        const uploadedImageDiv = document.createElement('div');
+                        uploadedImageDiv.className = 'uploaded-image-item';
+                        uploadedImageDiv.style.position = 'relative';
+                        uploadedImageDiv.appendChild(img);
+                        uploadedImageDiv.innerHTML += `
+                            <button type="button" class="remove-image-btn">×</button>
+                        `;
+                        uploadedImagesContainer.appendChild(uploadedImageDiv);
+
+                        uploadedImageDiv.querySelector('.remove-image-btn').addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            uploadedImagesContainer.removeChild(uploadedImageDiv);
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            imageInput.click();
+        });
+
+        editor.addEventListener('input', () => {
+            contentTextarea.value = editor.innerHTML;
+        });
+
+        // Handle cover image upload via drag-and-drop
+        const coverImageContainer = document.getElementById('coverImageContainer');
+        const coverImagePreview = document.getElementById('coverImagePreview');
+        const coverImagePlaceholder = document.getElementById('coverImagePlaceholder');
+        const removeCoverImageBtn = document.getElementById('removeCoverImage');
+
+        coverImageContainer.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            coverImageContainer.classList.add('drag-over');
+        });
+
+        coverImageContainer.addEventListener('dragleave', () => {
+            coverImageContainer.classList.remove('drag-over');
+        });
+
+        coverImageContainer.addEventListener('drop', (e) => {
+            e.preventDefault();
+            coverImageContainer.classList.remove('drag-over');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleCoverImage(files[0]);
+            }
+        });
+
+        // Handle cover image upload via click
+        coverImageContainer.addEventListener('click', () => {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.onchange = (e) => {
+                handleCoverImage(e.target.files[0]);
+            };
+            fileInput.click();
+        });
+
+        // Function to handle cover image
+        function handleCoverImage(file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                coverImagePreview.src = event.target.result;
+                coverImagePreview.style.display = 'block';
+                coverImagePlaceholder.style.display = 'none';
+                removeCoverImageBtn.style.display = 'flex';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Remove cover image
+        removeCoverImageBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent the click event from bubbling up
+            coverImagePreview.src = '';
+            coverImagePreview.style.display = 'none';
+            coverImagePlaceholder.style.display = 'flex';
+            removeCoverImageBtn.style.display = 'none';
+        });
     };
 
     return { template, initializeCreatePost };

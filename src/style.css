@@ -88,7 +88,314 @@ body.dark-mode .preview-post-container {
 body.dark-mode .preview-header {
   border-bottom-color: #444;
 }
+/* Add these styles to your existing CSS */
 
+/* Thumbnail styles */
+.thumbnail {
+  max-width: 100px;  body.dark-mode #editor {
+    background-color: #333;
+    border-color: #444;
+    color: #fff;
+  }
+  
+  body.dark-mode #editor:focus {
+    border-color: #ff8c00;
+  }
+  
+  body.dark-mode .preview-post-container {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+  
+  body.dark-mode .preview-header {
+    border-bottom-color: #444;
+  }
+  
+  /* Add these styles to your existing CSS */
+  
+  /* Thumbnail styles */
+  .thumbnail {
+    max-width: 100px;
+    height: auto;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 4px;
+    transition: transform 0.2s;
+  }
+  
+  .thumbnail:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Remove image button styles */
+  .remove-image-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 2px 5px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+  }
+  
+  .remove-image-btn:hover {
+    background: darkred;
+  }
+  
+  /* Modal styles */
+  .image-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    max-width: 90%;
+    max-height: 90vh;
+    object-fit: contain;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .close-modal {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    color: #f1f1f1;
+    font-size: 35px;
+    cursor: pointer;
+  }
+  /* Add these styles to your existing CSS */
+  
+  /* Thumbnail styles */
+  .thumbnail {
+    max-width: 100px;
+    height: auto;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 4px;
+    transition: transform 0.2s;
+    position: relative;
+  }
+  
+  .thumbnail:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Remove image button styles */
+  .remove-image-btn {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 2px 5px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+  }
+  
+  .remove-image-btn:hover {
+    background: darkred;
+  }
+  
+  /* Modal styles */
+  .image-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    max-width: 90%;
+    max-height: 90vh;
+    object-fit: contain;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .close-modal {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    color: #f1f1f1;
+    font-size: 35px;
+    cursor: pointer;
+  }
+  
+  .close-modal:hover {
+    color: #ff8c00;
+  }
+  
+  /* Flex container for uploaded images */
+  .uploaded-images-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .close-modal:hover {
+    color: #ff8c00;
+  }  /* Add these styles to your existing CSS */
+  
+  /* Thumbnail styles */
+  .thumbnail {
+    max-width: 100px;
+    height: auto;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 4px;
+    transition: transform 0.2s;
+    position: relative;
+  }
+  
+  .thumbnail:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Remove image button styles */
+  .remove-image-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 2px 5px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+  }
+  
+  .remove-image-btn:hover {
+    background: darkred;
+  }
+  
+  /* Modal styles */
+  .image-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    max-width: 90%;
+    max-height: 90vh;
+    object-fit: contain;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .close-modal {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    color: #f1f1f1;
+    font-size: 35px;
+    cursor: pointer;
+  }
+  
+  .close-modal:hover {
+    color: #ff8c00;
+  }
+  
+  /* Flex container for uploaded images */
+  .uploaded-images-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  height: auto;
+  cursor: pointer;
+  margin: 5px;
+  border-radius: 4px;
+  transition: transform 0.2s;
+}
+
+.thumbnail:hover {
+  transform: scale(1.05);
+}
+
+/* Modal styles */
+.image-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  max-width: 90%;
+  max-height: 90vh;
+  object-fit: contain;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  color: #f1f1f1;
+  font-size: 35px;
+  cursor: pointer;
+}
+
+.close-modal:hover {
+  color: #ff8c00;
+}
 body.dark-mode .preview-header h2,
 body.dark-mode .preview-title,
 body.dark-mode .preview-content,
@@ -149,6 +456,93 @@ body.dark-mode .dark-mode-toggle i.fa-sun {
   display: flex;
   justify-content: center;
   align-items: center;
+}/* Add these styles to your existing CSS */
+
+/* Thumbnail styles */
+.thumbnail {
+  max-width: 100px;
+  height: auto;
+  cursor: pointer;
+  margin: 5px;
+  border-radius: 4px;
+  transition: transform 0.2s;
+  position: relative;
+}
+
+.thumbnail:hover {
+  transform: scale(1.05);
+}
+
+/* Remove image button styles */
+.remove-image-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 5px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+.remove-image-btn:hover {
+  background: darkred;
+}
+
+/* Modal styles */
+.image-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  max-width: 90%;
+  max-height: 90vh;
+  object-fit: contain;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  color: #f1f1f1;
+  font-size: 35px;
+  cursor: pointer;
+}
+
+.close-modal:hover {
+  color: #ff8c00;
+}
+
+/* Flex container for uploaded images */
+.uploaded-images-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.uploaded-image-item {
+  position: relative;
+  display: inline-block;
 }
 
 .nav-right {
@@ -770,6 +1164,7 @@ body.dark-mode .cl-component {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 
 .close-modal {
   position: absolute;
