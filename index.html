@@ -11,8 +11,14 @@
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
+    <header></header>
     <div id="app">
-      <!-- Content will be dynamically loaded here based on auth state -->
+        <div id="navbarContainer">
+            <!-- Navbar content here -->
+        </div>
+        <div id="createPostFormContainer" style="display: none;">
+            <!-- Create post component will be injected here -->
+        </div>
     </div>
 
     <!-- Initialize Clerk with your Clerk Publishable Key -->
@@ -24,49 +30,21 @@
       type="text/javascript"
     ></script>
 
-    <script>
+    <script type="module">
       window.addEventListener('load', async function () {
         // Load Clerk
         await Clerk.load();
 
         // Check if the user is authenticated
         if (Clerk.user) {
-          // Render authenticated layout
-          document.getElementById('app').innerHTML = `
-            <header>
-              <nav class="navbar">
-                <div class="navbar-container">
-                  <a href="/"><img class="logo" src="./logo.svg" alt="Logo" /></a>
-                  
-                  <div class="search-bar">
-                    <input type="text" placeholder="Search posts..." id="search-input" />
-                    <i class="fas fa-search" id="search-icon"></i>
-                  </div>
-
-                  <ul class="nav-links">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/blogs">Blog</a></li>
-                    <li>
-                      <button class="create-post-btn" id="loadCreatePostBtn">
-                        Create Post
-                      </button>
-                    </li>
-                  </ul>
-
-                  <div id="user-button"></div>
-
-                  <div class="dark-mode-toggle">
-                    <i id="mode-icon" class="fas fa-moon"></i>
-                  </div>
-                </div>
-              </nav>
-              <div id="createPostFormContainer"></div>
-            </header>
-          `;
-
-          // Mount Clerk user button
-          const userButtonDiv = document.getElementById('user-button');
-          Clerk.mountUserButton(userButtonDiv);
+          // Import navbar component
+          const { navbarComponent } = await import('./src/components/navbarComponent.js');
+          
+          // Create and initialize navbar
+          const navbar = navbarComponent();
+          document.getElementById('navbarContainer').innerHTML = navbar.template;
+          navbar.initializeNavbar();
+          
         } else {
           // Render sign in page
           document.getElementById('app').innerHTML = `

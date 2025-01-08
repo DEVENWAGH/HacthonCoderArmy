@@ -131,11 +131,8 @@ body.dark-mode .dark-mode-toggle i.fa-sun {
 .navbar {
   background-color: #000000 !important;
   color: #fff;
-  padding: 15px 20px;
-  height: 80px;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  padding: 0.5rem 0;
+  width: 100%;
 }
 
 .navbar-container {
@@ -214,17 +211,12 @@ body:not(.dark-mode) .darklogo {
 
 /* Buttons */
 .create-post-btn {
-  padding: 10px 20px;
   background-color: #ff8c00;
-  color: #fff;
+  color: white;
   border: none;
+  padding: 0.35rem 0.75rem;
   border-radius: 4px;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 16px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: background-color 0.2s;
 }
 
 .create-post-btn:hover {
@@ -267,8 +259,7 @@ body:not(.dark-mode) .darklogo {
   background-color: #333333;
   color: #ffffff;
   border: 1px solid #444444;
-  padding: 8px;
-  font-size: 16px;
+  padding: 0.35rem;
   border-radius: 4px;
   width: 30vw;
 }
@@ -281,8 +272,7 @@ body:not(.dark-mode) .darklogo {
 .user-profile {
   display: flex;
   align-items: center;
-  position: relative;
-  cursor: pointer;
+  margin-left: 20px;
 }
 
 .profile-img {
@@ -838,4 +828,47 @@ body.dark-mode .cl-component {
 /* Dark mode support */
 body.dark-mode .suggestion-item.no-category {
     color: #999;
+}
+
+/* User Profile Styles */
+.user-profile {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+#user-button {
+    min-width: 40px;
+    height: 40px;
+}
+
+/* Make sure Clerk button is visible */
+.cl-userButtonBox {
+    color: white !important;
+}
+
+.cl-userButtonTrigger {
+    color: white !important;
+}
+
+/* Dark mode toggle adjustments */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-left: 20px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.dark-mode-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode-toggle i {
+    color: white;
+    font-size: 20px;
 }
