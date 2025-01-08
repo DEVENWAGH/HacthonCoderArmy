@@ -201,7 +201,9 @@ export function createPostComponent() {
                 img.style.height = 'auto';
                 img.style.cursor = 'pointer';
                 img.classList.add('thumbnail');
-                img.addEventListener('click', () => handleImageClick(event));
+                img.addEventListener('click', () => {
+                    createImageModal(event.target.result.toString());
+                });
 
 function createImageModal(imageSrc) {
     const modal = document.createElement('div');
@@ -221,13 +223,11 @@ function createImageModal(imageSrc) {
     modal.innerHTML = `<img src="${imageSrc}" style="max-width: 90%; max-height: 90%; object-fit: contain;">`;
     modal.addEventListener('click', () => {
         modal.style.display = 'none';
-    modal.addEventListener('click', hideModal);
+    });
     document.body.appendChild(modal);
 }
 
-function hideModal() {
-    modal.style.display = 'none';
-}               const uploadedImageDiv = document.createElement('div');
+                const uploadedImageDiv = document.createElement('div');
                 uploadedImageDiv.className = 'uploaded-image-item';
                 uploadedImageDiv.style.position = 'relative';
                 uploadedImageDiv.appendChild(img);
@@ -236,7 +236,10 @@ function hideModal() {
                 `;
                 document.getElementById('uploadedImagesList').appendChild(uploadedImageDiv);
 
-                uploadedImageDiv.querySelector('.remove-image-btn').addEventListener('click', (e) => handleRemoveImage(e, uploadedImageDiv));
+                uploadedImageDiv.querySelector('.remove-image-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    document.getElementById('uploadedImagesList').removeChild(uploadedImageDiv);
+                });
             };
             reader.readAsDataURL(file);
         }
