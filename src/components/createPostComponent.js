@@ -222,7 +222,7 @@ export function createPostComponent() {
 
         // Remove cover image
         removeCoverImageBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent the click event from bubbling up
+            e.stopPropagation();
             coverImagePreview.src = '';
             coverImagePreview.style.display = 'none';
             coverImagePlaceholder.style.display = 'flex';
