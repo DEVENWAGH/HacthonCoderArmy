@@ -37,23 +37,11 @@ export function navbarComponent() {
         // Dark mode toggle
         const darkModeToggle = document.querySelector('.dark-mode-toggle');
         if (darkModeToggle) {
-            darkModeToggle.addEventListener('click', () => {
-                const body = document.body;
-                const modeIcon = document.getElementById('mode-icon');
-                
-                if (!body.classList.contains('dark-mode')) {
-                    body.classList.add('dark-mode');
-                    modeIcon.classList.remove('fa-moon');
-                    modeIcon.classList.add('fa-sun');
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    body.classList.remove('dark-mode');
-                    modeIcon.classList.remove('fa-sun');
-                    modeIcon.classList.add('fa-moon');
-                    localStorage.setItem('theme', 'light');
-                }
-            });
+            darkModeToggle.addEventListener('click', toggleDarkMode);
         }
+
+        // Set initial theme
+        setInitialTheme();
 
         // Create post button
         const createPostBtn = document.getElementById('loadCreatePostBtn');
@@ -85,9 +73,32 @@ export function navbarComponent() {
                 }
             });
         }
+    };
 
-        // Set initial theme
-        const savedTheme = localStorage.getItem('theme') || 'light';
+    // Function to toggle between dark and light mode
+    function toggleDarkMode() {
+        const body = document.body;
+        const modeIcon = document.getElementById('mode-icon');
+
+        // Toggle dark mode and light mode classes on body
+        if (body.classList.contains('dark-mode')) {
+            // Switching to light mode
+            body.classList.remove('dark-mode');
+            modeIcon.classList.remove('fa-sun');
+            modeIcon.classList.add('fa-moon');
+            localStorage.setItem('theme', 'light');
+        } else {
+            // Switching to dark mode
+            body.classList.add('dark-mode');
+            modeIcon.classList.remove('fa-moon');
+            modeIcon.classList.add('fa-sun');
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+
+    // Function to set the initial theme based on local storage
+    function setInitialTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'light'; // Default to light theme
         const body = document.body;
         const modeIcon = document.getElementById('mode-icon');
 
@@ -100,7 +111,7 @@ export function navbarComponent() {
             modeIcon.classList.remove('fa-sun');
             modeIcon.classList.add('fa-moon');
         }
-    };
+    }
 
     return { template, initializeNavbar };
 }
