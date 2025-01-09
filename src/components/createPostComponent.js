@@ -1,6 +1,5 @@
 // createPostComponent.js
 
-import { previewComponent } from "./previewComponent.js";
 
 export function createPostComponent(postData = {}) {
   const template = `
@@ -353,7 +352,7 @@ export function createPostComponent(postData = {}) {
           img.style.cursor = "pointer";
           img.classList.add("thumbnail");
           img.addEventListener("click", () =>
-            handleImageClick(compressedImage)
+            handleImageClick()
           );
 
           const uploadedImageDiv = document.createElement("div");
