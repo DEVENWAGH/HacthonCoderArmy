@@ -32,6 +32,8 @@ export function previewComponent(postData) {
 
     const initializePreview = () => {
         const backToEditBtn = document.getElementById('backToEditBtn');
+        const publishBtn = document.getElementById('publishBtn');
+
         if (backToEditBtn) {
             backToEditBtn.addEventListener('click', () => {
                 const createPostFormContainer = document.getElementById('createPostFormContainer');
@@ -40,6 +42,19 @@ export function previewComponent(postData) {
                     createPostFormContainer.innerHTML = template;
                     initializeCreatePost();
                 }
+            });
+        }
+
+        // Handle publish button click
+        if (publishBtn) {
+            publishBtn.addEventListener('click', () => {
+                // Save post data to local storage
+                const posts = JSON.parse(localStorage.getItem('posts')) || [];
+                posts.push(postData);
+                localStorage.setItem('posts', JSON.stringify(posts));
+
+                // Redirect to the home page
+                window.location.href = '/'; // Redirect to the main page
             });
         }
     };

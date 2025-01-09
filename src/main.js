@@ -1,54 +1,6 @@
 import './style.css';
 import { createPostComponent } from './components/createPostComponent.js';
 
-// Function to toggle between dark and light mode
-function toggleDarkMode() {
-    const body = document.body;
-    const modeIcon = document.getElementById('mode-icon');
-
-    // Toggle dark mode and light mode classes on body
-    if (body.classList.contains('dark-mode')) {
-        // Switching to light mode
-        body.classList.remove('dark-mode');
-        modeIcon.classList.remove('fa-sun');
-        modeIcon.classList.add('fa-moon');
-        localStorage.setItem('theme', 'light');
-    } else {
-        // Switching to dark mode
-        body.classList.add('dark-mode');
-        modeIcon.classList.remove('fa-moon');
-        modeIcon.classList.add('fa-sun');
-        localStorage.setItem('theme', 'dark');
-    }
-}
-
-// Function to set the initial theme based on local storage
-function setInitialTheme() {
-    const savedTheme = localStorage.getItem('theme') || 'dark'; // Default to dark theme
-    const body = document.body;
-    const modeIcon = document.getElementById('mode-icon');
-
-    if (savedTheme === 'dark') {
-        body.classList.add('dark-mode');
-        modeIcon.classList.remove('fa-moon');
-        modeIcon.classList.add('fa-sun');
-    } else {
-        body.classList.remove('dark-mode');
-        modeIcon.classList.remove('fa-sun');
-        modeIcon.classList.add('fa-moon');
-    }
-}
-
-// Add event listener to the dark mode toggle button
-document.addEventListener('DOMContentLoaded', () => {
-    const darkModeToggle = document.querySelector('.dark-mode-toggle');
-    if (darkModeToggle) {
-        darkModeToggle.addEventListener('click', toggleDarkMode);
-    }
-    
-    // Set initial theme
-    setInitialTheme();
-});
 
 // Initialize when the page loads
 window.addEventListener('load', initializeClerk);
@@ -411,4 +363,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+});
+
+// Function to display posts on the home page
+function displayPosts() {
+    const postsContainer = document.getElementById('postsContainer'); // Ensure you have this element in your HTML
+    const posts = JSON.parse(localStorage.getItem('posts')) || [];
+
+    postsContainer.innerHTML = posts.map(post => `
+        <div class="post">
+            <h2>${post.title}</h2>
+            ${post.coverImage ? `<img src="${post.coverImage}" alt="Cover Image" class="preview-cover-image">` : ''}
+            <p>${post.content}</p>
+            <div class="tags">${post.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}</div>
+        </div>
+    `).join('');
+}
+
+// Call displayPosts when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    displayPosts(); // Display posts on home page
+    // Other initialization code...
 });
