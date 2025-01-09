@@ -5,7 +5,6 @@ export function previewComponent(postData) {
         <div class="preview-post-container">
             <div class="preview-header">
                 <h2>Preview Post</h2>
-                <button class="edit-post-btn" id="backToEditBtn">Back to Edit</button>
             </div>
             ${postData.coverImage ? `
                 <img src="${postData.coverImage}" alt="Cover" class="preview-cover-image">
@@ -18,6 +17,11 @@ export function previewComponent(postData) {
             </div>
             <div class="preview-content">
                 ${postData.content || ''}
+            </div>
+            <div class="uploaded-images-preview">
+                ${postData.uploadedImages ? postData.uploadedImages.map(image => `
+                    <img src="${image}" alt="Uploaded Image" class="preview-uploaded-image">
+                `).join('') : ''}
             </div>
             <div class="form-actions">
                 <button type="button" class="submit-btn" id="publishBtn">Publish Post</button>

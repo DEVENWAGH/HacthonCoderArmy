@@ -2,7 +2,7 @@
 
 import { previewComponent } from './previewComponent.js';
 
-export function createPostComponent() {
+export function createPostComponent(postData = {}) {
     const template = `
         <div class="create-post-container" id="createPostContainer" style="margin-top: 20px;">
             <div class="logo-container">
@@ -15,32 +15,34 @@ export function createPostComponent() {
                             <i class="fas fa-image"></i>
                             <span>Click or drag image to add cover image</span>
                         </div>
-                        <img id="coverImagePreview" class="cover-image-preview" src="" alt="" style="display: none;">
+                        <img id="coverImagePreview" class="cover-image-preview" src="${postData.coverImage || ''}" alt="" style="display: ${postData.coverImage ? 'block' : 'none'};">
                         <button type="button" class="remove-cover-image-btn" id="removeCoverImage" style="display: none;">×</button>
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="text" id="title" name="title" placeholder="Post Title" required>
+                    <input type="text" id="title" name="title" placeholder="Post Title" required value="${postData.title || ''}">
                 </div>
                 <div class="form-group">
                     <label for="category">Category <span style="color: #ff8c00;">*</span></label>
                     <select id="category" name="category" required>
                         <option value="">Select a category</option>
-                        <option value="technology">Technology</option>
-                        <option value="lifestyle">Lifestyle</option>
-                        <option value="travel">Travel</option>
-                        <option value="food">Food</option>
+                        <option value="technology" ${postData.category === 'technology' ? 'selected' : ''}>Technology</option>
+                        <option value="lifestyle" ${postData.category === 'lifestyle' ? 'selected' : ''}>Lifestyle</option>
+                        <option value="travel" ${postData.category === 'travel' ? 'selected' : ''}>Travel</option>
+                        <option value="food" ${postData.category === 'food' ? 'selected' : ''}>Food</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="tags">Tags (up to 5)</label>
                     <div class="tags-input-container">
                         <input type="text" class="tags-input" id="tags-input" placeholder="Type to add tags">
-                        <div class="tags-list" id="tags-list"></div>
+                        <div class="tags-list" id="tags-list">
+                            ${postData.tags ? postData.tags.map(tag => `<span class="tag">${tag}</span>`).join('') : ''}
+                        </div>
                         <div class="tag-suggestions" id="tag-suggestions" style="display: none;"></div>
                     </div>
                     <div class="tags-limit-message" style="display: none;">Maximum 5 tags allowed</div>
-                    <input type="hidden" id="tags-hidden" name="tags">
+                    <input type="hidden" id="tags-hidden" name="tags" value='${JSON.stringify(postData.tags || [])}'>
                 </div>
                 <div class="form-group">
                     <label for="content">Content</label>
@@ -50,15 +52,21 @@ export function createPostComponent() {
                         <button type="button" class="editor-btn" data-command="insertOrderedList"><i class="fas fa-list-ol"></i></button>
                         <button type="button" class="editor-btn" data-command="insertUnorderedList"><i class="fas fa-list-ul"></i></button>
                         <button type="button" class="editor-btn" data-command="formatBlock" data-value="h2"><i class="fas fa-heading"></i></button>
-                        <button type="button" class="editor-btn" data-command="formatBlock" data-value="blockquote"><i class="fas fa-quote-right"></i></button>
                         <button type="button" class="editor-btn" id="insertImageBtn"><i class="fas fa-image"></i></button>
                     </div>
-                    <div id="editor" contenteditable="true" class="form-group input"></div>
+                    <div id="editor" contenteditable="true" class="form-group input">${postData.content || ''}</div>
                     <textarea id="content" name="content" required style="display: none;"></textarea>
                 </div>
                 <div class="uploaded-images-container" id="uploadedImagesContainer">
                     <h4>Uploaded Images</h4>
-                    <div id="uploadedImagesList" class="uploaded-images-list"></div>
+                    <div id="uploadedImagesList" class="uploaded-images-list">
+                        ${postData.uploadedImages ? postData.uploadedImages.map(image => `
+                            <div class="uploaded-image-item">
+                                <img src="${image}" alt="Uploaded Image" style="max-width: 100px; height: auto;">
+                                <button type="button" class="remove-image-btn">×</button>
+                            </div>
+                        `).join('') : ''}
+                    </div>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="preview-btn" id="previewPostBtn">Preview</button>
@@ -87,7 +95,8 @@ export function createPostComponent() {
                     title: document.getElementById('title').value,
                     category: document.getElementById('category').value,
                     tags: Array.from(document.querySelectorAll('#tags-list .tag')).map(tag => tag.textContent),
-                    content: document.getElementById('editor').innerHTML
+                    content: document.getElementById('editor').innerHTML,
+                    uploadedImages: Array.from(document.querySelectorAll('#uploadedImagesList img')).map(img => img.src)
                 };
 
                 const { template, initializePreview } = previewComponent(postData);
