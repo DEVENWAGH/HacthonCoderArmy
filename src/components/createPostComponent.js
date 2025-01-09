@@ -6,7 +6,7 @@ export function createPostComponent(postData = {}) {
     const template = `
         <div class="create-post-container" id="createPostContainer" style="margin-top: 20px;">
             <div class="logo-container">
-                <a href="/"><img class="darklogo" src="./dark-logo.svg" alt="Logo"></a>
+                <a href="/"><img class="darklogo" id="logoImage" src="./logo.svg" alt="Logo"></a>
             </div>
             <form id="createPostForm">
                 <div class="form-group">
@@ -187,6 +187,9 @@ export function createPostComponent(postData = {}) {
             coverImagePlaceholder.style.display = 'flex';
             removeCoverImageBtn.style.display = 'none';
         });
+
+        // Initialize logo switch based on theme
+        switchLogoBasedOnTheme();
     };
 
     function executeCommand(command, value = null) {
@@ -210,34 +213,6 @@ export function createPostComponent(postData = {}) {
                 img.classList.add('thumbnail');
                 img.addEventListener('click', handleImageClick);
 
-function handleImageClick() {
-    createImageModal(typeof event.target.result === 'string' ? event.target.result : '');
-}
-
-function createImageModal(imageSrc) {
-    const modal = document.createElement('div');
-    modal.style.cssText = `
-        display: flex;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.9);
-        z-index: 1000;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-    `;
-    modal.innerHTML = `<img src="${imageSrc}" style="max-width: 90%; max-height: 90%; object-fit: contain;">`;
-    modal.addEventListener('click', closeModal);
-    document.body.appendChild(modal);
-}
-
-function closeModal() {
-    modal.style.display = 'none';
-}
-
                 const uploadedImageDiv = document.createElement('div');
                 uploadedImageDiv.className = 'uploaded-image-item';
                 uploadedImageDiv.style.position = 'relative';
@@ -254,6 +229,40 @@ function closeModal() {
             };
             reader.readAsDataURL(file);
         }
+    }
+
+    function handleImageClick() {
+        createImageModal(typeof event.target.result === 'string' ? event.target.result : '');
+    }
+
+    function createImageModal(imageSrc) {
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        `;
+        modal.innerHTML = `<img src="${imageSrc}" style="max-width: 90%; max-height: 90%; object-fit: contain;">`;
+        modal.addEventListener('click', closeModal);
+        document.body.appendChild(modal);
+    }
+
+    function closeModal() {
+        modal.style.display = 'none';
+    }
+
+    function switchLogoBasedOnTheme() {
+        const logoImage = document.getElementById('logoImage');
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        logoImage.src = isDarkMode ? './logo.svg' : './dark-logo.svg';
     }
 
     return { template, initializeCreatePost };
