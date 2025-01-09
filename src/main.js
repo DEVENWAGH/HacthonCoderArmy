@@ -1,6 +1,87 @@
 import './style.css';
 import { createPostComponent } from './components/createPostComponent.js';
 
+// Initialize Clerk
+window.initializeClerk = async function() {
+    try {
+        await Clerk.load();
+
+        // Check if the user is authenticated
+        if (Clerk.user) {
+            // Import navbar component
+            const { navbarComponent } = await import('./components/navbarComponent.js');
+            
+            // Create and initialize navbar
+            const navbar = navbarComponent();
+            document.getElementById('navbarContainer').innerHTML = navbar.template;
+            await navbar.initializeNavbar();
+            
+            // Display posts
+            displayPosts();
+        } else {
+            // Render sign in page
+            document.getElementById('app').innerHTML = `<div id="sign-in"></div>`;
+            Clerk.mountSignIn(document.getElementById('sign-in'));
+        }
+    } catch (error) {
+        console.error('Error initializing Clerk:', error);
+    }
+};
+
+// Make displayPosts globally available
+window.displayPosts = function() {
+    const postsContainer = document.getElementById('content');
+    const createPostFormContainer = document.getElementById('createPostFormContainer');
+    
+    // Only show posts if we're on the main content area and not in create post view
+    if (!postsContainer || createPostFormContainer.style.display === 'block') return;
+
+    try {
+        const posts = JSON.parse(localStorage.getItem('posts') || '[]');
+        
+        // Clear existing content first
+        postsContainer.innerHTML = '';
+
+        if (posts.length === 0) {
+            postsContainer.innerHTML = `
+                <div class="no-posts">
+                    <h2>No posts yet</h2>
+                    <p>Be the first one to create a post!</p>
+                </div>`;
+            return;
+        }
+
+        // Sort posts by date (newest first)
+        const sortedPosts = posts.sort((a, b) => 
+            new Date(b.createdAt) - new Date(a.createdAt)
+        );
+
+        postsContainer.innerHTML = sortedPosts.map(post => `
+            <div class="post-card">
+                ${post.coverImage ? `
+                    <img src="${post.coverImage}" alt="Cover" class="post-cover-image">
+                ` : ''}
+                <div class="post-content">
+                    <h2 class="post-title">${post.title}</h2>
+                    <div class="post-metadata">
+                        <span class="post-author">${post.author}</span>
+                        <span class="post-date">${new Date(post.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    <div class="post-category">${post.category}</div>
+                    <div class="post-tags">
+                        ${post.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}
+                    </div>
+                    <div class="post-excerpt">
+                        ${post.content.substring(0, 200)}...
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error('Error displaying posts:', error);
+        postsContainer.innerHTML = '<div class="error">Error loading posts</div>';
+    }
+};
 
 // Initialize when the page loads
 window.addEventListener('load', initializeClerk);
@@ -190,21 +271,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (createPostBtn) {
         createPostBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            
-            if (navbar) {
-                navbar.style.display = 'none';
-            }
-            
+            if (navbar) navbar.style.display = 'none';
             if (createPostFormContainer) {
                 const { template, initializeCreatePost } = createPostComponent();
                 createPostFormContainer.innerHTML = template;
                 createPostFormContainer.style.display = 'block';
                 initializeCreatePost();
                 initializeEditor();
-                initializeTagsInput(); // Make sure this is called
+                initializeTagsInput();
             }
         });
     }
+
+    displayPosts(); // Display existing posts
 });
 
 // Add this function to show navbar when returning to main page
@@ -365,23 +444,93 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Function to display posts on the home page
-function displayPosts() {
-    const postsContainer = document.getElementById('postsContainer'); // Ensure you have this element in your HTML
-    const posts = JSON.parse(localStorage.getItem('posts')) || [];
+// Add publish button initialization
+function initializePublishButton() {
+    const publishBtn = document.querySelector('.submit-btn');
+    const form = document.getElementById('createPostForm');
 
-    postsContainer.innerHTML = posts.map(post => `
-        <div class="post">
-            <h2>${post.title}</h2>
-            ${post.coverImage ? `<img src="${post.coverImage}" alt="Cover Image" class="preview-cover-image">` : ''}
-            <p>${post.content}</p>
-            <div class="tags">${post.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}</div>
-        </div>
-    `).join('');
+    if (form && publishBtn) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Gather post data
+            const postData = {
+                title: document.getElementById('title').value,
+                content: document.getElementById('editor').innerHTML,
+                category: document.getElementById('category').value,
+                tags: JSON.parse(document.getElementById('tags-hidden').value || '[]'),
+                coverImage: document.getElementById('coverImagePreview').src,
+                createdAt: new Date().toISOString(),
+                author: Clerk.user?.fullName || 'Anonymous'
+            };
+
+            // Save post
+            const posts = JSON.parse(localStorage.getItem('posts') || '[]');
+            posts.push(postData);
+            localStorage.setItem('posts', JSON.stringify(posts));
+
+            // Reset UI
+            document.getElementById('createPostFormContainer').style.display = 'none';
+            document.querySelector('.navbar').style.display = 'block';
+
+            // Refresh posts display
+            displayPosts();
+        });
+    }
 }
 
 // Call displayPosts when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     displayPosts(); // Display posts on home page
     // Other initialization code...
+});
+
+// Update the create post form handling
+const handleCreatePost = async (e) => {
+    e.preventDefault();
+    
+    const createPostFormContainer = document.getElementById('createPostFormContainer');
+    const navbar = document.querySelector('.navbar');
+    const content = document.getElementById('content');
+
+    // Hide create post form
+    createPostFormContainer.style.display = 'none';
+    
+    // Show navbar
+    navbar.style.display = 'block';
+    
+    // Show content area
+    content.style.display = 'block';
+    
+    // Refresh posts display
+    displayPosts();
+    
+    // Reset form
+    e.target.reset();
+
+    // Redirect to home
+    window.location.href = '/';
+};
+
+// Add this to your initialization code
+document.addEventListener('DOMContentLoaded', () => {
+    // Hide content when create post is visible
+    const createPostFormContainer = document.getElementById('createPostFormContainer');
+    const content = document.getElementById('content');
+
+    if (createPostFormContainer && content) {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'style') {
+                    if (createPostFormContainer.style.display === 'block') {
+                        content.style.display = 'none';
+                    } else {
+                        content.style.display = 'block';
+                    }
+                }
+            });
+        });
+
+        observer.observe(createPostFormContainer, { attributes: true });
+    }
 });

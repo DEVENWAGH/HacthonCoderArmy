@@ -1623,3 +1623,388 @@ body.dark-mode .suggestion-item.no-category {
     color: white;
     font-size: 20px;
 }
+
+/* Post Card Styles */
+.post-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin: 20px auto;
+    max-width: 800px;
+    overflow: hidden;
+}
+
+.dark-mode .post-card {
+    background: #1e1e1e;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.post-cover-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.post-content {
+    padding: 20px;
+}
+
+.post-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.dark-mode .post-title {
+    color: #fff;
+}
+
+.post-metadata {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.post-tags {
+    display: flex;
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.tag {
+    background: #ff8c00;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.post-excerpt {
+    color: #555;
+    line-height: 1.6;
+}
+
+.dark-mode .post-excerpt {
+    color: #ccc;
+}
+
+.no-posts {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 18px;
+}
+
+/* Responsive Media Queries */
+@media screen and (max-width: 1200px) {
+  .navbar-container {
+    padding: 0 20px;
+  }
+
+  .create-post-container {
+    margin: 20px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .search-bar input {
+    width: 25vw;
+  }
+
+  .preview-post-container {
+    margin: 20px;
+  }
+
+  .preview-cover-image {
+    height: 300px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .navbar-container {
+    flex-direction: column;
+    padding: 10px 20px;
+  }
+
+  .nav-left, .nav-right {
+    width: 100%;
+    justify-content: center;
+    margin: 10px 0;
+  }
+
+  .search-bar {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .search-bar input {
+    width: 100%;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .create-post-container {
+    margin: 10px;
+  }
+
+  .editor-toolbar {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .form-group input[type="text"]#title {
+    font-size: 24px;
+  }
+
+  .preview-title {
+    font-size: 24px;
+  }
+
+  .preview-cover-image {
+    height: 200px;
+  }
+
+  .uploaded-images-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .logo {
+    height: 30px;
+  }
+
+  .darklogo {
+    height: 40px;
+  }
+
+  .nav-links a {
+    font-size: 16px;
+  }
+
+  .create-post-btn {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .submit-btn, .preview-btn, .cancel-btn {
+    width: 100%;
+  }
+
+  .preview-gallery {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .modal-content {
+    width: 95%;
+  }
+
+  .uploaded-images-container {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .tags-list {
+    flex-wrap: wrap;
+  }
+
+  .tag-item {
+    margin: 2px;
+  }
+}
+
+/* Responsive Post Cards */
+@media screen and (max-width: 768px) {
+  .post-card {
+    margin: 15px;
+  }
+
+  .post-cover-image {
+    height: 200px;
+  }
+
+  .post-title {
+    font-size: 20px;
+  }
+
+  .post-metadata {
+    flex-wrap: wrap;
+  }
+
+  .post-tags {
+    flex-wrap: wrap;
+  }
+}
+
+/* Responsive Image Modal */
+@media screen and (max-width: 576px) {
+  .image-modal {
+    padding: 10px;
+  }
+
+  .close-modal {
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+  }
+}
+
+/* Responsive Editor */
+@media screen and (max-width: 768px) {
+  #editor {
+    min-height: 150px;
+  }
+
+  .editor-toolbar button {
+    padding: 5px 8px;
+    font-size: 14px;
+  }
+}
+
+/* Dark Mode Adjustments for Mobile */
+@media screen and (max-width: 768px) {
+  body.dark-mode .navbar {
+    background-color: #121212;
+  }
+
+  body.dark-mode .search-bar input {
+    background-color: #1e1e1e;
+  }
+}
+
+/* Fix for iOS Safari 100vh issue */
+@supports (-webkit-touch-callout: none) {
+  .image-modal {
+    height: -webkit-fill-available;
+  }
+
+  #sign-in {
+    height: -webkit-fill-available;
+  }
+}
+
+/* Navigation Responsive Styles */
+@media screen and (max-width: 992px) {
+  .navbar-container {
+    padding: 10px 20px;
+  }
+
+  .search-bar input {
+    width: 200px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .navbar {
+    position: relative;
+    padding: 10px 0;
+  }
+
+  .navbar-container {
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
+  }
+
+  .nav-left {
+    width: 100%;
+    justify-content: space-between;
+    padding: 0 10px;
+  }
+
+  .nav-right {
+    width: 100%;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .search-bar {
+    width: 100%;
+    order: 2;
+  }
+
+  .search-bar input {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .nav-links {
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+    gap: 15px;
+    order: 3;
+  }
+
+  .nav-links li {
+    margin: 0;
+  }
+
+  .user-actions {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    order: 1;
+  }
+
+  .user-profile {
+    margin: 0;
+  }
+
+  .create-post-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .nav-links {
+    flex-wrap: wrap;
+  }
+
+  .nav-links a {
+    font-size: 14px;
+  }
+
+  .user-actions {
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .create-post-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .logo {
+    height: 30px;
+  }
+
+  .search-bar {
+    margin: 10px 0;
+  }
+
+  .dark-mode-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+}
+
+/* Fix for iOS Safari bottom bar */
+@supports (-webkit-touch-callout: none) {
+  .navbar {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
