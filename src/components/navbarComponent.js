@@ -61,11 +61,14 @@ export function navbarComponent() {
                         const { template, initializeCreateBlog } = createBlogComponent();
                         createBlogFormContainer.innerHTML = template;
                         createBlogFormContainer.style.display = 'block';
-                        initializeCreateBlog();
                         
-                        // Initialize additional functionalities
-                        window.initializeEditor();
-                        window.initializeTagsInput();
+                        // Initialize blog form
+                        await initializeCreateBlog();
+                        
+                        // Initialize editor is now part of createBlogComponent
+                        if (document.getElementById('editor')) {
+                            initializeTagsInput();
+                        }
                     }
                 } catch (error) {
                     console.error('Error loading create blog component:', error);
