@@ -1,4 +1,4 @@
-import { createPostComponent } from './createPostComponent.js';
+import { createBlogComponent } from './createBlogComponent.js';
 
 export function navbarComponent() {
     const template = `
@@ -12,8 +12,8 @@ export function navbarComponent() {
                 <ul class="nav-links">
                     <li><a href="/blogs">Blog</a></li>
                     <li>
-                        <button class="create-post-btn" id="loadCreatePostBtn">
-                            Create Post
+                        <button class="create-blog-btn" id="loadCreateBlogBtn">
+                            Create Blog
                         </button>
                     </li>
                 </ul>
@@ -43,33 +43,32 @@ export function navbarComponent() {
         // Set initial theme
         setInitialTheme();
 
-        // Create post button
-        const createPostBtn = document.getElementById('loadCreatePostBtn');
-        if (createPostBtn) {
-            createPostBtn.addEventListener('click', async () => {
+        // Create blog button
+        const createBlogBtn = document.getElementById('loadCreateBlogBtn');
+        if (createBlogBtn) {
+            createBlogBtn.addEventListener('click', async () => {
                 try {
-                    const createPostFormContainer = document.getElementById('createPostFormContainer');
-                    if (createPostFormContainer) {
-                        // Hide navbar
+                    const createBlogFormContainer = document.getElementById('createBlogFormContainer');
+                    if (createBlogFormContainer) {
+                        // Hide navbar and content
                         const navbar = document.querySelector('.navbar');
-                        if (navbar) {
-                            navbar.style.display = 'none';
-                        }
-
-                        // Get the template
-                        const { template, initializeCreatePost } = createPostComponent();
+                        const content = document.getElementById('content');
                         
-                        // Clear existing content and add new content
-                        createPostFormContainer.innerHTML = template;
-                        
-                        // Show the container
-                        createPostFormContainer.style.display = 'block';
+                        navbar.style.display = 'none';
+                        content.style.display = 'none';
 
-                        // Initialize all required functionality
-                        initializeCreatePost();
+                        // Initialize create blog
+                        const { template, initializeCreateBlog } = createBlogComponent();
+                        createBlogFormContainer.innerHTML = template;
+                        createBlogFormContainer.style.display = 'block';
+                        initializeCreateBlog();
+                        
+                        // Initialize additional functionalities
+                        window.initializeEditor();
+                        window.initializeTagsInput();
                     }
                 } catch (error) {
-                    console.error('Error loading create post component:', error);
+                    console.error('Error loading create blog component:', error);
                 }
             });
         }
@@ -111,6 +110,36 @@ export function navbarComponent() {
             modeIcon.classList.remove('fa-sun');
             modeIcon.classList.add('fa-moon');
         }
+    }
+
+    // In the handleCoverImage function
+    let fileInput = null;
+
+    function handleCoverImage() {
+        if (!fileInput) {
+            fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.onchange = (e) => {
+                if (e.target.files[0]) {
+                    processImage(e.target.files[0]);
+                }
+            };
+        }
+        fileInput.click();
+    }
+
+    // Clear the file input value after use
+    function processImage(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            coverImagePreview.src = e.target.result;
+            coverImagePreview.style.display = 'block';
+            coverImagePlaceholder.style.display = 'none';
+            removeCoverImageBtn.style.display = 'flex';
+            fileInput.value = ''; // Clear the input
+        };
+        reader.readAsDataURL(file);
     }
 
     return { template, initializeNavbar };

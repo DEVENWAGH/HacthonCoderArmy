@@ -1,3 +1,6 @@
+/* Import any other stylesheets here */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
 /* Base Styles */
 * {
   margin: 0;
@@ -29,7 +32,7 @@ body:not(.dark-mode) .navbar {
   background-color: #ffffff;
 }
 
-body:not(.dark-mode) .create-post-container,
+body:not(.dark-mode) .create-blog-container,
 body:not(.dark-mode) #sign-in {
   background-color: #ffffff;
   border: 1px solid #000000;
@@ -50,7 +53,7 @@ body.dark-mode {
   color: #ffffff;
 }
 
-.dark-mode .create-post-container {
+.dark-mode .create-blog-container {
   background-color: #000000;
   color: #ffffff;
 }
@@ -88,7 +91,7 @@ body.dark-mode #editor:focus {
   border-color: #ff8c00;
 }
 
-body.dark-mode .preview-post-container {
+body.dark-mode .preview-blog-container {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
@@ -154,7 +157,7 @@ body.dark-mode .preview-header {
     border-color: #ff8c00;
   }
   
-  body.dark-mode .preview-post-container {
+  body.dark-mode .preview-blog-container {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   }
   
@@ -594,6 +597,80 @@ body.dark-mode .dark-mode-toggle i.fa-sun {
   display: inline-block;
 }
 
+/* Content Image Styles */
+.content-image-wrapper {
+  display: inline-block;
+  position: relative;
+  margin: 10px;
+}
+
+.content-image {
+  max-width: 200px;
+  height: auto;
+  border-radius: 4px;
+  transition: transform 0.2s ease;
+}
+
+.content-image:hover {
+  transform: scale(1.02);
+}
+
+.remove-content-image-btn {
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 0, 0, 0.8);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
+}
+
+.remove-content-image-btn:hover {
+  background: rgba(255, 0, 0, 1);
+}
+
+/* Image Modal Styles */
+.image-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90vh;
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  color: white;
+  font-size: 35px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.close-modal:hover {
+  color: #ff8c00;
+}
+
 .nav-right {
   flex: 2;
   display: flex;
@@ -653,7 +730,7 @@ body:not(.dark-mode) .darklogo {
 }
 
 /* Buttons */
-.create-post-btn {
+.create-blog-btn {
   background-color: #ff8c00;
   color: white;
   border: none;
@@ -662,7 +739,7 @@ body:not(.dark-mode) .darklogo {
   cursor: pointer;
 }
 
-.create-post-btn:hover {
+.create-blog-btn:hover {
   background-color: #e07b00;
 }
 
@@ -822,8 +899,8 @@ body:not(.dark-mode) .darklogo {
   font-size: 24px;
 }
 
-/* Create Post Form */
-.create-post-container {
+/* Create Blog Form */
+.create-blog-container {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
@@ -833,14 +910,14 @@ body:not(.dark-mode) .darklogo {
 }
 
 
-.create-post-container a {
+.create-blog-container a {
   text-decoration: none;
   display: block;
   text-align: center;
   margin-bottom: 30px;
 }
 
-#createPostFormContainer {
+#createBlogFormContainer {
   margin: 0;
 }
 
@@ -879,6 +956,9 @@ body:not(.dark-mode) .darklogo {
   cursor: pointer;
   font-size: 18px;
   color: inherit;
+  pointer-events: all;
+  padding: 8px 12px;
+  margin: 0 2px;
 }
 
 .dark-mode .editor-btn {
@@ -1053,11 +1133,11 @@ body:not(.dark-mode) .darklogo {
 .dark-mode .no-category {
   color: #ccc;
 }
-#createPostFormContainer {
+#createBlogFormContainer {
   margin: 0;
 }
 
-#createPostForm#createPostFormContainer {
+#createBlogForm#createBlogFormContainer {
   margin: 0;
   padding: 0;
 }nts */
@@ -1295,6 +1375,15 @@ body:not(.dark-mode) .darklogo {
   display: none;
 }
 
+/* Prevent unwanted clicks on cover image container */
+.cover-image-container img {
+  pointer-events: none;
+}
+
+.cover-image-container button {
+  pointer-events: all;
+}
+
 /* Editor */
 .editor-toolbar {
   display: flex;
@@ -1312,6 +1401,8 @@ body:not(.dark-mode) .darklogo {
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
+  pointer-events: all;
+  margin: 0 2px;
 }
 
 .editor-btn:hover,
@@ -1344,8 +1435,18 @@ body:not(.dark-mode) .darklogo {
   border-radius: 4px;
 }
 
-/* Preview Post */
-.preview-post-container {
+/* Ensure uploaded images don't trigger unwanted clicks */
+.uploaded-image-item img {
+  pointer-events: none;
+}
+
+.uploaded-image-item .remove-image-btn {
+  pointer-events: all;
+  z-index: 2;
+}
+
+/* Preview Blog */
+.preview-blog-container {
   max-width: 800px;
   margin: 30px auto;
   padding: 30px;
@@ -1368,7 +1469,7 @@ body:not(.dark-mode) .darklogo {
   font-size: 24px;
 }
 
-.edit-post-btn {
+.edit-blog-btn {
   padding: 10px 20px;
   background-color: #ff8c00;
   color: #fff;
@@ -1380,7 +1481,7 @@ body:not(.dark-mode) .darklogo {
   transition: background-color 0.2s;
 }
 
-.edit-post-btn:hover {
+.edit-blog-btn:hover {
   background-color: #e07b00;
 }
 
@@ -1486,7 +1587,7 @@ body:not(.dark-mode) .darklogo {
 }
 
 .not-authenticated .navbar,
-.not-authenticated #createPostFormContainer {
+.not-authenticated #createBlogFormContainer {
   display: none;
 }
 
@@ -1624,8 +1725,8 @@ body.dark-mode .suggestion-item.no-category {
     font-size: 20px;
 }
 
-/* Post Card Styles */
-.post-card {
+/* Blog Card Styles */
+.blog-card {
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -1634,39 +1735,39 @@ body.dark-mode .suggestion-item.no-category {
     overflow: hidden;
 }
 
-.dark-mode .post-card {
+.dark-mode .blog-card {
     background: #1e1e1e;
     box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
-.post-cover-image {
+.blog-cover-image {
     width: 100%;
     height: 300px;
     object-fit: cover;
 }
 
-.post-content {
+.blog-content {
     padding: 20px;
 }
 
-.post-title {
+.blog-title {
     font-size: 24px;
     margin-bottom: 10px;
     color: #333;
 }
 
-.dark-mode .post-title {
+.dark-mode .blog-title {
     color: #fff;
 }
 
-.post-metadata {
+.blog-metadata {
     display: flex;
     gap: 15px;
     margin-bottom: 10px;
     color: #666;
 }
 
-.post-tags {
+.blog-tags {
     display: flex;
     gap: 8px;
     margin: 10px 0;
@@ -1680,16 +1781,16 @@ body.dark-mode .suggestion-item.no-category {
     font-size: 14px;
 }
 
-.post-excerpt {
+.blog-excerpt {
     color: #555;
     line-height: 1.6;
 }
 
-.dark-mode .post-excerpt {
+.dark-mode .blog-excerpt {
     color: #ccc;
 }
 
-.no-posts {
+.no-blogs {
     text-align: center;
     padding: 40px;
     color: #666;
@@ -1702,7 +1803,7 @@ body.dark-mode .suggestion-item.no-category {
     padding: 0 20px;
   }
 
-  .create-post-container {
+  .create-blog-container {
     margin: 20px;
   }
 }
@@ -1712,7 +1813,7 @@ body.dark-mode .suggestion-item.no-category {
     width: 25vw;
   }
 
-  .preview-post-container {
+  .preview-blog-container {
     margin: 20px;
   }
 
@@ -1748,7 +1849,7 @@ body.dark-mode .suggestion-item.no-category {
     gap: 15px;
   }
 
-  .create-post-container {
+  .create-blog-container {
     margin: 10px;
   }
 
@@ -1787,7 +1888,7 @@ body.dark-mode .suggestion-item.no-category {
     font-size: 16px;
   }
 
-  .create-post-btn {
+  .create-blog-btn {
     padding: 8px 12px;
     font-size: 14px;
   }
@@ -1822,25 +1923,25 @@ body.dark-mode .suggestion-item.no-category {
   }
 }
 
-/* Responsive Post Cards */
+/* Responsive Blog Cards */
 @media screen and (max-width: 768px) {
-  .post-card {
+  .blog-card {
     margin: 15px;
   }
 
-  .post-cover-image {
+  .blog-cover-image {
     height: 200px;
   }
 
-  .post-title {
+  .blog-title {
     font-size: 20px;
   }
 
-  .post-metadata {
+  .blog-metadata {
     flex-wrap: wrap;
   }
 
-  .post-tags {
+  .blog-tags {
     flex-wrap: wrap;
   }
 }
@@ -1961,7 +2062,7 @@ body.dark-mode .suggestion-item.no-category {
     margin: 0;
   }
 
-  .create-post-btn {
+  .create-blog-btn {
     padding: 8px 16px;
     font-size: 14px;
   }
@@ -1982,7 +2083,7 @@ body.dark-mode .suggestion-item.no-category {
     justify-content: center;
   }
 
-  .create-post-btn {
+  .create-blog-btn {
     width: 100%;
     text-align: center;
   }
@@ -2007,4 +2108,656 @@ body.dark-mode .suggestion-item.no-category {
   .navbar {
     padding-bottom: env(safe-area-inset-bottom);
   }
+}
+
+/* Uploaded images container styles */
+.uploaded-images-container {
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+.uploaded-images-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 10px 0;
+}
+
+.uploaded-image-item {
+    position: relative;
+    width: 150px;
+    height: 150px;
+}
+
+.uploaded-image-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+    pointer-events: none;
+}
+
+.uploaded-image-item img:hover {
+    transform: scale(1.05);
+}
+
+.remove-image-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+    z-index: 2;
+    pointer-events: all;
+}
+
+.remove-image-btn:hover {
+    background: rgba(255, 0, 0, 1);
+}
+
+/* Image modal styles */
+.image-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90vh;
+}
+
+.close-modal {
+    position: absolute;
+    top: -35px;
+    right: -35px;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.close-modal:hover {
+    color: #ff8c00;
+}
+
+/* Dark mode adjustments */
+.dark-mode .uploaded-images-container {
+    border-top-color: #444;
+}
+
+/* Uploaded images container styles */
+.uploaded-images-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 10px 0;
+}
+
+.uploaded-image-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+}
+
+.image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.image-wrapper:hover .thumbnail {
+    transform: scale(1.05);
+}
+
+.image-wrapper:hover .remove-image-btn {
+    opacity: 1;
+}
+
+.thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.remove-image-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 25px;
+    height: 25px;
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+    z-index: 2;
+    pointer-events: all;
+}
+
+.remove-image-btn:hover {
+    background: rgba(255, 0, 0, 1);
+}
+
+/* Modal styles */
+.image-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+}
+
+.modal-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-image-container img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+}
+
+.close-modal {
+    position: absolute;
+    top: -35px;
+    right: -35px;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+    color: #ff8c00;
+}
+
+/* Dark mode adjustments */
+.dark-mode .image-modal {
+    background: rgba(0, 0, 0, 0.95);
+}
+
+.dark-mode .remove-image-btn {
+    background: rgba(255, 0, 0, 0.9);
+}
+
+.dark-mode .remove-image-btn:hover {
+    background: red;
+}
+
+/* Modal styles - update or add these styles */
+.image-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-image-container {
+    position: relative;
+    max-width: 90%;
+    max-height: 90vh;
+}
+
+.modal-image-container img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+.close-modal {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    color: white;
+    font-size: 35px;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 1001;
+}
+
+.close-modal:hover {
+    color: #ff8c00;
+}
+
+/* Updated Modal styles */
+.image-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.modal-image-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 90%;
+    max-height: 90%;
+}
+
+.modal-image-container img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+}
+
+.close-modal {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    color: white;
+    font-size: 35px;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 1001;
+}
+
+.close-modal:hover {
+    color: #ff8c00;
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.close-modal:hover {
+    background: rgba(0, 0, 0, 0.8);
+    color: #ff8c00;
+    transform: scale(1.1);
+}
+
+/* Update Modal styles */
+.image-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 90%;
+    max-height: 90%;
+}
+
+.modal-image-container img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+    display: block;
+}
+
+.close-modal {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.close-modal:hover {
+    background: rgba(0, 0, 0, 0.8);
+    color: #ff8c00;
+    transform: scale(1.1);
+}
+
+/* Update Remove button styles */
+.remove-image-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 24px;
+    height: 24px;
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+.uploaded-image-container:hover .remove-image-btn {
+    opacity: 1;
+}
+
+.remove-image-btn:hover {
+    background: red;
+    transform: scale(1.1);
+}
+
+/* ...existing code... */
+
+body:not(.dark-mode) .preview-title,
+body:not(.dark-mode) .preview-content,
+body:not(.dark-mode) .preview-content h2 {
+  color: #000; /* Change text color to black in light theme */
+}
+
+body:not(.dark-mode) .preview-content blockquote {
+  color: #333; /* Adjust blockquote color */
+}
+
+/* Menu icon styles */
+.blog-card .menu-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.3s ease;
+}
+
+.blog-card .menu-icon:hover {
+  color: #ff8c00;
+}
+
+/* Menu dropdown styles */
+.blog-card .menu-dropdown {
+  display: none;
+  position: absolute;
+  top: 30px;
+  right: 10px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.blog-card .menu-dropdown a {
+  display: block;
+  padding: 10px;
+  color: #333;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.blog-card .menu-dropdown a:hover {
+  background: #f5f5f5;
+}
+
+body.dark-mode .blog-card .menu-dropdown {
+  background: #333;
+  border-color: #444;
+}
+
+body.dark-mode .blog-card .menu-dropdown a {
+  color: #fff;
+}
+
+body.dark-mode .blog-card .menu-dropdown a:hover {
+  background: #444;
+}
+
+/* Category styles */
+.blog-category {
+  color: #000; /* Default color for categories */
+}
+
+body:not(.dark-mode) .blog-category.technology,
+body:not(.dark-mode) .blog-category.lifestyle {
+  color: #000; /* Set color to black for technology and lifestyle categories in light theme */
+}
+
+body.dark-mode .blog-category {
+  color: #fff; /* Set color to white for categories in dark theme */
+}
+
+/* Blog card header and menu styles */
+.blog-header {
+    position: relative;
+    padding: 10px;
+    text-align: right;
+}
+
+.blog-card {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.menu-icon {
+    cursor: pointer;
+    padding: 10px;
+    font-size: 18px;
+    color: #666;
+    transition: color 0.3s ease;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+}
+
+.menu-icon:hover {
+    color: #ff8c00;
+}
+
+.menu-dropdown {
+    display: none;
+    position: absolute;
+    top: 40px;
+    right: 10px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 3;
+}
+
+.menu-dropdown a {
+    display: block;
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.menu-dropdown a:hover {
+    background: #f5f5f5;
+    color: #ff8c00;
+}
+
+/* Dark mode support */
+body.dark-mode .menu-dropdown {
+    background: #333;
+    border-color: #444;
+}
+
+body.dark-mode .menu-dropdown a {
+    color: #fff;
+}
+
+body.dark-mode .menu-dropdown a:hover {
+    background: #444;
+    color: #ff8c00;
+}
+
+body.dark-mode .menu-icon {
+    color: #fff;
+}
+
+/* Blog card styles */
+.blog-card {
+    position: relative;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin: 20px auto;
+    max-width: 800px;
+    overflow: hidden;
+}
+
+.blog-cover-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+}
+
+.blog-content {
+    padding: 20px;
+    position: relative;
+    margin-top: 0;
+}
+
+/* Menu positioning */
+.blog-header {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+}
+
+/* Cover image container in edit form */
+.cover-image-container {
+    width: 100%;
+    height: 300px;
+    position: relative;
+    overflow: hidden;
+    background-color: #f5f5f5;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.cover-image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+}
+
+/* Prevent multiple uploads */
+.cover-image-container.uploading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+/* Image upload container */
+.uploaded-images-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    padding: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
 }
