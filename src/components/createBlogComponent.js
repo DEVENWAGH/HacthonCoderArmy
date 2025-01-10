@@ -1,5 +1,5 @@
 export function createBlogComponent(blogData = {}) {
-    const template = `
+  const template = `
         <div class="create-blog-container">
             <div class="logo-container">
                 <a href="/"><img class="darklogo" id="logoImage" src="./logo.svg" alt="Logo"></a>
@@ -61,140 +61,157 @@ export function createBlogComponent(blogData = {}) {
         </div>
     `;
 
-    const initializeCreateBlog = () => {
-        const form = document.getElementById('createBlogForm');
-        const cancelBtn = document.getElementById('cancelBtn');
-        const editor = document.getElementById('editor');
-        
-        // Initialize editor toolbar
-        const toolbarButtons = document.querySelectorAll('.editor-toolbar button');
-        toolbarButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const command = button.getAttribute('data-command');
-                const value = button.getAttribute('data-value') || '';
-                document.execCommand(command, false, value);
-                editor.focus();
-            });
-        });
+  const initializeCreateBlog = () => {
+    const form = document.getElementById("createBlogForm");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const editor = document.getElementById("editor");
 
-        // Initialize cover image upload
-        const coverImageContainer = document.getElementById('coverImageContainer');
-        const coverImagePreview = document.getElementById('coverImagePreview');
-        const coverImagePlaceholder = document.getElementById('coverImagePlaceholder');
-        const removeCoverImageBtn = document.getElementById('removeCoverImage');
-
-        // Handle drag and drop
-        coverImageContainer.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            coverImageContainer.classList.add('drag-over');
-        });
-
-        coverImageContainer.addEventListener('dragleave', () => {
-            coverImageContainer.classList.remove('drag-over');
-        });
-
-        coverImageContainer.addEventListener('drop', (e) => {
-            e.preventDefault();
-            coverImageContainer.classList.remove('drag-over');
-            const file = e.dataTransfer.files[0];
-            if (file && file.type.startsWith('image/')) {
-                handleCoverImage(file);
-            }
-        });
-
-        // Handle click to upload
-        coverImageContainer.addEventListener('click', () => {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.onchange = (e) => {
-                if (e.target.files[0]) {
-                    handleCoverImage(e.target.files[0]);
-                }
-            };
-            input.click();
-        });
-
-        // Handle image function
-        function handleCoverImage(file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                coverImagePreview.src = e.target.result;
-                coverImagePreview.style.display = 'block';
-                coverImagePlaceholder.style.display = 'none';
-                removeCoverImageBtn.style.display = 'flex';
-            };
-            reader.readAsDataURL(file);
+    // Initialize editor toolbar
+    const toolbarButtons = document.querySelectorAll(".editor-toolbar button");
+    toolbarButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const command = button.getAttribute("data-command");
+        const value = button.getAttribute("data-value") || "";
+        if (
+          [
+            "bold",
+            "italic",
+            "insertOrderedList",
+            "insertUnorderedList",
+            "formatBlock",
+          ].includes(command)
+        ) {
+          const supportedCommands = [
+            "bold",
+            "italic",
+            "insertOrderedList",
+            "insertUnorderedList",
+            "formatBlock",
+          ];
+          if (supportedCommands.includes(command)) {
+            document.execCommand(command, false, value);
+          }
         }
+        editor.focus();
+      });
+    });
 
-        // Remove cover image
-        removeCoverImageBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            coverImagePreview.src = '';
-            coverImagePreview.style.display = 'none';
-            coverImagePlaceholder.style.display = 'flex';
-            removeCoverImageBtn.style.display = 'none';
-        });
+    // Initialize cover image upload
+    const coverImageContainer = document.getElementById("coverImageContainer");
+    const coverImagePreview = document.getElementById("coverImagePreview");
+    const coverImagePlaceholder = document.getElementById(
+      "coverImagePlaceholder"
+    );
+    const removeCoverImageBtn = document.getElementById("removeCoverImage");
 
-        // Initialize content image upload
-        const insertImageBtn = document.getElementById('insertImageBtn');
-        const uploadedImagesList = document.getElementById('uploadedImagesList');
+    // Handle drag and drop
+    coverImageContainer.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      coverImageContainer.classList.add("drag-over");
+    });
 
-        insertImageBtn.addEventListener('click', () => {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.onchange = (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        // Create image container
-                        const imageContainer = document.createElement('div');
-                        imageContainer.className = 'uploaded-image-container';
-                        
-                        // Create image wrapper for hover effect
-                        const imageWrapper = document.createElement('div');
-                        imageWrapper.className = 'image-wrapper';
-                        
-                        // Create image
-                        const img = document.createElement('img');
-                        img.src = event.target.result;
-                        img.className = 'thumbnail';
-                        
-                        // Create remove button
-                        const removeBtn = document.createElement('button');
-                        removeBtn.className = 'remove-image-btn';
-                        removeBtn.innerHTML = '×';
-                        
-                        // Add click event for full-size preview
-                        img.addEventListener('click', () => {
-                            showImageModal(event.target.result);
-                        });
-                        
-                        // Add click event for remove button
-                        removeBtn.addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            imageContainer.remove();
-                        });
-                        
-                        // Assemble and insert
-                        imageWrapper.appendChild(img);
-                        imageWrapper.appendChild(removeBtn);
-                        imageContainer.appendChild(imageWrapper);
-                        uploadedImagesList.appendChild(imageContainer);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            };
-            input.click();
-        });
+    coverImageContainer.addEventListener("dragleave", () => {
+      coverImageContainer.classList.remove("drag-over");
+    });
 
-        // Create modal for full-size image preview
-        function showImageModal(imageSrc) {
-            const modal = document.createElement('div');
-            modal.className = 'image-modal';
-            modal.innerHTML = `
+    coverImageContainer.addEventListener("drop", (e) => {
+      e.preventDefault();
+      coverImageContainer.classList.remove("drag-over");
+      const file = e.dataTransfer.files[0];
+      if (file?.type?.startsWith("image/")) {
+        handleCoverImage(file);
+      }
+    });
+
+    // Handle click to upload
+    coverImageContainer.addEventListener("click", () => {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = "image/*";
+      input.onchange = (e) => {
+        if (e.target.files[0]) {
+          handleCoverImage(e.target.files[0]);
+        }
+      };
+      input.click();
+    });
+
+    // Handle image function
+    function handleCoverImage(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        coverImagePreview.src = e.target.result;
+        coverImagePreview.style.display = "block";
+        coverImagePlaceholder.style.display = "none";
+        removeCoverImageBtn.style.display = "flex";
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Remove cover image
+    removeCoverImageBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      coverImagePreview.src = "";
+      coverImagePreview.style.display = "none";
+      coverImagePlaceholder.style.display = "flex";
+      removeCoverImageBtn.style.display = "none";
+    });
+
+    // Initialize content image upload
+    const insertImageBtn = document.getElementById("insertImageBtn");
+    const uploadedImagesList = document.getElementById("uploadedImagesList");
+
+    const handleImageUpload = (file, uploadedImagesList) => {
+      const reader = new FileReader();
+      reader.onload = (event) =>
+        createAndAppendImage(event.target.result, uploadedImagesList);
+      reader.readAsDataURL(file);
+    };
+
+    const createAndAppendImage = (imageSrc, uploadedImagesList) => {
+      const imageContainer = document.createElement("div");
+      imageContainer.className = "uploaded-image-container";
+
+      const imageWrapper = document.createElement("div");
+      imageWrapper.className = "image-wrapper";
+
+      const img = document.createElement("img");
+      img.src = imageSrc;
+      img.className = "thumbnail";
+      img.addEventListener("click", () => showImageModal(imageSrc));
+
+      const removeBtn = document.createElement("button");
+      removeBtn.className = "remove-image-btn";
+      removeBtn.innerHTML = "×";
+      removeBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        imageContainer.remove();
+      });
+
+      imageWrapper.appendChild(img);
+      imageWrapper.appendChild(removeBtn);
+      imageContainer.appendChild(imageWrapper);
+      uploadedImagesList.appendChild(imageContainer);
+    };
+
+    insertImageBtn.addEventListener("click", () => {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = "image/*";
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          handleImageUpload(file, uploadedImagesList);
+        }
+      };
+      input.click();
+    });
+
+    // Create modal for full-size image preview
+    function showImageModal(imageSrc) {
+      const modal = document.createElement("div");
+      modal.className = "image-modal";
+      modal.innerHTML = `
                 <div class="modal-content">
                     <div class="modal-image-container">
                         <img src="${imageSrc}" alt="Full size image">
@@ -202,128 +219,136 @@ export function createBlogComponent(blogData = {}) {
                     <button class="close-modal">&times;</button>
                 </div>
             `;
-            
-            document.body.appendChild(modal);
-            
-            // Show modal
-            requestAnimationFrame(() => {
-                modal.style.display = 'flex';
-            });
 
-            // Close modal handlers
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) modal.remove();
-            });
-            modal.querySelector('.close-modal').addEventListener('click', () => modal.remove());
+      document.body.appendChild(modal);
+
+      // Show modal
+      requestAnimationFrame(() => {
+        modal.style.display = "flex";
+      });
+
+      // Close modal handlers
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) modal.remove();
+      });
+      modal
+        .querySelector(".close-modal")
+        .addEventListener("click", () => modal.remove());
+    }
+
+    // Form submission
+    if (form) {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        try {
+          // Get form data
+          const formData = {
+            id: Date.now(),
+            title: document.getElementById("title").value.trim(),
+            content: editor.innerHTML.trim(),
+            category: document.getElementById("category").value,
+            tags: JSON.parse(
+              document.getElementById("tags-hidden").value || "[]"
+            ),
+            coverImage: document.getElementById("coverImagePreview").src || "",
+            createdAt: new Date().toISOString(),
+            author: window.Clerk?.user?.fullName || "Anonymous",
+          };
+
+          // Get existing blogs
+          let blogs = JSON.parse(sessionStorage.getItem("blogs") || "[]");
+
+          // Add new blog
+          blogs.push(formData);
+
+          // Save to session storage
+          sessionStorage.setItem("blogs", JSON.stringify(blogs));
+
+          // Reset form
+          form.reset();
+          editor.innerHTML = "";
+          document.getElementById("coverImagePreview").style.display = "none";
+          document.getElementById("coverImagePlaceholder").style.display =
+            "flex";
+          document.getElementById("removeCoverImage").style.display = "none";
+          document.getElementById("tags-list").innerHTML = "";
+          document.getElementById("uploadedImagesList").innerHTML = "";
+          // Form submission
+          // Update UI
+          document.getElementById("createBlogFormContainer").style.display =
+            "none";
+          document.querySelector(".navbar").style.display = "block";
+          document.getElementById("content").style.display = "block";
+
+          // Refresh blogs display
+          if (typeof window.displayBlogs === "function") {
+            window.displayBlogs();
+          }
+        } catch (error) {
+          console.error("Error publishing blog:", error);
+          alert("Error saving blog. Please try again.");
         }
+      });
+    }
 
-        // Form submission
-        if (form) {
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                try {
-                    // Get form data
-                    const formData = {
-                        id: Date.now(),
-                        title: document.getElementById('title').value.trim(),
-                        content: editor.innerHTML.trim(),
-                        category: document.getElementById('category').value,
-                        tags: JSON.parse(document.getElementById('tags-hidden').value || '[]'),
-                        coverImage: document.getElementById('coverImagePreview').src || '',
-                        createdAt: new Date().toISOString(),
-                        author: window.Clerk?.user?.fullName || 'Anonymous'
-                    };
+    // Cancel button
+    if (cancelBtn) {
+      cancelBtn.addEventListener("click", () => {
+        document.getElementById("createBlogFormContainer").style.display =
+          "none";
+        document.querySelector(".navbar").style.display = "block";
+        document.getElementById("content").style.display = "block";
+      });
+    }
+  };
 
-                    // Get existing blogs
-                    let blogs = JSON.parse(sessionStorage.getItem('blogs') || '[]');
-                    
-                    // Add new blog
-                    blogs.push(formData);
-                    
-                    // Save to session storage
-                    sessionStorage.setItem('blogs', JSON.stringify(blogs));
-
-                    // Reset form
-                    form.reset();
-                    editor.innerHTML = '';
-                    document.getElementById('coverImagePreview').style.display = 'none';
-                    document.getElementById('coverImagePlaceholder').style.display = 'flex';
-                    document.getElementById('removeCoverImage').style.display = 'none';
-                    document.getElementById('tags-list').innerHTML = '';
-                    document.getElementById('uploadedImagesList').innerHTML = '';
-
-                    // Update UI
-                    document.getElementById('createBlogFormContainer').style.display = 'none';
-                    document.querySelector('.navbar').style.display = 'block';
-                    document.getElementById('content').style.display = 'block';
-
-                    // Refresh blogs display
-                    if (typeof window.displayBlogs === 'function') {
-                        window.displayBlogs();
-                    }
-                } catch (error) {
-                    console.error('Error publishing blog:', error);
-                    alert('Error saving blog. Please try again.');
-                }
-            });
-        }
-
-        // Cancel button
-        if (cancelBtn) {
-            cancelBtn.addEventListener('click', () => {
-                document.getElementById('createBlogFormContainer').style.display = 'none';
-                document.querySelector('.navbar').style.display = 'block';
-                document.getElementById('content').style.display = 'block';
-            });
-        }
-    };
-
-    return { template, initializeCreateBlog };
+  return { template, initializeCreateBlog };
 }
 
 // Function to optimize image data
 async function optimizeImageData(dataUrl) {
-    return compressImage(dataUrl, 1200); // Compress image to a max width of 1200px
+  return compressImage(dataUrl, 1200); // Compress image to a max width of 1200px
 }
 
 // Function to compress image
 function compressImage(dataUrl, maxWidth = 1200) {
-    return new Promise((resolve) => {
-        const img = new Image();
-        img.src = dataUrl;
-        img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.src = dataUrl;
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
 
-            // Calculate new dimensions while maintaining aspect ratio
-            let width = img.width;
-            let height = img.height;
+      // Calculate new dimensions while maintaining aspect ratio
+      let width = img.width;
+      let height = img.height;
 
-            if (width > maxWidth) {
-                height = Math.round((height * maxWidth) / width);
-                width = maxWidth;
-            }
+      if (width > maxWidth) {
+        height = Math.round((height * maxWidth) / width);
+        width = maxWidth;
+      }
 
-            canvas.width = width;
-            canvas.height = height;
+      canvas.width = width;
+      canvas.height = height;
 
-            // Use better quality settings
-            ctx.imageSmoothingEnabled = true;
-            ctx.imageSmoothingQuality = 'high';
-            ctx.drawImage(img, 0, 0, width, height);
+      // Use better quality settings
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(img, 0, 0, width, height);
 
-            // Convert to JPEG with 0.9 quality (higher quality)
-            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.9);
+      // Convert to JPEG with 0.9 quality (higher quality)
+      const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.9);
 
-            // Check size and adjust if needed
-            if (compressedDataUrl.length > 2000000) { // If larger than ~2MB
-                // Try again with slightly lower quality
-                const mediumQuality = canvas.toDataURL('image/jpeg', 0.8);
-                resolve(mediumQuality);
-            } else {
-                resolve(compressedDataUrl);
-            }
-        };
-    });
+      // Check size and adjust if needed
+      if (compressedDataUrl.length > 2000000) {
+        // If larger than ~2MB
+        // Try again with slightly lower quality
+        const mediumQuality = canvas.toDataURL("image/jpeg", 0.8);
+        resolve(mediumQuality);
+      } else {
+        resolve(compressedDataUrl);
+      }
+    };
+  });
 }

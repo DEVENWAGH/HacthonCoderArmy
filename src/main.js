@@ -258,7 +258,6 @@ function initializeEditor() {
 
     const contentTextarea = document.getElementById('content');
     const insertImageBtn = document.getElementById('insertImageBtn');
-    const uploadedImagesContainer = document.getElementById('uploadedImagesList');
     const coverImageContainer = document.getElementById('coverImageContainer');
     const coverImagePreview = document.getElementById('coverImagePreview');
     const coverImagePlaceholder = document.getElementById('coverImagePlaceholder');

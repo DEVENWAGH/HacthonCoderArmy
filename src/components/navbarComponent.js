@@ -112,35 +112,6 @@ export function navbarComponent() {
         }
     }
 
-    // In the handleCoverImage function
-    let fileInput = null;
-
-    function handleCoverImage() {
-        if (!fileInput) {
-            fileInput = document.createElement('input');
-            fileInput.type = 'file';
-            fileInput.accept = 'image/*';
-            fileInput.onchange = (e) => {
-                if (e.target.files[0]) {
-                    processImage(e.target.files[0]);
-                }
-            };
-        }
-        fileInput.click();
-    }
-
-    // Clear the file input value after use
-    function processImage(file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            coverImagePreview.src = e.target.result;
-            coverImagePreview.style.display = 'block';
-            coverImagePlaceholder.style.display = 'none';
-            removeCoverImageBtn.style.display = 'flex';
-            fileInput.value = ''; // Clear the input
-        };
-        reader.readAsDataURL(file);
-    }
 
     return { template, initializeNavbar };
 }
