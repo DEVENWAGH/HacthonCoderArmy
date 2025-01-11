@@ -28,10 +28,17 @@
     <script
       async
       crossorigin="anonymous"
-      data-clerk-publishable-key="pk_test_ZnVuLXdhaG9vLTk0LmNsZXJrLmFjY291bnRzLmRldiQ"
-      src="https://fun-wahoo-94.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
       type="text/javascript"
+      id="clerk-script"
     ></script>
+
+    <script type="module">
+      // Add this before other scripts
+      const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+      const script = document.getElementById('clerk-script');
+      script.setAttribute('data-clerk-publishable-key', clerkPubKey);
+      script.src = `https://fun-wahoo-94.clerk.accounts.dev/npm/@clerk/clerk-js@latest/dist/clerk.browser.js`;
+    </script>
 
     <script type="module">
       window.addEventListener("load", async function () {

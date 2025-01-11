@@ -1,5 +1,9 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  // You can add any necessary Vite configuration here
+  define: {
+    'process.env': {}
+  },
+  // This allows you to use environment variables in your code
+  envPrefix: 'VITE_'
 });
