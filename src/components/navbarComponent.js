@@ -83,6 +83,43 @@ export function navbarComponent() {
       });
     }
 
+    // Add search functionality
+    const searchInput = document.getElementById("search-input");
+    const searchIcon = document.getElementById("search-icon");
+
+    if (searchInput && searchIcon) {
+        // Handle Enter key press
+        searchInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                performSearch(searchInput.value);
+            }
+        });
+
+        // Handle search icon click
+        searchIcon.addEventListener("click", () => {
+            performSearch(searchInput.value);
+        });
+    }
+
+    // Function to perform search
+    function performSearch(query) {
+        if (!query.trim()) {
+            displayBlogs(); // Show all blogs if search is empty
+            return;
+        }
+
+        const blogs = JSON.parse(sessionStorage.getItem("blogs") || "[]");
+        const filteredBlogs = blogs.filter(blog => {
+            const lowerQuery = query.toLowerCase();
+            return blog.title.toLowerCase().includes(lowerQuery) ||
+                   blog.category.toLowerCase().includes(lowerQuery) ||
+                   blog.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
+        });
+
+        displayBlogs(filteredBlogs); // Display filtered blogs
+    }
+
     const runAnimation = () => {
         // Set initial states
         gsap.set(".navbar", {

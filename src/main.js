@@ -83,22 +83,22 @@ function animateBlogs() {
 }
 
 // Update displayBlogs function
-window.displayBlogs = function () {
+window.displayBlogs = function (filteredBlogs = null) {
     const blogsContainer = document.getElementById("content");
     const createBlogFormContainer = document.getElementById("createBlogFormContainer");
 
     if (!blogsContainer || createBlogFormContainer.style.display === "block") return;
 
     try {
-        // Get blogs from sessionStorage
-        let blogs = JSON.parse(sessionStorage.getItem("blogs") || "[]");
+        // Use filtered blogs if provided, otherwise get all blogs
+        let blogs = filteredBlogs || JSON.parse(sessionStorage.getItem("blogs") || "[]");
         blogsContainer.innerHTML = "";
 
         if (blogs.length === 0) {
             blogsContainer.innerHTML = `
                 <div class="no-blogs">
-                    <h2>No blogs yet</h2>
-                    <p>Be the first one to create a blog!</p>
+                    <h2>No blogs found</h2>
+                    <p>${filteredBlogs ? 'No matching results' : 'Be the first one to create a blog!'}</p>
                 </div>`;
             
             gsap.from(".no-blogs", {
@@ -929,4 +929,84 @@ document.addEventListener('DOMContentLoaded', () => {
     if (createBlogFormContainer) {
         initializeTagsInput();
     }
+});
+
+// Function to filter blogs based on search query
+function filterBlogs(query) {
+  const blogs = JSON.parse(sessionStorage.getItem("blogs") || "[]");
+  const lowerCaseQuery = query.toLowerCase();
+
+  return blogs.filter(blog => {
+    const titleMatch = blog.title.toLowerCase().includes(lowerCaseQuery);
+    const categoryMatch = blog.category.toLowerCase().includes(lowerCaseQuery);
+    const tagsMatch = blog.tags.some(tag => tag.toLowerCase().includes(lowerCaseQuery));
+    return titleMatch || categoryMatch || tagsMatch;
+  });
+}
+
+// Function to display search results
+function displaySearchResults(results) {
+  const searchResultsContainer = document.getElementById("search-results");
+  if (!searchResultsContainer) return;
+
+  if (results.length === 0) {
+    searchResultsContainer.innerHTML = `<div class="search-result-item">No results found</div>`;
+  } else {
+    searchResultsContainer.innerHTML = results.map(blog => `
+      <div class="search-result-item" data-id="${blog.id}">
+        <i class="fas fa-file-alt"></i>
+        <div>
+          <div><strong>${blog.title}</strong></div>
+          <div>${blog.category}</div>
+          <div>${blog.tags.map(tag => `#${tag}`).join(", ")}</div>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  searchResultsContainer.style.display = "block";
+}
+
+// Initialize search functionality
+function initializeSearch() {
+  const searchInput = document.getElementById("search-input");
+  const searchResultsContainer = document.createElement("div");
+  searchResultsContainer.id = "search-results";
+  searchResultsContainer.className = "search-results";
+  document.querySelector(".search-bar").appendChild(searchResultsContainer);
+
+  searchInput.addEventListener("input", (e) => {
+    const query = e.target.value.trim();
+    if (query) {
+      const results = filterBlogs(query);
+      displaySearchResults(results);
+    } else {
+      searchResultsContainer.style.display = "none";
+    }
+  });
+
+  searchResultsContainer.addEventListener("click", (e) => {
+    const resultItem = e.target.closest(".search-result-item");
+    if (resultItem) {
+      const blogId = resultItem.dataset.id;
+      const blog = JSON.parse(sessionStorage.getItem("blogs") || "[]").find(b => b.id === parseInt(blogId));
+      if (blog) {
+        // Display the selected blog
+        displayBlogs([blog]);
+      }
+      searchResultsContainer.style.display = "none";
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".search-bar")) {
+      searchResultsContainer.style.display = "none";
+    }
+  });
+}
+
+// Call initializeSearch when the page loads
+document.addEventListener("DOMContentLoaded", () => {
+  initializeSearch();
+  displayBlogs(); // Display existing blogs
 });
