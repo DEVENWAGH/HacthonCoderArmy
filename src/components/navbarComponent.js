@@ -1,5 +1,5 @@
 import { createBlogComponent } from "./createBlogComponent.js";
-import { gsap } from 'gsap';
+import { gsap } from "gsap";
 
 let navbarInitialized = false; // Add this flag at the top level
 
@@ -88,143 +88,161 @@ export function navbarComponent() {
     const searchIcon = document.getElementById("search-icon");
 
     if (searchInput && searchIcon) {
-        // Handle Enter key press
-        searchInput.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-                e.preventDefault();
-                performSearch(searchInput.value);
-            }
-        });
+      // Handle Enter key press
+      searchInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          performSearch(searchInput.value);
+        }
+      });
 
-        // Handle search icon click
-        searchIcon.addEventListener("click", () => {
-            performSearch(searchInput.value);
-        });
+      // Handle search icon click
+      searchIcon.addEventListener("click", () => {
+        performSearch(searchInput.value);
+      });
     }
 
     // Function to perform search
     function performSearch(query) {
-        if (!query.trim()) {
-            displayBlogs(); // Show all blogs if search is empty
-            return;
-        }
+      if (!query.trim()) {
+        displayBlogs(); // Show all blogs if search is empty
+        return;
+      }
 
-        const blogs = JSON.parse(sessionStorage.getItem("blogs") || "[]");
-        const filteredBlogs = blogs.filter(blog => {
-            const lowerQuery = query.toLowerCase();
-            return blog.title.toLowerCase().includes(lowerQuery) ||
-                   blog.category.toLowerCase().includes(lowerQuery) ||
-                   blog.tags.some(tag => tag.toLowerCase().includes(lowerQuery));
-        });
+      const blogs = JSON.parse(sessionStorage.getItem("blogs") || "[]");
+      const filteredBlogs = blogs.filter((blog) => {
+        const lowerQuery = query.toLowerCase();
+        return (
+          blog.title.toLowerCase().includes(lowerQuery) ||
+          blog.category.toLowerCase().includes(lowerQuery) ||
+          blog.tags.some((tag) => tag.toLowerCase().includes(lowerQuery))
+        );
+      });
 
-        displayBlogs(filteredBlogs); // Display filtered blogs
+      displayBlogs(filteredBlogs); // Display filtered blogs
     }
 
     const runAnimation = () => {
-        // Set initial states
-        gsap.set(".navbar", {
-            background: "transparent"  // Start with transparent background
-        });
-        
-        gsap.set(".navbar-container", { 
-            opacity: 0
-        });
+      // Set initial states
+      gsap.set(".navbar", {
+        background: "transparent", // Start with transparent background
+      });
 
-        // Set specific initial positions
-        gsap.set(".logo", {
-            opacity: 0,
-            x: -100  // Start from left
-        });
-        
-        gsap.set(".search-bar", {
-            opacity: 0,
-            y: -50   // Start from top
-        });
-        
-        gsap.set(".nav-links li", {
-            opacity: 0,
-            y: -50   // Start from top
-        });
-        
-        gsap.set([".user-profile", ".dark-mode-toggle"], {
-            opacity: 0,
-            y: -50   // Start from top
-        });
+      gsap.set(".navbar-container", {
+        opacity: 0,
+      });
 
-        // Animation timeline
-        const tl = gsap.timeline({
-            defaults: { 
-                ease: "power3.out",
-                duration: 1  // Increased base duration
-            },
-            onComplete: () => {
-                navbarInitialized = true;
-            }
-        });
+      // Set specific initial positions
+      gsap.set(".logo", {
+        opacity: 0,
+        x: -100, // Start from left
+      });
 
-        // Add background animation first
-        tl.to(".navbar", {
-            duration: 0.8,
-            background: "#000000",
-            ease: "power2.inOut"
-        })
+      gsap.set(".search-bar", {
+        opacity: 0,
+        y: -50, // Start from top
+      });
+
+      gsap.set(".nav-links li", {
+        opacity: 0,
+        y: -50, // Start from top
+      });
+
+      gsap.set([".user-profile", ".dark-mode-toggle"], {
+        opacity: 0,
+        y: -50, // Start from top
+      });
+
+      // Animation timeline
+      const tl = gsap.timeline({
+        defaults: {
+          ease: "power3.out",
+          duration: 1,
+        },
+        onComplete: () => {
+          navbarInitialized = true;
+        },
+      });
+
+      // Add background animation first
+      tl.to(".navbar", {
+        duration: 0.2,
+        background: "#000000",
+        ease: "power2.Out",
+      })
         .to(".navbar-container", {
-            opacity: 1,
-            duration: 0.5
+          opacity: 1,
+          duration: 0.5,
         })
-        .to(".logo", {
+        .to(
+          ".logo",
+          {
             x: 0,
             opacity: 1,
             duration: 1.2,
-            clearProps: "transform"
-        }, "-=0.3")
-        .to(".search-bar", {
+            clearProps: "transform",
+          },
+          "-=0.3"
+        )
+        .to(
+          ".search-bar",
+          {
             y: 0,
             opacity: 1,
             duration: 1,
-            clearProps: "transform"
-        }, "-=0.8")  // Overlap with logo animation
-        .to(".nav-links li", {
+            clearProps: "transform",
+          },
+          "-=0.8"
+        ) // Overlap with logo animation
+        .to(
+          ".nav-links li",
+          {
             y: 0,
             opacity: 1,
             duration: 0.8,
             stagger: 0.2,
-            clearProps: "transform"
-        }, "-=0.6")  // Overlap with search bar
-        .to([".user-profile", ".dark-mode-toggle"], {
+            clearProps: "transform",
+          },
+          "-=0.6"
+        ) // Overlap with search bar
+        .to(
+          [".user-profile", ".dark-mode-toggle"],
+          {
             y: 0,
             opacity: 1,
             duration: 0.8,
             stagger: 0.2,
-            clearProps: "transform"
-        }, "-=0.4");  // Overlap with nav links
+            clearProps: "transform",
+          },
+          "-=0.4"
+        ); // Overlap with nav links
     };
 
     // Run animation only once
-    if (document.readyState === 'complete') {
-        runAnimation();
+    if (document.readyState === "complete") {
+      runAnimation();
     } else {
-        window.addEventListener('load', runAnimation, { once: true });
+      window.addEventListener("load", runAnimation, { once: true });
     }
 
     // Simple hover effect for logo
     const logo = document.querySelector(".logo");
     if (logo) {
-        logo.addEventListener("mouseenter", () => {
-            gsap.to(".logo", {
-                scale: 1.05,
-                duration: 0.2,
-                overwrite: true
-            });
+      logo.addEventListener("mouseenter", () => {
+        gsap.to(".logo", {
+          scale: 1.05,
+          duration: 0.2,
+          overwrite: true,
         });
+      });
 
-        logo.addEventListener("mouseleave", () => {
-            gsap.to(".logo", {
-                scale: 1,
-                duration: 0.2,
-                overwrite: true
-            });
+      logo.addEventListener("mouseleave", () => {
+        gsap.to(".logo", {
+          scale: 1,
+          duration: 0.2,
+          overwrite: true,
         });
+      });
     }
   };
 
