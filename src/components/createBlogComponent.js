@@ -245,25 +245,41 @@ export function createBlogComponent(blogData = {}) {
     // Cancel button
     const cancelBtn = document.getElementById("cancelBtn");
     if (cancelBtn) {
-      cancelBtn.addEventListener("click", () => {
-        // Check if draft exists
-        const savedDraft = localStorage.getItem('blog-draft');
-        
-        // Only show confirmation if there's NO draft saved
-        if (!savedDraft) {
-            if (confirm("Are you sure? Any unsaved changes will be lost.")) {
-                document.getElementById("createBlogFormContainer").style.display = "none";
-                document.querySelector(".navbar").style.display = "block";
-                document.getElementById("content").style.display = "block";
+        cancelBtn.addEventListener("click", () => {
+            const hasDraft = localStorage.getItem('blog-draft');
+            
+            if (!hasDraft) {
+                // No draft saved - check for unsaved changes
+                const hasContent = hasFormContent();
+                if (hasContent) {
+                    if (confirm("Are you sure you want to leave? All unsaved changes will be lost.")) {
+                        closeForm();
+                    }
+                } else {
+                    closeForm();
+                }
+            } else {
+                // Draft exists - just close without warning
+                closeForm();
             }
-        } else {
-            // If draft exists, just close the form since changes are saved
-            document.getElementById("createBlogFormContainer").style.display = "none";
-            document.querySelector(".navbar").style.display = "block";
-            document.getElementById("content").style.display = "block";
-            showNotification('Your draft is saved');
-        }
-    });
+        });
+    }
+
+    // Helper function to check if form has content
+    function hasFormContent() {
+        return document.getElementById("title").value || 
+               editor.innerHTML || 
+               document.getElementById("category").value || 
+               JSON.parse(document.getElementById("tags-hidden").value || "[]").length > 0 || 
+               document.getElementById("coverImagePreview").src;
+    }
+
+    // Helper function to close form without clearing draft
+    function closeForm() {
+        // Don't clear the draft, just hide the form
+        document.getElementById("createBlogFormContainer").style.display = "none";
+        document.querySelector(".navbar").style.display = "block";
+        document.getElementById("content").style.display = "block";
     }
 
     // Initialize tags input with correct scope
@@ -376,23 +392,16 @@ export function createBlogComponent(blogData = {}) {
   function initializeEditor(editor) {
     if (!editor) return;
 
-    // Auto-save functionality
-    let autoSaveTimeout;
-    const autoSaveHandler = () => {
-        clearTimeout(autoSaveTimeout);
-        autoSaveTimeout = setTimeout(() => {
-            saveDraft('auto');
-        }, 2000);
-    };
+    // Remove auto-save listeners and timeout
+    // let autoSaveTimeout;
+    // const autoSaveHandler = () => { ... }
+    // editor.addEventListener('input', autoSaveHandler);
+    // document.getElementById('title').addEventListener('input', autoSaveHandler);
+    // document.getElementById('category').addEventListener('change', autoSaveHandler);
+    // document.getElementById('tags-hidden').addEventListener('change', autoSaveHandler);
 
-    // Add auto-save listeners
-    editor.addEventListener('input', autoSaveHandler);
-    document.getElementById('title').addEventListener('input', autoSaveHandler);
-    document.getElementById('category').addEventListener('change', autoSaveHandler);
-    document.getElementById('tags-hidden').addEventListener('change', autoSaveHandler);
-
-    // Save draft function
-    function saveDraft(type = 'manual') {
+    // Save draft function - only called by Save Draft button
+    function saveDraft() {
         const draftData = {
             title: document.getElementById("title").value,
             content: editor.innerHTML,
@@ -402,56 +411,27 @@ export function createBlogComponent(blogData = {}) {
             lastSaved: new Date().toISOString()
         };
 
-        // Save only one draft
         localStorage.setItem('blog-draft', JSON.stringify(draftData));
-
-        if (type === 'manual') {
-            showNotification('Draft saved successfully!');
-        }
+        showNotification('Draft saved successfully!');
     }
 
     // Manual save draft button
     const saveDraftBtn = document.querySelector('.save-draft-btn');
     if (saveDraftBtn) {
-        saveDraftBtn.addEventListener('click', () => saveDraft('manual'));
+        saveDraftBtn.addEventListener('click', saveDraft);
     }
 
-    // Load draft if exists - Move this function definition up
+    // Only load draft when creating new blog
     function loadDraft() {
         const savedDraft = localStorage.getItem('blog-draft');
         if (savedDraft) {
             const draft = JSON.parse(savedDraft);
             
-            // Directly restore draft without confirmation
             document.getElementById("title").value = draft.title || '';
             editor.innerHTML = draft.content || '';
             document.getElementById("category").value = draft.category || '';
             
-            // Restore tags
-            if (draft.tags && draft.tags.length > 0) {
-                document.getElementById("tags-hidden").value = JSON.stringify(draft.tags);
-                window.tags = draft.tags; // Update the global tags array
-                const tagsList = document.getElementById("tags-list");
-                if (tagsList) {
-                    tagsList.innerHTML = draft.tags.map(tag => `
-                        <span class="tag-item">
-                            <i class="fas fa-hashtag"></i>${tag}
-                            <span class="tag-remove" data-tag="${tag}">×</span>
-                        </span>
-                    `).join('');
-                    
-                    // Reattach tag remove event listeners
-                    document.querySelectorAll('.tag-remove').forEach(button => {
-                        button.addEventListener('click', (e) => {
-                            const tagToRemove = e.target.dataset.tag;
-                            window.tags = window.tags.filter(t => t !== tagToRemove);
-                            updateTags();
-                        });
-                    });
-                }
-            }
-            
-            // Restore cover image
+            // Restore cover image properly
             if (draft.coverImage) {
                 const coverPreview = document.getElementById("coverImagePreview");
                 const coverPlaceholder = document.getElementById("coverImagePlaceholder");
@@ -464,14 +444,39 @@ export function createBlogComponent(blogData = {}) {
                     removeCoverBtn.style.display = "flex";
                 }
             }
+            
+            // Restore tags
+            if (draft.tags && draft.tags.length > 0) {
+                document.getElementById("tags-hidden").value = JSON.stringify(draft.tags);
+                window.tags = draft.tags;
+                const tagsList = document.getElementById("tags-list");
+                if (tagsList) {
+                    tagsList.innerHTML = draft.tags.map(tag => `
+                        <span class="tag-item">
+                            <i class="fas fa-hashtag"></i>${tag}
+                            <span class="tag-remove" data-tag="${tag}">×</span>
+                        </span>
+                    `).join('');
+                    
+                    document.querySelectorAll('.tag-remove').forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            const tagToRemove = e.target.dataset.tag;
+                            window.tags = window.tags.filter(t => t !== tagToRemove);
+                            updateTags();
+                        });
+                    });
+                }
+            }
 
-            // Show notification that draft was restored
-            showNotification('Draft restored successfully!');
+            showNotification('Draft restored');
         }
     }
 
-    // Call loadDraft immediately
-    loadDraft();
+    // Only call loadDraft when creating new blog (not editing)
+    const isEditing = document.getElementById("createBlogFormContainer").dataset.editBlogId;
+    if (!isEditing) {
+        loadDraft();
+    }
 
     // Add underline to existing commands
     const commands = ["bold", "italic", "underline", "insertOrderedList", "insertUnorderedList", "formatBlock"];
