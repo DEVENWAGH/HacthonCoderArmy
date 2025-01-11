@@ -1,3 +1,5 @@
+import { gsap } from "gsap";
+
 export function createBlogComponent(blogData = {}) {
   const template = `
         <div class="create-blog-container">
@@ -33,7 +35,6 @@ export function createBlogComponent(blogData = {}) {
                     <div class="tags-input-container">
                         <input type="text" id="tags-input" placeholder="Type to add tags">
                         <div id="tags-list" class="tags-list"></div>
-                        <div id="tag-suggestions" class="tag-suggestions"></div>
                         <input type="hidden" id="tags-hidden" name="tags" value="[]">
                     </div>
                 </div>
@@ -62,6 +63,75 @@ export function createBlogComponent(blogData = {}) {
   const initializeCreateBlog = () => {
     const form = document.getElementById("createBlogForm");
     const editor = document.getElementById("editor");
+    const formContainer = document.getElementById("createBlogFormContainer");
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    const initialLogoSrc = isDarkMode ? "./logo.svg" : "./dark-logo.svg";
+    const logoImage = document.getElementById('logoImage');
+    if (logoImage) {
+        logoImage.src = initialLogoSrc;
+    }
+    // Set initial states for animation
+    gsap.set(formContainer, { 
+      opacity: 0,
+      y: 50 
+    });
+    
+    gsap.set(".form-group", {
+      opacity: 0,
+      y: 20
+    });
+    
+    gsap.set(".editor-toolbar button", {
+      opacity: 0,
+      scale: 0.8
+    });
+    
+    gsap.set("#editor", {
+      opacity: 0,
+      y: 20
+    });
+    
+    gsap.set(".form-actions button", {
+      opacity: 0,
+      y: 20
+    });
+
+    // Entrance animation timeline
+    const tl = gsap.timeline();
+    
+    tl.to(formContainer, {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      ease: "power3.out"
+    })
+    .to(".form-group", {
+      opacity: 1,
+      y: 0,
+      duration: 0.4,
+      stagger: 0.1,
+      ease: "power2.out"
+    }, "-=0.2")
+    .to(".editor-toolbar button", {
+      opacity: 1,
+      scale: 1,
+      duration: 0.3,
+      stagger: 0.05,
+      ease: "back.out(1.7)"
+    }, "-=0.2")
+    .to("#editor", {
+      opacity: 1,
+      y: 0,
+      duration: 0.4,
+      ease: "power2.out"
+    }, "-=0.2")
+    .to(".form-actions button", {
+      opacity: 1,
+      y: 0,
+      duration: 0.3,
+      stagger: 0.1,
+      ease: "power2.out"
+    }, "-=0.2");
 
     // Prevent form submission on Enter key
     form.addEventListener('keypress', (e) => {
@@ -69,12 +139,7 @@ export function createBlogComponent(blogData = {}) {
         e.preventDefault();
       }
     });
-    const isDarkMode = document.body.classList.contains('dark-mode');
-    const initialLogoSrc = isDarkMode ? "./logo.svg" : "./dark-logo.svg";
-    const logoImage = document.getElementById('logoImage');
-    if (logoImage) {
-        logoImage.src = initialLogoSrc;
-    }
+
     // Get the blog ID if we're editing
     const blogId = document.getElementById("createBlogFormContainer").dataset
       .editBlogId;
@@ -159,10 +224,33 @@ export function createBlogComponent(blogData = {}) {
         if (navbar) navbar.style.display = "block";
         if (content) content.style.display = "block";
 
-        // Refresh blogs display
-        if (typeof window.displayBlogs === "function") {
-          window.displayBlogs();
-        }
+        // Exit animation
+        gsap.to(formContainer, {
+          opacity: 0,
+          y: -50,
+          duration: 0.5,
+          ease: "power2.inOut",
+          onComplete: () => {
+            formContainer.style.display = "none";
+            document.querySelector(".navbar").style.display = "block";
+            document.getElementById("content").style.display = "block";
+
+            // Animate navbar and content back in
+            gsap.from([".navbar", "#content"], {
+              opacity: 0,
+              y: -20,
+              duration: 0.5,
+              stagger: 0.1,
+              ease: "power2.out",
+              onComplete: () => {
+                // Only call displayBlogs once here, remove other calls
+                if (typeof window.displayBlogs === "function") {
+                  window.displayBlogs();
+                }
+              }
+            });
+          }
+        });
       } catch (error) {
         console.error("Error publishing blog:", error);
         // Remove alert and silently handle the error
@@ -281,89 +369,46 @@ export function createBlogComponent(blogData = {}) {
 
     // Helper function to close form without clearing draft
     function closeForm() {
-        // Don't clear the draft, just hide the form
-        document.getElementById("createBlogFormContainer").style.display = "none";
-        document.querySelector(".navbar").style.display = "block";
-        document.getElementById("content").style.display = "block";
+      gsap.to(formContainer, {
+        opacity: 0,
+        y: -50,
+        duration: 0.5,
+        ease: "power2.inOut",
+        onComplete: () => {
+          formContainer.style.display = "none";
+          document.querySelector(".navbar").style.display = "block";
+          document.getElementById("content").style.display = "block";
+          
+          // Animate navbar and content back in
+          gsap.from([".navbar", "#content"], {
+            opacity: 0,
+            y: -20,
+            duration: 0.5,
+            stagger: 0.1,
+            ease: "power2.out"
+          });
+        }
+      });
     }
 
     // Initialize tags input with correct scope
     const tagsInput = document.getElementById('tags-input');
     const tagsList = document.getElementById('tags-list');
-    const tagSuggestions = document.getElementById('tag-suggestions');
     const tagsHidden = document.getElementById('tags-hidden');
-    const categorySelect = document.getElementById('category');
     let tags = [];
 
-    if (categorySelect) {
-      categorySelect.addEventListener('change', () => {
-        if (categorySelect.value) {
-          tagsInput.disabled = false;
-          tagsInput.placeholder = 'Type to add tags';
-        } else {
-          tagsInput.disabled = true;
-          tagsInput.placeholder = 'Please select a category first';
-        }
-      });
-    }
-
     if (tagsInput) {
-      tagsInput.addEventListener('input', (e) => {
-        const input = e.target.value.trim().toLowerCase();
-        const selectedCategory = categorySelect.value;
-        
-        if (!input || !selectedCategory) {
-          tagSuggestions.style.display = 'none';
-          return;
-        }
-
-        const suggestions = CATEGORY_TAGS[selectedCategory]
-          .filter(tag => tag.includes(input))
-          .filter(tag => !tags.includes(tag));
-
-        if (suggestions.length > 0) {
-          tagSuggestions.innerHTML = suggestions
-            .slice(0, 5)
-            .map(tag => `
-              <div class="suggestion-item" data-tag="${tag}">
-                <i class="fas fa-hashtag"></i> ${tag}
-              </div>
-            `).join('');
-          tagSuggestions.style.display = 'block';
-        } else {
-          tagSuggestions.innerHTML = `
-            <div class="suggestion-item no-category">
-              No matching tags found
-            </div>`;
-          tagSuggestions.style.display = 'block';
-        }
-      });
-
       tagsInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && tagsInput.value.trim()) {
           e.preventDefault();
-          addTag(tagsInput.value.trim());
+          const tag = tagsInput.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
+          if (tag && !tags.includes(tag) && tags.length < 5) {
+            tags.push(tag);
+            updateTags();
+            tagsInput.value = '';
+          }
         }
       });
-    }
-
-    if (tagSuggestions) {
-      tagSuggestions.addEventListener('click', (e) => {
-        const suggestionItem = e.target.closest('.suggestion-item');
-        if (suggestionItem && !suggestionItem.classList.contains('no-category')) {
-          addTag(suggestionItem.dataset.tag);
-        }
-      });
-    }
-
-    function addTag(tag) {
-      tag = tag.toLowerCase().replace(/[^a-z0-9-]/g, '');
-      if (tag && !tags.includes(tag) && tags.length < 5) {
-        tags.push(tag);
-        updateTags();
-        tagsInput.value = '';
-        tagSuggestions.style.display = 'none';
-      }
     }
 
     function updateTags() {
@@ -383,14 +428,33 @@ export function createBlogComponent(blogData = {}) {
           updateTags();
         });
       });
+
+      // Animate new tag
+      gsap.from(tagsList.lastElementChild, {
+        opacity: 0,
+        scale: 0.5,
+        duration: 0.3,
+        ease: "back.out(1.7)"
+      });
     }
 
-    // Close suggestions when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.tags-input-container')) {
-        tagSuggestions.style.display = 'none';
-      }
+    // Add theme change observer
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.attributeName === 'class' && 
+                mutation.target === document.body) {
+                updateLogoForTheme();
+            }
+        });
     });
+
+    observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class']
+    });
+
+    // Initial logo setup
+    updateLogoForTheme();
   };
 
   // Move editor initialization into a separate function
@@ -763,6 +827,12 @@ function updateUIAfterSubmission() {
   }
 }
 
+const CATEGORY_TAGS = {
+  technology: ['javascript', 'react', 'nodejs', 'python', 'webdev', 'coding', 'programming', 'tech', 'software', 'development'],
+  lifestyle: ['health', 'fitness', 'wellness', 'mindfulness', 'motivation', 'selfcare', 'productivity', 'lifestyle', 'personal', 'growth'],
+  travel: ['adventure', 'wanderlust', 'explore', 'vacation', 'destination', 'tourism', 'journey', 'traveltips', 'wandering', 'travellife'],
+  food: ['cooking', 'recipe', 'foodie', 'cuisine', 'baking', 'healthy', 'delicious', 'foodlover', 'homemade', 'culinary']
+};
 
 // Add notification function
 function showNotification(message) {
@@ -774,4 +844,23 @@ function showNotification(message) {
     setTimeout(() => {
         notification.remove();
     }, 3000);
+}
+
+// Add this function to handle logo theme changes
+function updateLogoForTheme() {
+    const logoImage = document.getElementById('logoImage');
+    if (logoImage) {
+        // Animate logo change
+        gsap.to(logoImage, {
+            opacity: 1,
+            duration: 0.3,
+            onComplete: () => {
+                logoImage.src = newSrc;
+                gsap.to(logoImage, {
+                    opacity: 1,
+                    duration: 0.3
+                });
+            }
+        });
+    }
 }
