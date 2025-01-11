@@ -1,7 +1,7 @@
 import "./style.css";
 import { createBlogComponent } from "./components/createBlogComponent.js";
 import { gsap } from 'gsap';
-
+import Lenis from 'lenis'
 // Add this at the top of the file
 const CATEGORY_TAGS = {
     technology: ['javascript', 'react', 'nodejs', 'python', 'webdev', 'coding', 'programming', 'tech', 'software', 'development'],
@@ -10,6 +10,16 @@ const CATEGORY_TAGS = {
     food: ['cooking', 'recipe', 'foodie', 'cuisine', 'baking', 'healthy', 'delicious', 'foodlover', 'homemade', 'culinary']
 };
 
+// Initialize Lenis
+const lenis = new Lenis();
+
+// Use requestAnimationFrame to continuously update the scroll
+function raf(time) {
+  lenis.raf(time);
+  requestAnimationFrame(raf);
+}
+
+requestAnimationFrame(raf);
 // Initialize Clerk
 window.initializeClerk = async function () {
   try {
