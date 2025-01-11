@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="EchoBlogs - A modern blogging platform" />
     <title>EchoBlogs</title>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -11,17 +12,30 @@
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
-    <header></header>
-    <div id="app">
-      <div id="navbarContainer">
-        <!-- Navbar content here -->
-      </div>
-      <div id="content">
-        <!-- Dynamic content will be displayed here -->
-      </div>
-      <div id="createBlogFormContainer" style="display: none">
-        <!-- Create blog component will be injected here -->
-      </div>
+    <div class="wrapper">
+      <header>
+        <nav id="navbarContainer" role="navigation" aria-label="Main navigation">
+          <!-- Navbar content here -->
+        </nav>
+      </header>
+
+      <main id="app" role="main">
+        <section id="content" aria-live="polite">
+          <!-- Dynamic content will be displayed here -->
+        </section>
+        
+        <section id="createBlogFormContainer" style="display: none" aria-hidden="true">
+          <!-- Create blog component will be injected here -->
+        </section>
+
+        <aside id="search-results" class="search-results" aria-label="Search results" hidden>
+          <!-- Search results will appear here -->
+        </aside>
+      </main>
+
+      <footer id="footerContainer">
+        <!-- Footer content will be injected here -->
+      </footer>
     </div>
 
     <!-- Initialize Clerk with your Clerk Publishable Key -->
@@ -63,7 +77,7 @@
         } else {
           // Render sign in page
           document.getElementById("app").innerHTML = `
-            <div id="sign-in"></div>
+            <section id="sign-in" aria-label="Sign in form"></section>
           `;
 
           // Mount Clerk sign in

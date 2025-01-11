@@ -1,5 +1,6 @@
 import "./style.css";
 import { createBlogComponent } from "./components/createBlogComponent.js";
+import { footerComponent } from "./components/footerComponent.js"; // Import the footer component
 import { gsap } from 'gsap';
 import Lenis from 'lenis'
 // Add this at the top of the file
@@ -39,6 +40,11 @@ window.initializeClerk = async function () {
 
       // Display posts
       displayBlogs();
+
+      // Initialize and display footer
+      const footer = footerComponent();
+      document.getElementById("footerContainer").innerHTML = footer.template;
+      footer.initializeFooter();
     } else {
       // Render sign in page
       document.getElementById("app").innerHTML = `<div id="sign-in"></div>`;
