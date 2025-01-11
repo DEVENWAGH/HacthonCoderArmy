@@ -1,8 +1,12 @@
+import { gsap } from "gsap";
+
 export function createBlogComponent(blogData = {}) {
   const template = `
         <div class="create-blog-container">
             <div class="logo-container">
-                <a href="/"><img class="darklogo" id="logoImage" src="./logo.svg" alt="Logo"></a>
+                <a href="/">
+                    <img class="darklogo" id="logoImage" src="./logo.svg" alt="Logo" data-light-src="./logo.svg" data-dark-src="./dark-logo.svg">
+                </a>
             </div>
             <form id="createBlogForm">
                 <div class="form-group">
@@ -33,7 +37,6 @@ export function createBlogComponent(blogData = {}) {
                     <div class="tags-input-container">
                         <input type="text" id="tags-input" placeholder="Type to add tags">
                         <div id="tags-list" class="tags-list"></div>
-                        <div id="tag-suggestions" class="tag-suggestions"></div>
                         <input type="hidden" id="tags-hidden" name="tags" value="[]">
                     </div>
                 </div>
@@ -62,10 +65,74 @@ export function createBlogComponent(blogData = {}) {
   const initializeCreateBlog = () => {
     const form = document.getElementById("createBlogForm");
     const editor = document.getElementById("editor");
+    const formContainer = document.getElementById("createBlogFormContainer");
+
+    // Set initial states for animation
+    gsap.set(formContainer, { 
+      opacity: 0,
+      y: 50 
+    });
+    
+    gsap.set(".form-group", {
+      opacity: 0,
+      y: 20
+    });
+    
+    gsap.set(".editor-toolbar button", {
+      opacity: 0,
+      scale: 0.8
+    });
+    
+    gsap.set("#editor", {
+      opacity: 0,
+      y: 20
+    });
+    
+    gsap.set(".form-actions button", {
+      opacity: 0,
+      y: 20
+    });
+
+    // Entrance animation timeline
+    const tl = gsap.timeline();
+    
+    tl.to(formContainer, {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      ease: "power3.out"
+    })
+    .to(".form-group", {
+      opacity: 1,
+      y: 0,
+      duration: 0.4,
+      stagger: 0.1,
+      ease: "power2.out"
+    }, "-=0.2")
+    .to(".editor-toolbar button", {
+      opacity: 1,
+      scale: 1,
+      duration: 0.3,
+      stagger: 0.05,
+      ease: "back.out(1.7)"
+    }, "-=0.2")
+    .to("#editor", {
+      opacity: 1,
+      y: 0,
+      duration: 0.4,
+      ease: "power2.out"
+    }, "-=0.2")
+    .to(".form-actions button", {
+      opacity: 1,
+      y: 0,
+      duration: 0.3,
+      stagger: 0.1,
+      ease: "power2.out"
+    }, "-=0.2");
 
     // Prevent form submission on Enter key
-    form.addEventListener("keypress", (e) => {
-      if (e.key === "Enter" && e.target.id === "tags-input") {
+    form.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && e.target.id === 'tags-input') {
         e.preventDefault();
       }
     });
@@ -154,10 +221,33 @@ export function createBlogComponent(blogData = {}) {
         if (navbar) navbar.style.display = "block";
         if (content) content.style.display = "block";
 
-        // Refresh blogs display
-        if (typeof window.displayBlogs === "function") {
-          window.displayBlogs();
-        }
+        // Exit animation
+        gsap.to(formContainer, {
+          opacity: 0,
+          y: -50,
+          duration: 0.5,
+          ease: "power2.inOut",
+          onComplete: () => {
+            formContainer.style.display = "none";
+            document.querySelector(".navbar").style.display = "block";
+            document.getElementById("content").style.display = "block";
+
+            // Animate navbar and content back in
+            gsap.from([".navbar", "#content"], {
+              opacity: 0,
+              y: -20,
+              duration: 0.5,
+              stagger: 0.1,
+              ease: "power2.out",
+              onComplete: () => {
+                // Only call displayBlogs once here, remove other calls
+                if (typeof window.displayBlogs === "function") {
+                  window.displayBlogs();
+                }
+              }
+            });
+          }
+        });
       } catch (error) {
         console.error("Error publishing blog:", error);
         // Remove alert and silently handle the error
@@ -245,164 +335,123 @@ export function createBlogComponent(blogData = {}) {
     // Cancel button
     const cancelBtn = document.getElementById("cancelBtn");
     if (cancelBtn) {
-      cancelBtn.addEventListener("click", () => {
-        const hasDraft = localStorage.getItem("blog-draft");
-
-        if (!hasDraft) {
-          // No draft saved - check for unsaved changes
-          const hasContent = hasFormContent();
-          if (hasContent) {
-            if (
-              confirm(
-                "Are you sure you want to leave? All unsaved changes will be lost."
-              )
-            ) {
-              closeForm();
+        cancelBtn.addEventListener("click", () => {
+            const hasDraft = localStorage.getItem('blog-draft');
+            
+            if (!hasDraft) {
+                // No draft saved - check for unsaved changes
+                const hasContent = hasFormContent();
+                if (hasContent) {
+                    if (confirm("Are you sure you want to leave? All unsaved changes will be lost.")) {
+                        closeForm();
+                    }
+                } else {
+                    closeForm();
+                }
+            } else {
+                // Draft exists - just close without warning
+                closeForm();
             }
-          } else {
-            closeForm();
-          }
-        } else {
-          // Draft exists - just close without warning
-          closeForm();
-        }
-      });
+        });
     }
 
     // Helper function to check if form has content
     function hasFormContent() {
-      return (
-        document.getElementById("title").value ||
-        editor.innerHTML ||
-        document.getElementById("category").value ||
-        JSON.parse(document.getElementById("tags-hidden").value || "[]")
-          .length > 0 ||
-        document.getElementById("coverImagePreview").src
-      );
+        return document.getElementById("title").value || 
+               editor.innerHTML || 
+               document.getElementById("category").value || 
+               JSON.parse(document.getElementById("tags-hidden").value || "[]").length > 0 || 
+               document.getElementById("coverImagePreview").src;
     }
 
     // Helper function to close form without clearing draft
     function closeForm() {
-      // Don't clear the draft, just hide the form
-      document.getElementById("createBlogFormContainer").style.display = "none";
-      document.querySelector(".navbar").style.display = "block";
-      document.getElementById("content").style.display = "block";
+      gsap.to(formContainer, {
+        opacity: 0,
+        y: -50,
+        duration: 0.5,
+        ease: "power2.inOut",
+        onComplete: () => {
+          formContainer.style.display = "none";
+          document.querySelector(".navbar").style.display = "block";
+          document.getElementById("content").style.display = "block";
+          
+          // Animate navbar and content back in
+          gsap.from([".navbar", "#content"], {
+            opacity: 0,
+            y: -20,
+            duration: 0.5,
+            stagger: 0.1,
+            ease: "power2.out"
+          });
+        }
+      });
     }
 
     // Initialize tags input with correct scope
-    const tagsInput = document.getElementById("tags-input");
-    const tagsList = document.getElementById("tags-list");
-    const tagSuggestions = document.getElementById("tag-suggestions");
-    const tagsHidden = document.getElementById("tags-hidden");
-    const categorySelect = document.getElementById("category");
+    const tagsInput = document.getElementById('tags-input');
+    const tagsList = document.getElementById('tags-list');
+    const tagsHidden = document.getElementById('tags-hidden');
     let tags = [];
 
-    if (categorySelect) {
-      categorySelect.addEventListener("change", () => {
-        if (categorySelect.value) {
-          tagsInput.disabled = false;
-          tagsInput.placeholder = "Type to add tags";
-        } else {
-          tagsInput.disabled = true;
-          tagsInput.placeholder = "Please select a category first";
-        }
-      });
-    }
-
     if (tagsInput) {
-      tagsInput.addEventListener("input", (e) => {
-        const input = e.target.value.trim().toLowerCase();
-        const selectedCategory = categorySelect.value;
-
-        if (!input || !selectedCategory) {
-          tagSuggestions.style.display = "none";
-          return;
-        }
-
-        const suggestions = CATEGORY_TAGS[selectedCategory]
-          .filter((tag) => tag.includes(input))
-          .filter((tag) => !tags.includes(tag));
-
-        if (suggestions.length > 0) {
-          tagSuggestions.innerHTML = suggestions
-            .slice(0, 5)
-            .map(
-              (tag) => `
-              <div class="suggestion-item" data-tag="${tag}">
-                <i class="fas fa-hashtag"></i> ${tag}
-              </div>
-            `
-            )
-            .join("");
-          tagSuggestions.style.display = "block";
-        } else {
-          tagSuggestions.innerHTML = `
-            <div class="suggestion-item no-category">
-              No matching tags found
-            </div>`;
-          tagSuggestions.style.display = "block";
-        }
-      });
-
-      tagsInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && tagsInput.value.trim()) {
+      tagsInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && tagsInput.value.trim()) {
           e.preventDefault();
-          addTag(tagsInput.value.trim());
+          const tag = tagsInput.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
+          if (tag && !tags.includes(tag) && tags.length < 5) {
+            tags.push(tag);
+            updateTags();
+            tagsInput.value = '';
+          }
         }
       });
-    }
-
-    if (tagSuggestions) {
-      tagSuggestions.addEventListener("click", (e) => {
-        const suggestionItem = e.target.closest(".suggestion-item");
-        if (
-          suggestionItem &&
-          !suggestionItem.classList.contains("no-category")
-        ) {
-          addTag(suggestionItem.dataset.tag);
-        }
-      });
-    }
-
-    function addTag(tag) {
-      tag = tag.toLowerCase().replace(/[^a-z0-9-]/g, "");
-      if (tag && !tags.includes(tag) && tags.length < 5) {
-        tags.push(tag);
-        updateTags();
-        tagsInput.value = "";
-        tagSuggestions.style.display = "none";
-      }
     }
 
     function updateTags() {
       tagsHidden.value = JSON.stringify(tags);
-      tagsList.innerHTML = tags
-        .map(
-          (tag) => `
+      tagsList.innerHTML = tags.map(tag => `
         <span class="tag-item">
           <i class="fas fa-hashtag"></i>${tag}
           <span class="tag-remove" data-tag="${tag}">×</span>
         </span>
-      `
-        )
-        .join("");
+      `).join('');
 
       // Add click handlers for remove buttons
-      document.querySelectorAll(".tag-remove").forEach((button) => {
-        button.addEventListener("click", (e) => {
+      document.querySelectorAll('.tag-remove').forEach(button => {
+        button.addEventListener('click', (e) => {
           const tagToRemove = e.target.dataset.tag;
-          tags = tags.filter((t) => t !== tagToRemove);
+          tags = tags.filter(t => t !== tagToRemove);
           updateTags();
         });
       });
+
+      // Animate new tag
+      gsap.from(tagsList.lastElementChild, {
+        opacity: 0,
+        scale: 0.5,
+        duration: 0.3,
+        ease: "back.out(1.7)"
+      });
     }
 
-    // Close suggestions when clicking outside
-    document.addEventListener("click", (e) => {
-      if (!e.target.closest(".tags-input-container")) {
-        tagSuggestions.style.display = "none";
-      }
+    // Add theme change observer
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.attributeName === 'class' && 
+                mutation.target === document.body) {
+                updateLogoForTheme();
+            }
+        });
     });
+
+    observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class']
+    });
+
+    // Initial logo setup
+    updateLogoForTheme();
   };
 
   // Move editor initialization into a separate function
@@ -419,132 +468,112 @@ export function createBlogComponent(blogData = {}) {
 
     // Save draft function - only called by Save Draft button
     function saveDraft() {
-      const draftData = {
-        title: document.getElementById("title").value,
-        content: editor.innerHTML,
-        category: document.getElementById("category").value,
-        tags: JSON.parse(document.getElementById("tags-hidden").value || "[]"),
-        coverImage: document.getElementById("coverImagePreview").src || "",
-        lastSaved: new Date().toISOString(),
-      };
+        const draftData = {
+            title: document.getElementById("title").value,
+            content: editor.innerHTML,
+            category: document.getElementById("category").value,
+            tags: JSON.parse(document.getElementById("tags-hidden").value || "[]"),
+            coverImage: document.getElementById("coverImagePreview").src || '',
+            lastSaved: new Date().toISOString()
+        };
 
-      localStorage.setItem("blog-draft", JSON.stringify(draftData));
-      showNotification("Draft saved successfully!");
+        localStorage.setItem('blog-draft', JSON.stringify(draftData));
+        showNotification('Draft saved successfully!');
     }
 
     // Manual save draft button
-    const saveDraftBtn = document.querySelector(".save-draft-btn");
+    const saveDraftBtn = document.querySelector('.save-draft-btn');
     if (saveDraftBtn) {
-      saveDraftBtn.addEventListener("click", saveDraft);
+        saveDraftBtn.addEventListener('click', saveDraft);
     }
 
     // Only load draft when creating new blog
     function loadDraft() {
-      const savedDraft = localStorage.getItem("blog-draft");
-      if (savedDraft) {
-        const draft = JSON.parse(savedDraft);
-
-        document.getElementById("title").value = draft.title || "";
-        editor.innerHTML = draft.content || "";
-        document.getElementById("category").value = draft.category || "";
-
-        // Restore cover image properly
-        if (draft.coverImage) {
-          const coverPreview = document.getElementById("coverImagePreview");
-          const coverPlaceholder = document.getElementById(
-            "coverImagePlaceholder"
-          );
-          const removeCoverBtn = document.getElementById("removeCoverImage");
-
-          if (coverPreview && coverPlaceholder && removeCoverBtn) {
-            coverPreview.src = draft.coverImage;
-            coverPreview.style.display = "block";
-            coverPlaceholder.style.display = "none";
-            removeCoverBtn.style.display = "flex";
-          }
-        }
-
-        // Restore tags
-        if (draft.tags && draft.tags.length > 0) {
-          document.getElementById("tags-hidden").value = JSON.stringify(
-            draft.tags
-          );
-          window.tags = draft.tags;
-          const tagsList = document.getElementById("tags-list");
-          if (tagsList) {
-            tagsList.innerHTML = draft.tags
-              .map(
-                (tag) => `
+        const savedDraft = localStorage.getItem('blog-draft');
+        if (savedDraft) {
+            const draft = JSON.parse(savedDraft);
+            
+            document.getElementById("title").value = draft.title || '';
+            editor.innerHTML = draft.content || '';
+            document.getElementById("category").value = draft.category || '';
+            
+            // Restore cover image properly
+            if (draft.coverImage) {
+                const coverPreview = document.getElementById("coverImagePreview");
+                const coverPlaceholder = document.getElementById("coverImagePlaceholder");
+                const removeCoverBtn = document.getElementById("removeCoverImage");
+                
+                if (coverPreview && coverPlaceholder && removeCoverBtn) {
+                    coverPreview.src = draft.coverImage;
+                    coverPreview.style.display = "block";
+                    coverPlaceholder.style.display = "none";
+                    removeCoverBtn.style.display = "flex";
+                }
+            }
+            
+            // Restore tags
+            if (draft.tags && draft.tags.length > 0) {
+                document.getElementById("tags-hidden").value = JSON.stringify(draft.tags);
+                window.tags = draft.tags;
+                const tagsList = document.getElementById("tags-list");
+                if (tagsList) {
+                    tagsList.innerHTML = draft.tags.map(tag => `
                         <span class="tag-item">
                             <i class="fas fa-hashtag"></i>${tag}
                             <span class="tag-remove" data-tag="${tag}">×</span>
                         </span>
-                    `
-              )
-              .join("");
+                    `).join('');
+                    
+                    document.querySelectorAll('.tag-remove').forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            const tagToRemove = e.target.dataset.tag;
+                            window.tags = window.tags.filter(t => t !== tagToRemove);
+                            updateTags();
+                        });
+                    });
+                }
+            }
 
-            document.querySelectorAll(".tag-remove").forEach((button) => {
-              button.addEventListener("click", (e) => {
-                const tagToRemove = e.target.dataset.tag;
-                window.tags = window.tags.filter((t) => t !== tagToRemove);
-                updateTags();
-              });
-            });
-          }
+            showNotification('Draft restored');
         }
-
-        showNotification("Draft restored");
-      }
     }
 
     // Only call loadDraft when creating new blog (not editing)
-    const isEditing = document.getElementById("createBlogFormContainer").dataset
-      .editBlogId;
+    const isEditing = document.getElementById("createBlogFormContainer").dataset.editBlogId;
     if (!isEditing) {
-      loadDraft();
+        loadDraft();
     }
 
     // Add underline to existing commands
-    const commands = [
-      "bold",
-      "italic",
-      "underline",
-      "insertOrderedList",
-      "insertUnorderedList",
-      "formatBlock",
-    ];
+    const commands = ["bold", "italic", "underline", "insertOrderedList", "insertUnorderedList", "formatBlock"];
     const toolbarButtons = document.querySelectorAll(".editor-toolbar button");
-
+    
     toolbarButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const command = button.getAttribute("data-command");
-        const value = button.getAttribute("data-value") || "";
-
-        if (commands.includes(command)) {
-          if (command === "formatBlock") {
-            // Check if the current block is already a heading
-            const isHeading =
-              document.queryCommandValue("formatBlock") === "h2";
-
-            if (isHeading) {
-              // If it's already a heading, change it back to paragraph
-              document.execCommand("formatBlock", false, "p");
-              button.classList.remove("active");
-            } else {
-              // If it's not a heading, make it a heading
-              document.execCommand("formatBlock", false, value);
-              button.classList.add("active");
+        button.addEventListener("click", () => {
+            const command = button.getAttribute("data-command");
+            const value = button.getAttribute("data-value") || "";
+            
+            if (commands.includes(command)) {
+                if (command === "formatBlock") {
+                    // Check if the current block is already a heading
+                    const isHeading = document.queryCommandValue("formatBlock") === "h2";
+                    
+                    if (isHeading) {
+                        // If it's already a heading, change it back to paragraph
+                        document.execCommand("formatBlock", false, "p");
+                        button.classList.remove("active");
+                    } else {
+                        // If it's not a heading, make it a heading
+                        document.execCommand("formatBlock", false, value);
+                        button.classList.add("active");
+                    }
+                } else {
+                    document.execCommand(command, false, value);
+                    button.classList.toggle("active", document.queryCommandState(command));
+                }
             }
-          } else {
-            document.execCommand(command, false, value);
-            button.classList.toggle(
-              "active",
-              document.queryCommandState(command)
-            );
-          }
-        }
-        editor.focus();
-      });
+            editor.focus();
+        });
     });
 
     // Update button states when selection changes
@@ -557,41 +586,31 @@ export function createBlogComponent(blogData = {}) {
         if (command === "formatBlock") {
           const isHeading = document.queryCommandValue("formatBlock") === "h2";
           button.classList.toggle("active", isHeading);
-        } else if (
-          [
-            "bold",
-            "italic",
-            "insertOrderedList",
-            "insertUnorderedList",
-          ].includes(command)
-        ) {
-          button.classList.toggle(
-            "active",
-            document.queryCommandState(command)
-          );
+        } else if (["bold", "italic", "insertOrderedList", "insertUnorderedList"].includes(command)) {
+          button.classList.toggle("active", document.queryCommandState(command));
         }
       });
     }
 
     // Update form submit handler to clear draft after successful publish
-    const form = document.getElementById("createBlogForm");
+    const form = document.getElementById('createBlogForm');
     const originalSubmitHandler = form.onsubmit;
     form.onsubmit = async (e) => {
-      e.preventDefault();
+        e.preventDefault();
+        
+        try {
+            // Call original submit handler if it exists
+            if (originalSubmitHandler) {
+                await originalSubmitHandler.call(form, e);
+            }
 
-      try {
-        // Call original submit handler if it exists
-        if (originalSubmitHandler) {
-          await originalSubmitHandler.call(form, e);
+            // If publish was successful, clear the draft
+            localStorage.removeItem('blog-draft');
+            showNotification('Blog published successfully!');
+        } catch (error) {
+            console.error('Error publishing blog:', error);
+            showNotification('Error publishing blog');
         }
-
-        // If publish was successful, clear the draft
-        localStorage.removeItem("blog-draft");
-        showNotification("Blog published successfully!");
-      } catch (error) {
-        console.error("Error publishing blog:", error);
-        showNotification("Error publishing blog");
-      }
     };
   }
 
@@ -806,64 +825,44 @@ function updateUIAfterSubmission() {
 }
 
 const CATEGORY_TAGS = {
-  technology: [
-    "javascript",
-    "react",
-    "nodejs",
-    "python",
-    "webdev",
-    "coding",
-    "programming",
-    "tech",
-    "software",
-    "development",
-  ],
-  lifestyle: [
-    "health",
-    "fitness",
-    "wellness",
-    "mindfulness",
-    "motivation",
-    "selfcare",
-    "productivity",
-    "lifestyle",
-    "personal",
-    "growth",
-  ],
-  travel: [
-    "adventure",
-    "wanderlust",
-    "explore",
-    "vacation",
-    "destination",
-    "tourism",
-    "journey",
-    "traveltips",
-    "wandering",
-    "travellife",
-  ],
-  food: [
-    "cooking",
-    "recipe",
-    "foodie",
-    "cuisine",
-    "baking",
-    "healthy",
-    "delicious",
-    "foodlover",
-    "homemade",
-    "culinary",
-  ],
+  technology: ['javascript', 'react', 'nodejs', 'python', 'webdev', 'coding', 'programming', 'tech', 'software', 'development'],
+  lifestyle: ['health', 'fitness', 'wellness', 'mindfulness', 'motivation', 'selfcare', 'productivity', 'lifestyle', 'personal', 'growth'],
+  travel: ['adventure', 'wanderlust', 'explore', 'vacation', 'destination', 'tourism', 'journey', 'traveltips', 'wandering', 'travellife'],
+  food: ['cooking', 'recipe', 'foodie', 'cuisine', 'baking', 'healthy', 'delicious', 'foodlover', 'homemade', 'culinary']
 };
 
 // Add notification function
 function showNotification(message) {
-  const notification = document.createElement("div");
-  notification.className = "editor-notification";
-  notification.textContent = message;
-  document.body.appendChild(notification);
+    const notification = document.createElement('div');
+    notification.className = 'editor-notification';
+    notification.textContent = message;
+    document.body.appendChild(notification);
 
-  setTimeout(() => {
-    notification.remove();
-  }, 3000);
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+// Add this function to handle logo theme changes
+function updateLogoForTheme() {
+    const logoImage = document.getElementById('logoImage');
+    if (logoImage) {
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        const newSrc = isDarkMode ? 
+            logoImage.getAttribute('data-dark-src') : 
+            logoImage.getAttribute('data-light-src');
+        
+        // Animate logo change
+        gsap.to(logoImage, {
+            opacity: 0,
+            duration: 0.3,
+            onComplete: () => {
+                logoImage.src = newSrc;
+                gsap.to(logoImage, {
+                    opacity: 1,
+                    duration: 0.3
+                });
+            }
+        });
+    }
 }
