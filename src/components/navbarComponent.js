@@ -250,76 +250,21 @@ export function navbarComponent() {
   function toggleDarkMode() {
     const body = document.body;
     const modeIcon = document.getElementById("mode-icon");
-    const navbar = document.querySelector(".navbar");
-    const createBlogContainer = document.querySelector(".create-blog-container");
 
-    // Create animation timeline
-    const tl = gsap.timeline({
-      defaults: { duration: 0.5, ease: "power2.inOut" }
-    });
-
+    // Toggle dark mode and light mode classes on body
     if (body.classList.contains("dark-mode")) {
       // Switching to light mode
-      tl.to("body", {
-        backgroundColor: "#ffffff",
-        color: "#000000",
-        duration: 0.5
-      })
-      .to(".blog-card", {
-        backgroundColor: "#ffffff",
-        color: "#000000",
-        stagger: 0.05,
-        duration: 0.3
-      }, "-=0.3")
-      .to(modeIcon, {
-        rotation: 180,
-        duration: 0.5
-      }, 0);
-
       body.classList.remove("dark-mode");
       modeIcon.classList.remove("fa-sun");
       modeIcon.classList.add("fa-moon");
       localStorage.setItem("theme", "light");
-
     } else {
       // Switching to dark mode
-      tl.to("body", {
-        backgroundColor: "#121212",
-        color: "#ffffff",
-        duration: 0.5
-      })
-      .to(navbar, {
-        backgroundColor: "#000000",
-        duration: 0.3
-      }, "-=0.3")
-      .to(".blog-card", {
-        backgroundColor: "#1e1e1e",
-        color: "#ffffff",
-        stagger: 0.05,
-        duration: 0.3
-      }, "-=0.3")
-      .to(modeIcon, {
-        rotation: -180,
-        duration: 0.5
-      }, 0);
-
       body.classList.add("dark-mode");
       modeIcon.classList.remove("fa-moon");
       modeIcon.classList.add("fa-sun");
       localStorage.setItem("theme", "dark");
     }
-
-    // Animate specific elements based on current page
-    if (createBlogContainer) {
-      tl.to(createBlogContainer, {
-        backgroundColor: body.classList.contains("dark-mode") ? "#000000" : "#ffffff",
-        color: body.classList.contains("dark-mode") ? "#ffffff" : "#000000",
-        duration: 0.3
-      }, "-=0.3");
-    }
-
-    // Reset icon rotation after animation
-    tl.set(modeIcon, { clearProps: "rotation" });
   }
 
   // Function to set the initial theme based on local storage
@@ -332,20 +277,10 @@ export function navbarComponent() {
       body.classList.add("dark-mode");
       modeIcon.classList.remove("fa-moon");
       modeIcon.classList.add("fa-sun");
-      
-      // Initial dark mode styles without animation
-      gsap.set("body", { backgroundColor: "#121212", color: "#ffffff" });
-      gsap.set(".navbar", { backgroundColor: "#000000" });
-      gsap.set(".blog-card", { backgroundColor: "#1e1e1e", color: "#ffffff" });
     } else {
       body.classList.remove("dark-mode");
       modeIcon.classList.remove("fa-sun");
       modeIcon.classList.add("fa-moon");
-      
-      // Initial light mode styles without animation
-      gsap.set("body", { backgroundColor: "#ffffff", color: "#000000" });
-      gsap.set(".navbar", { backgroundColor: "#ffffff" });
-      gsap.set(".blog-card", { backgroundColor: "#ffffff", color: "#000000" });
     }
   }
 
