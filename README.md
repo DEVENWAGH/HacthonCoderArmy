@@ -87,4 +87,4 @@ npm run dev
 5. Open pull request
 
 ## 📄 License <a name="license"></a>
-This project is licensed under the MIT License - see [LICENSE](LICENSE) for details.
+This project is licensed under the MIT License
