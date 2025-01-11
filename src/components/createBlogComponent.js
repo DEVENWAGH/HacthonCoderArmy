@@ -60,93 +60,112 @@ export function createBlogComponent(blogData = {}) {
   const initializeCreateBlog = () => {
     const form = document.getElementById("createBlogForm");
     const editor = document.getElementById("editor");
-    
+
+    // Prevent form submission on Enter key
+    form.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && e.target.id === 'tags-input') {
+        e.preventDefault();
+      }
+    });
+
     // Get the blog ID if we're editing
-    const blogId = document.getElementById('createBlogFormContainer').dataset.editBlogId;
+    const blogId = document.getElementById("createBlogFormContainer").dataset
+      .editBlogId;
 
     // Ensure form exists before adding event listeners
     if (!form || !editor) {
-        console.error('Required elements not found');
-        return;
+      console.error("Required elements not found");
+      return;
     }
 
     // Add form submit handler
     form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+      e.preventDefault();
+      e.stopPropagation();
 
-        try {
-            const formData = {
-                id: blogId ? parseInt(blogId) : Date.now(), // Use existing ID if editing
-                title: document.getElementById("title").value.trim(),
-                content: editor.innerHTML.trim(),
-                category: document.getElementById("category").value,
-                tags: JSON.parse(
-                    document.getElementById("tags-hidden").value || "[]"
-                ),
-                coverImage: document.getElementById("coverImagePreview").src || "",
-                createdAt: blogId ? document.getElementById('createBlogFormContainer').dataset.createdAt : new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
-                author: window.Clerk?.user?.fullName || "Anonymous",
-            };
+      try {
+        const formData = {
+          id: blogId ? parseInt(blogId) : Date.now(), // Use existing ID if editing
+          title: document.getElementById("title").value.trim(),
+          content: editor.innerHTML.trim(),
+          category: document.getElementById("category").value,
+          tags: JSON.parse(
+            document.getElementById("tags-hidden").value || "[]"
+          ),
+          coverImage: document.getElementById("coverImagePreview").src || "",
+          createdAt: blogId
+            ? document.getElementById("createBlogFormContainer").dataset
+                .createdAt
+            : new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          author: window.Clerk?.user?.fullName || "Anonymous",
+        };
 
-            // Get existing blogs
-            let blogs = JSON.parse(sessionStorage.getItem('blogs') || '[]');
-            
-            // If editing, remove the old version
-            if (blogId) {
-                blogs = blogs.filter(blog => blog.id !== parseInt(blogId));
-            }
-            
-            // Add new/updated blog
-            blogs.push(formData);
+        // Get existing blogs
+        let blogs = JSON.parse(sessionStorage.getItem("blogs") || "[]");
 
-            // Save to session storage
-            sessionStorage.setItem('blogs', JSON.stringify(blogs));
-
-            // Reset edit state
-            document.getElementById('createBlogFormContainer').removeAttribute('data-edit-blog-id');
-            document.getElementById('createBlogFormContainer').removeAttribute('data-created-at');
-
-            // Reset form and update UI
-            form.reset();
-            editor.innerHTML = '';
-            
-            // Reset other elements
-            const coverImagePreview = document.getElementById('coverImagePreview');
-            const coverImagePlaceholder = document.getElementById('coverImagePlaceholder');
-            const removeCoverImageBtn = document.getElementById('removeCoverImage');
-            const tagsList = document.getElementById('tags-list');
-
-            if (coverImagePreview) coverImagePreview.style.display = 'none';
-            if (coverImagePlaceholder) coverImagePlaceholder.style.display = 'flex';
-            if (removeCoverImageBtn) removeCoverImageBtn.style.display = 'none';
-            if (tagsList) tagsList.innerHTML = '';
-
-            // Update UI
-            const createBlogFormContainer = document.getElementById('createBlogFormContainer');
-            const navbar = document.querySelector('.navbar');
-            const content = document.getElementById('content');
-
-            if (createBlogFormContainer) createBlogFormContainer.style.display = 'none';
-            if (navbar) navbar.style.display = 'block';
-            if (content) content.style.display = 'block';
-
-            // Refresh blogs display
-            if (typeof window.displayBlogs === 'function') {
-                window.displayBlogs();
-            }
-
-        } catch (error) {
-            console.error("Error publishing blog:", error);
-            // Remove alert and silently handle the error
-            // Optionally add visual feedback to the form if needed
+        // If editing, remove the old version
+        if (blogId) {
+          blogs = blogs.filter((blog) => blog.id !== parseInt(blogId));
         }
+
+        // Add new/updated blog
+        blogs.push(formData);
+
+        // Save to session storage
+        sessionStorage.setItem("blogs", JSON.stringify(blogs));
+
+        // Reset edit state
+        document
+          .getElementById("createBlogFormContainer")
+          .removeAttribute("data-edit-blog-id");
+        document
+          .getElementById("createBlogFormContainer")
+          .removeAttribute("data-created-at");
+
+        // Reset form and update UI
+        form.reset();
+        editor.innerHTML = "";
+
+        // Reset other elements
+        const coverImagePreview = document.getElementById("coverImagePreview");
+        const coverImagePlaceholder = document.getElementById(
+          "coverImagePlaceholder"
+        );
+        const removeCoverImageBtn = document.getElementById("removeCoverImage");
+        const tagsList = document.getElementById("tags-list");
+
+        if (coverImagePreview) coverImagePreview.style.display = "none";
+        if (coverImagePlaceholder) coverImagePlaceholder.style.display = "flex";
+        if (removeCoverImageBtn) removeCoverImageBtn.style.display = "none";
+        if (tagsList) tagsList.innerHTML = "";
+
+        // Update UI
+        const createBlogFormContainer = document.getElementById(
+          "createBlogFormContainer"
+        );
+        const navbar = document.querySelector(".navbar");
+        const content = document.getElementById("content");
+
+        if (createBlogFormContainer)
+          createBlogFormContainer.style.display = "none";
+        if (navbar) navbar.style.display = "block";
+        if (content) content.style.display = "block";
+
+        // Refresh blogs display
+        if (typeof window.displayBlogs === "function") {
+          window.displayBlogs();
+        }
+      } catch (error) {
+        console.error("Error publishing blog:", error);
+        // Remove alert and silently handle the error
+        // Optionally add visual feedback to the form if needed
+      }
     });
 
     // Initialize editor functionality
     initializeEditor(editor);
-    
+
     // Initialize cover image upload
     const coverImageContainer = document.getElementById("coverImageContainer");
 
@@ -187,32 +206,38 @@ export function createBlogComponent(blogData = {}) {
       const reader = new FileReader();
       reader.onload = async (e) => {
         try {
-            const optimizedImage = await optimizeImageData(e.target.result);
-            const coverImagePreview = document.getElementById("coverImagePreview");
-            const coverImagePlaceholder = document.getElementById("coverImagePlaceholder");
-            const removeCoverImageBtn = document.getElementById("removeCoverImage");
+          const optimizedImage = await optimizeImageData(e.target.result);
+          const coverImagePreview =
+            document.getElementById("coverImagePreview");
+          const coverImagePlaceholder = document.getElementById(
+            "coverImagePlaceholder"
+          );
+          const removeCoverImageBtn =
+            document.getElementById("removeCoverImage");
 
-            coverImagePreview.src = optimizedImage;
-            coverImagePreview.style.display = "block";
-            coverImagePlaceholder.style.display = "none";
-            removeCoverImageBtn.style.display = "flex";
+          coverImagePreview.src = optimizedImage;
+          coverImagePreview.style.display = "block";
+          coverImagePlaceholder.style.display = "none";
+          removeCoverImageBtn.style.display = "flex";
         } catch (error) {
-            console.error("Error optimizing image:", error);
+          console.error("Error optimizing image:", error);
         }
-    };
-    reader.readAsDataURL(file);
+      };
+      reader.readAsDataURL(file);
     }
 
     // Remove content image related code and functions
     const insertImageBtn = document.getElementById("insertImageBtn");
     if (insertImageBtn) {
-        insertImageBtn.remove(); // Remove the button completely
+      insertImageBtn.remove(); // Remove the button completely
     }
 
     // Remove uploaded images container since we won't use it
-    const uploadedImagesContainer = document.getElementById("uploadedImagesContainer");
+    const uploadedImagesContainer = document.getElementById(
+      "uploadedImagesContainer"
+    );
     if (uploadedImagesContainer) {
-        uploadedImagesContainer.remove();
+      uploadedImagesContainer.remove();
     }
 
     // Cancel button
@@ -225,6 +250,111 @@ export function createBlogComponent(blogData = {}) {
         document.getElementById("content").style.display = "block";
       });
     }
+
+    // Initialize tags input with correct scope
+    const tagsInput = document.getElementById('tags-input');
+    const tagsList = document.getElementById('tags-list');
+    const tagSuggestions = document.getElementById('tag-suggestions');
+    const tagsHidden = document.getElementById('tags-hidden');
+    const categorySelect = document.getElementById('category');
+    let tags = [];
+
+    if (categorySelect) {
+      categorySelect.addEventListener('change', () => {
+        if (categorySelect.value) {
+          tagsInput.disabled = false;
+          tagsInput.placeholder = 'Type to add tags';
+        } else {
+          tagsInput.disabled = true;
+          tagsInput.placeholder = 'Please select a category first';
+        }
+      });
+    }
+
+    if (tagsInput) {
+      tagsInput.addEventListener('input', (e) => {
+        const input = e.target.value.trim().toLowerCase();
+        const selectedCategory = categorySelect.value;
+        
+        if (!input || !selectedCategory) {
+          tagSuggestions.style.display = 'none';
+          return;
+        }
+
+        const suggestions = CATEGORY_TAGS[selectedCategory]
+          .filter(tag => tag.includes(input))
+          .filter(tag => !tags.includes(tag));
+
+        if (suggestions.length > 0) {
+          tagSuggestions.innerHTML = suggestions
+            .slice(0, 5)
+            .map(tag => `
+              <div class="suggestion-item" data-tag="${tag}">
+                <i class="fas fa-hashtag"></i> ${tag}
+              </div>
+            `).join('');
+          tagSuggestions.style.display = 'block';
+        } else {
+          tagSuggestions.innerHTML = `
+            <div class="suggestion-item no-category">
+              No matching tags found
+            </div>`;
+          tagSuggestions.style.display = 'block';
+        }
+      });
+
+      tagsInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && tagsInput.value.trim()) {
+          e.preventDefault();
+          addTag(tagsInput.value.trim());
+        }
+      });
+    }
+
+    if (tagSuggestions) {
+      tagSuggestions.addEventListener('click', (e) => {
+        const suggestionItem = e.target.closest('.suggestion-item');
+        if (suggestionItem && !suggestionItem.classList.contains('no-category')) {
+          addTag(suggestionItem.dataset.tag);
+        }
+      });
+    }
+
+    function addTag(tag) {
+      tag = tag.toLowerCase().replace(/[^a-z0-9-]/g, '');
+      if (tag && !tags.includes(tag) && tags.length < 5) {
+        tags.push(tag);
+        updateTags();
+        tagsInput.value = '';
+        tagSuggestions.style.display = 'none';
+      }
+    }
+
+    function updateTags() {
+      tagsHidden.value = JSON.stringify(tags);
+      tagsList.innerHTML = tags.map(tag => `
+        <span class="tag-item">
+          <i class="fas fa-hashtag"></i>${tag}
+          <span class="tag-remove" data-tag="${tag}">×</span>
+        </span>
+      `).join('');
+
+      // Add click handlers for remove buttons
+      document.querySelectorAll('.tag-remove').forEach(button => {
+        button.addEventListener('click', (e) => {
+          const tagToRemove = e.target.dataset.tag;
+          tags = tags.filter(t => t !== tagToRemove);
+          updateTags();
+        });
+      });
+    }
+
+    // Close suggestions when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.tags-input-container')) {
+        tagSuggestions.style.display = 'none';
+      }
+    });
   };
 
   // Move editor initialization into a separate function
@@ -233,17 +363,51 @@ export function createBlogComponent(blogData = {}) {
 
     const toolbarButtons = document.querySelectorAll(".editor-toolbar button");
     toolbarButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-            const command = button.getAttribute("data-command");
-            const value = button.getAttribute("data-value") || "";
-            if (["bold", "italic", "insertOrderedList", "insertUnorderedList", "formatBlock"].includes(command)) {
-                document.execCommand(command, false, value);
-            }
-            editor.focus();
-        });
+      button.addEventListener("click", () => {
+        const command = button.getAttribute("data-command");
+        const value = button.getAttribute("data-value") || "";
+        
+        if (command === "formatBlock") {
+          // Check if the current block is already a heading
+          const isHeading = document.queryCommandValue("formatBlock") === "h2";
+          
+          if (isHeading) {
+            // If it's already a heading, change it back to paragraph
+            document.execCommand("formatBlock", false, "p");
+            button.classList.remove("active");
+          } else {
+            // If it's not a heading, make it a heading
+            document.execCommand("formatBlock", false, value);
+            button.classList.add("active");
+          }
+        } else if (["bold", "italic", "insertOrderedList", "insertUnorderedList"].includes(command)) {
+          document.execCommand(command, false, value);
+          // Toggle active class for other buttons
+          if (document.queryCommandState(command)) {
+            button.classList.add("active");
+          } else {
+            button.classList.remove("active");
+          }
+        }
+        editor.focus();
+      });
     });
 
-    // ... rest of editor initialization code ...
+    // Update button states when selection changes
+    editor.addEventListener("click", updateButtonStates);
+    editor.addEventListener("keyup", updateButtonStates);
+
+    function updateButtonStates() {
+      toolbarButtons.forEach((button) => {
+        const command = button.getAttribute("data-command");
+        if (command === "formatBlock") {
+          const isHeading = document.queryCommandValue("formatBlock") === "h2";
+          button.classList.toggle("active", isHeading);
+        } else if (["bold", "italic", "insertOrderedList", "insertUnorderedList"].includes(command)) {
+          button.classList.toggle("active", document.queryCommandState(command));
+        }
+      });
+    }
   }
 
   return { template, initializeCreateBlog };
@@ -251,42 +415,42 @@ export function createBlogComponent(blogData = {}) {
 
 // Enhanced image optimization function
 async function optimizeImageData(dataUrl) {
-    const maxWidth = 800; // Reduced from 1200
-    const maxSize = 300000; // Reduced to 300KB
-    const minQuality = 0.3; // Set minimum acceptable quality
+  const maxWidth = 800; // Reduced from 1200
+  const maxSize = 300000; // Reduced to 300KB
+  const minQuality = 0.3; // Set minimum acceptable quality
 
-    return new Promise((resolve) => {
-        const img = new Image();
-        img.src = dataUrl;
-        img.onload = () => {
-            let quality = 0.7;
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.src = dataUrl;
+    img.onload = () => {
+      let quality = 0.7;
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
 
-            // Calculate dimensions
-            let width = img.width;
-            let height = img.height;
-            
-            // Scale down large images more aggressively
-            if (width > maxWidth) {
-                height = Math.round((height * maxWidth) / width);
-                width = maxWidth;
-            }
+      // Calculate dimensions
+      let width = img.width;
+      let height = img.height;
 
-            canvas.width = width;
-            canvas.height = height;
-            ctx.drawImage(img, 0, 0, width, height);
+      // Scale down large images more aggressively
+      if (width > maxWidth) {
+        height = Math.round((height * maxWidth) / width);
+        width = maxWidth;
+      }
 
-            // Compress with progressive quality reduction
-            let compressed = canvas.toDataURL("image/jpeg", quality);
-            while (compressed.length > maxSize && quality > minQuality) {
-                quality -= 0.1;
-                compressed = canvas.toDataURL("image/jpeg", quality);
-            }
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(img, 0, 0, width, height);
 
-            resolve(compressed);
-        };
-    });
+      // Compress with progressive quality reduction
+      let compressed = canvas.toDataURL("image/jpeg", quality);
+      while (compressed.length > maxSize && quality > minQuality) {
+        quality -= 0.1;
+        compressed = canvas.toDataURL("image/jpeg", quality);
+      }
+
+      resolve(compressed);
+    };
+  });
 }
 
 // Function to compress image
@@ -337,17 +501,17 @@ const storageManager = {
   cleanup: () => {
     try {
       // Remove blogs older than 30 days
-      const blogs = JSON.parse(sessionStorage.getItem('blogs') || '[]');
+      const blogs = JSON.parse(sessionStorage.getItem("blogs") || "[]");
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-      
-      const filteredBlogs = blogs.filter(blog => 
-        new Date(blog.createdAt) > thirtyDaysAgo
+
+      const filteredBlogs = blogs.filter(
+        (blog) => new Date(blog.createdAt) > thirtyDaysAgo
       );
-      
-      sessionStorage.setItem('blogs', JSON.stringify(filteredBlogs));
+
+      sessionStorage.setItem("blogs", JSON.stringify(filteredBlogs));
     } catch (error) {
-      console.error('Storage cleanup failed:', error);
+      console.error("Storage cleanup failed:", error);
     }
   },
 
@@ -360,23 +524,23 @@ const storageManager = {
       }
 
       // Get and filter existing blogs
-      let blogs = JSON.parse(sessionStorage.getItem('blogs') || '[]');
-      
+      let blogs = JSON.parse(sessionStorage.getItem("blogs") || "[]");
+
       // Limit to most recent 50 blogs
       blogs = blogs.slice(-49);
       blogs.push(blogData);
-      
-      sessionStorage.setItem('blogs', JSON.stringify(blogs));
+
+      sessionStorage.setItem("blogs", JSON.stringify(blogs));
       return true;
     } catch (error) {
-      console.error('Failed to save blog:', error);
+      console.error("Failed to save blog:", error);
       return false;
     }
-  }
+  },
 };
 
 // Add CSS for improved image layout
-const style = document.createElement('style');
+const style = document.createElement("style");
 style.textContent = `
   .uploaded-images-list {
     display: flex;
@@ -437,21 +601,28 @@ document.head.appendChild(style);
 
 // Helper functions for form handling
 function resetForm() {
-  const form = document.getElementById('createBlogForm');
-  const editor = document.getElementById('editor');
+  const form = document.getElementById("createBlogForm");
+  const editor = document.getElementById("editor");
   form.reset();
-  editor.innerHTML = '';
-  document.getElementById('coverImagePreview').style.display = 'none';
-  document.getElementById('coverImagePlaceholder').style.display = 'flex';
-  document.getElementById('removeCoverImage').style.display = 'none';
-  document.getElementById('tags-list').innerHTML = '';
+  editor.innerHTML = "";
+  document.getElementById("coverImagePreview").style.display = "none";
+  document.getElementById("coverImagePlaceholder").style.display = "flex";
+  document.getElementById("removeCoverImage").style.display = "none";
+  document.getElementById("tags-list").innerHTML = "";
 }
 
 function updateUIAfterSubmission() {
-  document.getElementById('createBlogFormContainer').style.display = 'none';
-  document.querySelector('.navbar').style.display = 'block';
-  document.getElementById('content').style.display = 'block';
-  if (typeof window.displayBlogs === 'function') {
+  document.getElementById("createBlogFormContainer").style.display = "none";
+  document.querySelector(".navbar").style.display = "block";
+  document.getElementById("content").style.display = "block";
+  if (typeof window.displayBlogs === "function") {
     window.displayBlogs();
   }
 }
+
+const CATEGORY_TAGS = {
+  technology: ['javascript', 'react', 'nodejs', 'python', 'webdev', 'coding', 'programming', 'tech', 'software', 'development'],
+  lifestyle: ['health', 'fitness', 'wellness', 'mindfulness', 'motivation', 'selfcare', 'productivity', 'lifestyle', 'personal', 'growth'],
+  travel: ['adventure', 'wanderlust', 'explore', 'vacation', 'destination', 'tourism', 'journey', 'traveltips', 'wandering', 'travellife'],
+  food: ['cooking', 'recipe', 'foodie', 'cuisine', 'baking', 'healthy', 'delicious', 'foodlover', 'homemade', 'culinary']
+};
