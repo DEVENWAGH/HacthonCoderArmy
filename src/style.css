@@ -2912,3 +2912,37 @@ body.dark-mode .menu-icon {
   margin-top: 20px;
   border-top: 1px solid #ddd;
 }
+
+/* Add to existing styles */
+.save-draft-btn {
+    margin-left: auto !important;
+    background-color: #4CAF50 !important;
+    color: white !important;
+}
+
+.save-draft-btn:hover {
+    background-color: #45a049 !important;
+}
+
+.editor-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #4CAF50;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 4px;
+    animation: slideIn 0.3s ease-out;
+    z-index: 1000;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}

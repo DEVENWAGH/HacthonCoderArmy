@@ -42,9 +42,11 @@ export function createBlogComponent(blogData = {}) {
                     <div class="editor-toolbar">
                         <button type="button" class="editor-btn" data-command="bold"><i class="fas fa-bold"></i></button>
                         <button type="button" class="editor-btn" data-command="italic"><i class="fas fa-italic"></i></button>
+                        <button type="button" class="editor-btn" data-command="underline"><i class="fas fa-underline"></i></button>
                         <button type="button" class="editor-btn" data-command="insertOrderedList"><i class="fas fa-list-ol"></i></button>
                         <button type="button" class="editor-btn" data-command="insertUnorderedList"><i class="fas fa-list-ul"></i></button>
                         <button type="button" class="editor-btn" data-command="formatBlock" data-value="h2"><i class="fas fa-heading"></i></button>
+                        <button type="button" class="editor-btn save-draft-btn" id="saveDraftBtn"><i class="fas fa-save"></i> Save Draft</button>
                     </div>
                     <div id="editor" contenteditable="true"></div>
                     <textarea id="content" name="content" style="display: none;"></textarea>
@@ -244,11 +246,24 @@ export function createBlogComponent(blogData = {}) {
     const cancelBtn = document.getElementById("cancelBtn");
     if (cancelBtn) {
       cancelBtn.addEventListener("click", () => {
-        document.getElementById("createBlogFormContainer").style.display =
-          "none";
-        document.querySelector(".navbar").style.display = "block";
-        document.getElementById("content").style.display = "block";
-      });
+        // Check if draft exists
+        const savedDraft = localStorage.getItem('blog-draft');
+        
+        // Only show confirmation if there's NO draft saved
+        if (!savedDraft) {
+            if (confirm("Are you sure? Any unsaved changes will be lost.")) {
+                document.getElementById("createBlogFormContainer").style.display = "none";
+                document.querySelector(".navbar").style.display = "block";
+                document.getElementById("content").style.display = "block";
+            }
+        } else {
+            // If draft exists, just close the form since changes are saved
+            document.getElementById("createBlogFormContainer").style.display = "none";
+            document.querySelector(".navbar").style.display = "block";
+            document.getElementById("content").style.display = "block";
+            showNotification('Your draft is saved');
+        }
+    });
     }
 
     // Initialize tags input with correct scope
@@ -361,36 +376,133 @@ export function createBlogComponent(blogData = {}) {
   function initializeEditor(editor) {
     if (!editor) return;
 
-    const toolbarButtons = document.querySelectorAll(".editor-toolbar button");
-    toolbarButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const command = button.getAttribute("data-command");
-        const value = button.getAttribute("data-value") || "";
-        
-        if (command === "formatBlock") {
-          // Check if the current block is already a heading
-          const isHeading = document.queryCommandValue("formatBlock") === "h2";
-          
-          if (isHeading) {
-            // If it's already a heading, change it back to paragraph
-            document.execCommand("formatBlock", false, "p");
-            button.classList.remove("active");
-          } else {
-            // If it's not a heading, make it a heading
-            document.execCommand("formatBlock", false, value);
-            button.classList.add("active");
-          }
-        } else if (["bold", "italic", "insertOrderedList", "insertUnorderedList"].includes(command)) {
-          document.execCommand(command, false, value);
-          // Toggle active class for other buttons
-          if (document.queryCommandState(command)) {
-            button.classList.add("active");
-          } else {
-            button.classList.remove("active");
-          }
+    // Auto-save functionality
+    let autoSaveTimeout;
+    const autoSaveHandler = () => {
+        clearTimeout(autoSaveTimeout);
+        autoSaveTimeout = setTimeout(() => {
+            saveDraft('auto');
+        }, 2000);
+    };
+
+    // Add auto-save listeners
+    editor.addEventListener('input', autoSaveHandler);
+    document.getElementById('title').addEventListener('input', autoSaveHandler);
+    document.getElementById('category').addEventListener('change', autoSaveHandler);
+    document.getElementById('tags-hidden').addEventListener('change', autoSaveHandler);
+
+    // Save draft function
+    function saveDraft(type = 'manual') {
+        const draftData = {
+            title: document.getElementById("title").value,
+            content: editor.innerHTML,
+            category: document.getElementById("category").value,
+            tags: JSON.parse(document.getElementById("tags-hidden").value || "[]"),
+            coverImage: document.getElementById("coverImagePreview").src || '',
+            lastSaved: new Date().toISOString()
+        };
+
+        // Save only one draft
+        localStorage.setItem('blog-draft', JSON.stringify(draftData));
+
+        if (type === 'manual') {
+            showNotification('Draft saved successfully!');
         }
-        editor.focus();
-      });
+    }
+
+    // Manual save draft button
+    const saveDraftBtn = document.querySelector('.save-draft-btn');
+    if (saveDraftBtn) {
+        saveDraftBtn.addEventListener('click', () => saveDraft('manual'));
+    }
+
+    // Load draft if exists - Move this function definition up
+    function loadDraft() {
+        const savedDraft = localStorage.getItem('blog-draft');
+        if (savedDraft) {
+            const draft = JSON.parse(savedDraft);
+            
+            // Directly restore draft without confirmation
+            document.getElementById("title").value = draft.title || '';
+            editor.innerHTML = draft.content || '';
+            document.getElementById("category").value = draft.category || '';
+            
+            // Restore tags
+            if (draft.tags && draft.tags.length > 0) {
+                document.getElementById("tags-hidden").value = JSON.stringify(draft.tags);
+                window.tags = draft.tags; // Update the global tags array
+                const tagsList = document.getElementById("tags-list");
+                if (tagsList) {
+                    tagsList.innerHTML = draft.tags.map(tag => `
+                        <span class="tag-item">
+                            <i class="fas fa-hashtag"></i>${tag}
+                            <span class="tag-remove" data-tag="${tag}">×</span>
+                        </span>
+                    `).join('');
+                    
+                    // Reattach tag remove event listeners
+                    document.querySelectorAll('.tag-remove').forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            const tagToRemove = e.target.dataset.tag;
+                            window.tags = window.tags.filter(t => t !== tagToRemove);
+                            updateTags();
+                        });
+                    });
+                }
+            }
+            
+            // Restore cover image
+            if (draft.coverImage) {
+                const coverPreview = document.getElementById("coverImagePreview");
+                const coverPlaceholder = document.getElementById("coverImagePlaceholder");
+                const removeCoverBtn = document.getElementById("removeCoverImage");
+                
+                if (coverPreview && coverPlaceholder && removeCoverBtn) {
+                    coverPreview.src = draft.coverImage;
+                    coverPreview.style.display = "block";
+                    coverPlaceholder.style.display = "none";
+                    removeCoverBtn.style.display = "flex";
+                }
+            }
+
+            // Show notification that draft was restored
+            showNotification('Draft restored successfully!');
+        }
+    }
+
+    // Call loadDraft immediately
+    loadDraft();
+
+    // Add underline to existing commands
+    const commands = ["bold", "italic", "underline", "insertOrderedList", "insertUnorderedList", "formatBlock"];
+    const toolbarButtons = document.querySelectorAll(".editor-toolbar button");
+    
+    toolbarButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const command = button.getAttribute("data-command");
+            const value = button.getAttribute("data-value") || "";
+            
+            if (commands.includes(command)) {
+                if (command === "formatBlock") {
+                    // Check if the current block is already a heading
+                    const isHeading = document.queryCommandValue("formatBlock") === "h2";
+                    
+                    if (isHeading) {
+                        // If it's already a heading, change it back to paragraph
+                        document.execCommand("formatBlock", false, "p");
+                        button.classList.remove("active");
+                    } else {
+                        // If it's not a heading, make it a heading
+                        document.execCommand("formatBlock", false, value);
+                        button.classList.add("active");
+                    }
+                } else {
+                    document.execCommand(command, false, value);
+                    button.classList.toggle("active", document.queryCommandState(command));
+                }
+            }
+            editor.focus();
+        });
     });
 
     // Update button states when selection changes
@@ -408,6 +520,27 @@ export function createBlogComponent(blogData = {}) {
         }
       });
     }
+
+    // Update form submit handler to clear draft after successful publish
+    const form = document.getElementById('createBlogForm');
+    const originalSubmitHandler = form.onsubmit;
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        
+        try {
+            // Call original submit handler if it exists
+            if (originalSubmitHandler) {
+                await originalSubmitHandler.call(form, e);
+            }
+
+            // If publish was successful, clear the draft
+            localStorage.removeItem('blog-draft');
+            showNotification('Blog published successfully!');
+        } catch (error) {
+            console.error('Error publishing blog:', error);
+            showNotification('Error publishing blog');
+        }
+    };
   }
 
   return { template, initializeCreateBlog };
@@ -626,3 +759,15 @@ const CATEGORY_TAGS = {
   travel: ['adventure', 'wanderlust', 'explore', 'vacation', 'destination', 'tourism', 'journey', 'traveltips', 'wandering', 'travellife'],
   food: ['cooking', 'recipe', 'foodie', 'cuisine', 'baking', 'healthy', 'delicious', 'foodlover', 'homemade', 'culinary']
 };
+
+// Add notification function
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'editor-notification';
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
