@@ -1,6 +1,5 @@
 /* Import any other stylesheets here */
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css");
-
 /* Base Styles */
 * {
   margin: 0;
@@ -2213,18 +2212,6 @@ nts */ .form-group {
   background-color: #45a049 !important;
 }
 
-.editor-notification {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #4caf50;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 4px;
-  animation: slideIn 0.3s ease-out;
-  z-index: 1000;
-}
-
 @keyframes slideIn {
   from {
     transform: translateX(100%);
@@ -2402,17 +2389,6 @@ nts */ .form-group {
   z-index: 1000;
 }
 
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
 .save-draft-btn:hover {
   background-color: #45a049;
 }
@@ -2537,6 +2513,75 @@ main {
 .footer-container:hover::before {
   border-color: rgba(255, 255, 255, 0.2);
   transition: border-color 0.3s ease;
+}
+/* Editor Tooltip Styles */
+.editor-btn {
+  position: relative;
+}
+
+.editor-btn::before {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  padding: 6px 10px;
+  border-radius: 4px;
+  background-color: #333;
+  color: white;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease-in-out;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.editor-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  border: 5px solid transparent;
+  border-top-color: #333;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.editor-btn:hover::before,
+.editor-btn:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Dark mode support */
+body.dark-mode .editor-btn::before {
+  background-color: #555;
+  color: #fff;
+}
+
+body.dark-mode .editor-btn::after {
+  border-top-color: #555;
+}
+
+/* Animation for tooltip entrance */
+@keyframes tooltipIn {
+  from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(10px);
+  }
+  to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+  }
+}
+
+.editor-btn:hover::before {
+  animation: tooltipIn 0.2s ease-in-out forwards;
 }
 
 /*

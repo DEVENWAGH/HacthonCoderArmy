@@ -41,12 +41,12 @@ export function createBlogComponent(blogData = {}) {
                 <div class="form-group">
                     <label for="editor">Content</label>
                     <div class="editor-toolbar">
-                        <button type="button" class="editor-btn" data-command="bold"><i class="fas fa-bold"></i></button>
-                        <button type="button" class="editor-btn" data-command="italic"><i class="fas fa-italic"></i></button>
-                        <button type="button" class="editor-btn" data-command="underline"><i class="fas fa-underline"></i></button>
-                        <button type="button" class="editor-btn" data-command="insertOrderedList"><i class="fas fa-list-ol"></i></button>
-                        <button type="button" class="editor-btn" data-command="insertUnorderedList"><i class="fas fa-list-ul"></i></button>
-                        <button type="button" class="editor-btn" data-command="formatBlock" data-value="h2"><i class="fas fa-heading"></i></button>
+                        <button type="button" class="editor-btn" data-command="bold" title="Bold (Ctrl+B)"><i class="fas fa-bold"></i></button>
+                        <button type="button" class="editor-btn" data-command="italic" title="Italic (Ctrl+I)"><i class="fas fa-italic"></i></button>
+                        <button type="button" class="editor-btn" data-command="underline" title="Underline (Ctrl+U)"><i class="fas fa-underline"></i></button>
+                        <button type="button" class="editor-btn" data-command="insertOrderedList" title="Numbered List (Ctrl+1)"><i class="fas fa-list-ol"></i></button>
+                        <button type="button" class="editor-btn" data-command="insertUnorderedList" title="Bullet List (Ctrl+8)"><i class="fas fa-list-ul"></i></button>
+                        <button type="button" class="editor-btn" data-command="formatBlock" data-value="h2" title="Toggle Heading (Ctrl+H)"><i class="fas fa-heading"></i></button>
                         <button type="button" class="editor-btn save-draft-btn" id="saveDraftBtn"><i class="fas fa-save"></i> Save Draft</button>
                     </div>
                     <div id="editor" contenteditable="true"></div>
@@ -492,15 +492,119 @@ export function createBlogComponent(blogData = {}) {
   function initializeEditor(editor) {
     if (!editor) return;
 
-    // Remove auto-save listeners and timeout
-    // let autoSaveTimeout;
-    // const autoSaveHandler = () => { ... }
-    // editor.addEventListener('input', autoSaveHandler);
-    // document.getElementById('title').addEventListener('input', autoSaveHandler);
-    // document.getElementById('category').addEventListener('change', autoSaveHandler);
-    // document.getElementById('tags-hidden').addEventListener('change', autoSaveHandler);
+    // Add keyboard shortcut handler
+    editor.addEventListener('keydown', (e) => {
+      // Check if ctrl or cmd key is pressed
+      if (e.ctrlKey || e.metaKey) {
+        switch(e.key.toLowerCase()) {
+          case 'b': // Bold
+            e.preventDefault();
+            document.execCommand('bold', false, null);
+            updateButtonStates();
+            break;
+          case 'i': // Italic
+            e.preventDefault();
+            document.execCommand('italic', false, null);
+            updateButtonStates();
+            break;
+          case 'u': // Underline
+            e.preventDefault();
+            document.execCommand('underline', false, null);
+            updateButtonStates();
+            break;
+          case '1': // Ordered List
+            e.preventDefault();
+            document.execCommand('insertOrderedList', false, null);
+            updateButtonStates();
+            break;
+          case '8': // Unordered List (Ctrl + 8 for bullet point)
+            e.preventDefault();
+            document.execCommand('insertUnorderedList', false, null);
+            updateButtonStates();
+            break;
+          case 'h': // Heading
+            e.preventDefault();
+            const isHeading = document.queryCommandValue('formatBlock') === 'h2';
+            document.execCommand('formatBlock', false, isHeading ? 'p' : 'h2');
+            updateButtonStates();
+            break;
+        }
+      }
+    });
 
-    // Save draft function - only called by Save Draft button
+    // Add toolbar buttons click handlers
+    const commands = [
+      "bold",
+      "italic", 
+      "underline",
+      "insertOrderedList",
+      "insertUnorderedList",
+      "formatBlock"
+    ];
+
+    const toolbarButtons = document.querySelectorAll(".editor-toolbar button");
+
+    toolbarButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const command = button.getAttribute("data-command");
+        const value = button.getAttribute("data-value") || "";
+
+        if (commands.includes(command)) {
+          if (command === "formatBlock") {
+            const isHeading = document.queryCommandValue("formatBlock") === "h2";
+            document.execCommand("formatBlock", false, isHeading ? "p" : "h2");
+            button.classList.toggle("active", !isHeading);
+          } else {
+            document.execCommand(command, false, value);
+            button.classList.toggle("active", document.queryCommandState(command));
+          }
+        }
+        editor.focus();
+      });
+    });
+
+    // Update button states
+    function updateButtonStates() {
+      toolbarButtons.forEach((button) => {
+        const command = button.getAttribute("data-command");
+        if (command === "formatBlock") {
+          const isHeading = document.queryCommandValue("formatBlock") === "h2";
+          button.classList.toggle("active", isHeading);
+        } else if (commands.includes(command)) {
+          button.classList.toggle("active", document.queryCommandState(command));
+        }
+      });
+    }
+
+    // Update button states on selection change
+    editor.addEventListener("click", updateButtonStates);
+    editor.addEventListener("keyup", updateButtonStates);
+
+    // Add tooltips
+    toolbarButtons.forEach(button => {
+      const command = button.getAttribute('data-command');
+      switch(command) {
+        case 'bold':
+          button.title = 'Bold (Ctrl+B)';
+          break;
+        case 'italic':
+          button.title = 'Italic (Ctrl+I)'; 
+          break;
+        case 'underline':
+          button.title = 'Underline (Ctrl+U)';
+          break;
+        case 'insertOrderedList':
+          button.title = 'Numbered List (Ctrl+1)';
+          break;
+        case 'insertUnorderedList': 
+          button.title = 'Bullet List (Ctrl+8)';
+          break;
+        case 'formatBlock':
+          button.title = 'Toggle Heading (Ctrl+H)';
+          break;
+      }
+    });
+
     function saveDraft() {
       const draftData = {
         title: document.getElementById("title").value,
@@ -586,96 +690,6 @@ export function createBlogComponent(blogData = {}) {
     if (!isEditing) {
       loadDraft();
     }
-
-    // Add underline to existing commands
-    const commands = [
-      "bold",
-      "italic",
-      "underline",
-      "insertOrderedList",
-      "insertUnorderedList",
-      "formatBlock",
-    ];
-    const toolbarButtons = document.querySelectorAll(".editor-toolbar button");
-
-    toolbarButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const command = button.getAttribute("data-command");
-        const value = button.getAttribute("data-value") || "";
-
-        if (commands.includes(command)) {
-          if (command === "formatBlock") {
-            // Check if the current block is already a heading
-            const isHeading =
-              document.queryCommandValue("formatBlock") === "h2";
-
-            if (isHeading) {
-              // If it's already a heading, change it back to paragraph
-              document.execCommand("formatBlock", false, "p");
-              button.classList.remove("active");
-            } else {
-              // If it's not a heading, make it a heading
-              document.execCommand("formatBlock", false, value);
-              button.classList.add("active");
-            }
-          } else {
-            document.execCommand(command, false, value);
-            button.classList.toggle(
-              "active",
-              document.queryCommandState(command)
-            );
-          }
-        }
-        editor.focus();
-      });
-    });
-
-    // Update button states when selection changes
-    editor.addEventListener("click", updateButtonStates);
-    editor.addEventListener("keyup", updateButtonStates);
-
-    function updateButtonStates() {
-      toolbarButtons.forEach((button) => {
-        const command = button.getAttribute("data-command");
-        if (command === "formatBlock") {
-          const isHeading = document.queryCommandValue("formatBlock") === "h2";
-          button.classList.toggle("active", isHeading);
-        } else if (
-          [
-            "bold",
-            "italic",
-            "insertOrderedList",
-            "insertUnorderedList",
-          ].includes(command)
-        ) {
-          button.classList.toggle(
-            "active",
-            document.queryCommandState(command)
-          );
-        }
-      });
-    }
-
-    // Update form submit handler to clear draft after successful publish
-    const form = document.getElementById("createBlogForm");
-    const originalSubmitHandler = form.onsubmit;
-    form.onsubmit = async (e) => {
-      e.preventDefault();
-
-      try {
-        // Call original submit handler if it exists
-        if (originalSubmitHandler) {
-          await originalSubmitHandler.call(form, e);
-        }
-
-        // If publish was successful, clear the draft
-        localStorage.removeItem("blog-draft");
-        showNotification("Blog published successfully!");
-      } catch (error) {
-        console.error("Error publishing blog:", error);
-        showNotification("Error publishing blog");
-      }
-    };
   }
 
   return { template, initializeCreateBlog };
