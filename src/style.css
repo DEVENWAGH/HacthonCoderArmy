@@ -21,10 +21,6 @@ body {
   background-color: #ffffff;
 }
 /* Light/Dark Mode */
-body:not(.dark-mode) {
-  background-color: #ffffff;
-  color: #ffffff;
-}
 
 body:not(.dark-mode)#app {
   min-height: 100vh;
@@ -41,7 +37,28 @@ body:not(.dark-mode) #sign-in {
   border: 1px solid #000000;
   color: #000000;
 }
+body:not(.dark-mode) .darklogo {
+  filter: brightness(0.9);
+}
+body:not(.dark-mode) .preview-title,
+body:not(.dark-mode) .preview-content,
+body:not(.dark-mode) .preview-content h2 {
+  color: #000;
+}
+body:not(.dark-mode) .blog-category.technology,
+body:not(.dark-mode) .blog-category.lifestyle {
+  color: #000;
+}
+body:not(.dark-mode) .footer-container::before {
+  border-color: rgba(0, 0, 0, 0.1);
+}
 
+body:not(.dark-mode) .footer-container:hover::before {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+body:not(.dark-mode) .preview-content blockquote {
+  color: #333;
+}
 body.dark-mode {
   background-color: #121212;
   color: #ffffff;
@@ -92,84 +109,256 @@ body.dark-mode .preview-blog-container {
 body.dark-mode .preview-header {
   border-bottom-color: #444;
 }
-/* Add these styles to your existing CSS */
-/* Styles for uploaded images preview */
-.uploaded-images-preview {
-  display: flex; /* Use flexbox for layout */
-  flex-wrap: wrap; /* Allow wrapping of images */
-  gap: 10px; /* Space between images */
+body.dark-mode #editor:focus {
+  border-color: #ff8c00;
+}
+body.dark-mode .preview-header h2,
+body.dark-mode .preview-title,
+body.dark-mode .preview-content,
+body.dark-mode .preview-content h2 {
+  color: #fff;
 }
 
-.preview-uploaded-image {
-  max-width: 80px; /* Set a smaller max width for uploaded images */
-  height: auto; /* Maintain aspect ratio */
-  border-radius: 4px; /* Optional: Add some border radius */
-  cursor: pointer; /* Change cursor to pointer on hover */
-  transition: transform 0.2s; /* Add a transition for hover effect */
+body.dark-mode .preview-content blockquote {
+  color: #aaa;
 }
 
-.preview-uploaded-image:hover {
-  transform: scale(1.05); /* Slightly enlarge on hover */
+body.dark-mode .preview-gallery {
+  border-top-color: #444;
 }
 
-/* ... existing code ... */
-.search-bar {
+body.dark-mode .cover-image-container {
+  border-color: #444;
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+body.dark-mode .cover-image-placeholder {
+  color: #888;
+}
+
+body.dark-mode .cover-image-placeholder:hover {
+  color: #ff8c00;
+}
+
+body.dark-mode .dark-mode-toggle i.fa-sun {
+  color: #ffeb3b;
+}
+.darklogo {
+  height: 80px;
+  display: block;
+  z-index: 1000;
+}
+body.dark-mode .darklogo {
+  filter: brightness(1);
+}
+
+.dark-mode-toggle {
   display: flex;
   align-items: center;
-  position: relative;
-  height: 40px; /* Increased height */
-}
-
-.search-bar input {
-  font-size: 20px;
-  background-color: #333333;
-  color: #ffffff;
-  border: 1px solid #444444;
-  padding: 0.5rem; /* Adjusted padding for better height */
-  border-radius: 4px;
-  width: 30vw;
-  height: 100%; /* Ensure input takes full height */
-}
-
-.search-bar i {
-  position: absolute;
-  color: #0000;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
-  top: 50%;
-  left: 90%; /* Center the icon vertically */
-  transform: translateY(-50%); /* Adjust for perfect centering */
+  border-radius: 50%;
+  transition: background-color 0.3s;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #666;
+  padding: 1rem;
 }
-/* Thumbnail styles */
+
+.dark-mode-toggle:hover {
+  color: #333;
+  background-color: rgba(255, 255, 255, 0.1);
+
+}
+
+.dark-mode .navbar {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+.dark-mode .navbar {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+.dark-mode .editor-btn {
+  color: #ffffff;
+}
+.dark-mode #editor {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #555;
+}
+body.dark-mode #tags-input {
+  background: #333;
+  color: #fff;
+  border-color: #444;
+}
+
+body.dark-mode #tags-input:disabled {
+  background: #222;
+}
+
+body.dark-mode .tag-item {
+  background: #444;
+  color: #fff;
+}
+
+body.dark-mode #tag-suggestions {
+  background: #333;
+  border-color: #444;
+}
+
+body.dark-mode .suggestion-item:hover {
+  background: #444;
+}
+.dark-mode .tag-item {
+  background: #555;
+  color: #fff;
+}
+.dark-mode .editor-btn.active {
+  background-color: #ff8c00;
+  color: #fff;
+  border-color: #ff8c00;
+}
+.dark-mode .no-category {
+  color: #ccc;
+}
+body.dark-mode .cl-component {
+  background-color: #ffffff;
+  color: #000000;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+body.dark-mode .suggestion-item.no-category {
+  color: #999;
+}
+
+.dark-mode-toggle i {
+  color: white;
+  font-size: 20px;
+}
+.dark-mode .blog-title {
+  color: #fff;
+}
+.dark-mode .blog-content {
+  color: #ccc;
+}
+.dark-mode .blog-content blockquote {
+  color: #aaa;
+}
+.dark-mode .blog-content h2 {
+  color: #fff;
+}
+.dark-mode .blog-card {
+  background: #1e1e1e;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.dark-mode .blog-excerpt {
+  color: #ccc;
+}
+.dark-mode .uploaded-images-container {
+  border-top-color: #444;
+}
+.dark-mode .image-modal {
+  background: rgba(0, 0, 0, 0.95);
+}
+
+.dark-mode .remove-image-btn {
+  background: rgba(255, 0, 0, 0.9);
+}
+
+.dark-mode .remove-image-btn:hover {
+  background: red;
+}
+body.dark-mode .blog-card .menu-dropdown {
+  background: #333;
+  border-color: #444;
+}
+
+body.dark-mode .blog-card .menu-dropdown a {
+  color: #fff;
+}
+
+body.dark-mode .blog-card .menu-dropdown a:hover {
+  background: #444;
+}
+
+body.dark-mode .blog-category {
+  color: #fff; /* Set color to white for categories in dark theme */
+}
+
+body.dark-mode .menu-dropdown {
+  background: #333;
+  border-color: #444;
+}
+
+body.dark-mode .menu-dropdown a {
+  color: #fff;
+}
+
+body.dark-mode .menu-dropdown a:hover {
+  background: #444;
+  color: #ff8c00;
+}
+
+body.dark-mode .menu-icon {
+  color: #fff;
+}
+body.dark-mode .search-results {
+  background: #333;
+  border-color: #444;
+}
+
+body.dark-mode .search-result-item:hover {
+  background: #444;
+}
+
+body.dark-mode .search-result-item i {
+  color: #fff;
+}
+
+body.dark-mode .footer-container::before {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .footer-container:hover::before {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .navbar {
+  background-color: #121212;
+}
+
+body.dark-mode .search-bar input {
+  background-color: #1e1e1e;
+}
+
+.uploaded-images-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 .thumbnail {
+  height: auto;
+  cursor: pointer;
+  margin: 5px;
+  border-radius: 4px;
+  transition: transform 0.2s;
   max-width: 100px;
   body.dark-mode #editor {
     background-color: #333;
     border-color: #444;
     color: #fff;
   }
-
-  body.dark-mode #editor:focus {
-    border-color: #ff8c00;
-  }
-
-  body.dark-mode .preview-blog-container {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  }
-
-  body.dark-mode .preview-header {
-    border-bottom-color: #444;
-  }
-
-  /* Add these styles to your existing CSS */
-
-  /* Thumbnail styles */
-  .thumbnail {
-    max-width: 100px;
-    height: auto;
-    cursor: pointer;
-    margin: 5px;
-    border-radius: 4px;
-    transition: transform 0.2s;
+  .search-bar {
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 40px; /* Increased height */
   }
 
   .thumbnail:hover {
@@ -193,10 +382,6 @@ body.dark-mode .preview-header {
     justify-content: center;
     width: 20px;
     height: 20px;
-  }
-
-  .remove-image-btn:hover {
-    background: darkred;
   }
 
   /* Modal styles */
@@ -266,11 +451,6 @@ body.dark-mode .preview-header {
     width: 20px;
     height: 20px;
   }
-
-  .remove-image-btn:hover {
-    background: darkred;
-  }
-
   /* Modal styles */
   .image-modal {
     display: none;
@@ -351,11 +531,6 @@ body.dark-mode .preview-header {
     width: 20px;
     height: 20px;
   }
-
-  .remove-image-btn:hover {
-    background: darkred;
-  }
-
   /* Modal styles */
   .image-modal {
     display: none;
@@ -445,37 +620,6 @@ body.dark-mode .preview-header {
 
 .close-modal:hover {
   color: #ff8c00;
-}
-body.dark-mode .preview-header h2,
-body.dark-mode .preview-title,
-body.dark-mode .preview-content,
-body.dark-mode .preview-content h2 {
-  color: #fff;
-}
-
-body.dark-mode .preview-content blockquote {
-  color: #aaa;
-}
-
-body.dark-mode .preview-gallery {
-  border-top-color: #444;
-}
-
-body.dark-mode .cover-image-container {
-  border-color: #444;
-  background-color: rgba(255, 255, 255, 0.03);
-}
-
-body.dark-mode .cover-image-placeholder {
-  color: #888;
-}
-
-body.dark-mode .cover-image-placeholder:hover {
-  color: #ff8c00;
-}
-
-body.dark-mode .dark-mode-toggle i.fa-sun {
-  color: #ffeb3b;
 }
 
 /* Layout */
@@ -672,21 +816,6 @@ body.dark-mode .dark-mode-toggle i.fa-sun {
   margin-top: 10px;
 }
 
-.darklogo {
-  height: 60px;
-  display: block;
-  position: relative;
-  z-index: 1000;
-}
-
-body.dark-mode .darklogo {
-  filter: brightness(1);
-}
-
-body:not(.dark-mode) .darklogo {
-  filter: brightness(0.9);
-}
-
 /* Navigation Links */
 .nav-links {
   display: flex;
@@ -729,22 +858,7 @@ body:not(.dark-mode) .darklogo {
   background-color: #e07b00;
 }
 
-.dark-mode-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
-  color: #666;
-  padding: 8px;
-}
-
-.dark-mode-toggle:hover {
-  color: #333;
-}
-
-.dark-mode-toggle i {
-  color: #ffffff;
-} /* Search */
+ /* Search */
 .search-bar {
   display: flex;
   align-items: center;
@@ -753,7 +867,11 @@ body:not(.dark-mode) .darklogo {
 
 .search-bar i {
   position: absolute;
-  right: 10px;
+  color: #0000;
+  cursor: pointer;
+  top: 50%;
+  left: 92%;
+  transform: translateY(-50%);
   font-size: 18px;
   color: #888888;
   cursor: pointer;
@@ -764,8 +882,10 @@ body:not(.dark-mode) .darklogo {
   color: #ffffff;
   border: 1px solid #444444;
   padding: 0.35rem;
-  border-radius: 4px;
   width: 30vw;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .search-bar input:focus {
@@ -816,22 +936,10 @@ body:not(.dark-mode) .darklogo {
   align-items: center;
 }
 
-.dark-mode .navbar {
-  background-color: #1e1e1e; /* Dark mode background */
-  color: #ffffff; /* Dark mode text color */
-}
-
 /* Search bar styles */
 .search-bar {
   display: flex;
   align-items: center;
-}
-
-.search-bar input {
-  padding: 5px;
-  margin-right: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
 }
 
 /* Nav links styles */
@@ -875,10 +983,6 @@ body:not(.dark-mode) .darklogo {
   opacity: 0.8;
 }
 
-/* Dark mode toggle styles */
-.dark-mode-toggle {
-  cursor: pointer;
-}
 
 #mode-icon {
   font-size: 24px;
@@ -919,13 +1023,6 @@ body:not(.dark-mode) .darklogo {
   border-radius: 4px;
 }
 
-.dark-mode .form-group input,
-.dark-mode .form-group select,
-.dark-mode .form-group textarea {
-  background-color: #333;
-  color: #fff;
-  border: 1px solid #555;
-}
 
 /* Editor toolbar styles */
 .editor-toolbar {
@@ -945,17 +1042,7 @@ body:not(.dark-mode) .darklogo {
   margin: 0 2px;
 }
 
-.dark-mode .editor-btn {
-  color: #ffffff;
-}
-
 .editor-btn.active {
-  background-color: #ff8c00;
-  color: #fff;
-  border-color: #ff8c00;
-}
-
-.dark-mode .editor-btn.active {
   background-color: #ff8c00;
   color: #fff;
   border-color: #ff8c00;
@@ -967,12 +1054,6 @@ body:not(.dark-mode) .darklogo {
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 4px;
-}
-
-.dark-mode #editor {
-  background-color: #333;
-  color: #fff;
-  border: 1px solid #555;
 }
 
 /* Uploaded images container styles */
@@ -1017,10 +1098,6 @@ body:not(.dark-mode) .darklogo {
   justify-content: center;
   width: 20px;
   height: 20px;
-}
-
-.remove-image-btn:hover {
-  background: darkred;
 }
 
 /* Modal styles */
@@ -1137,31 +1214,6 @@ body:not(.dark-mode) .darklogo {
   color: #666;
 }
 
-/* Dark mode support */
-body.dark-mode #tags-input {
-  background: #333;
-  color: #fff;
-  border-color: #444;
-}
-
-body.dark-mode #tags-input:disabled {
-  background: #222;
-}
-
-body.dark-mode .tag-item {
-  background: #444;
-  color: #fff;
-}
-
-body.dark-mode #tag-suggestions {
-  background: #333;
-  border-color: #444;
-}
-
-body.dark-mode .suggestion-item:hover {
-  background: #444;
-}
-
 /* Tags input styles */
 .tags-input-container {
   position: relative;
@@ -1182,11 +1234,6 @@ body.dark-mode .suggestion-item:hover {
   align-items: center;
 }
 
-.dark-mode .tag-item {
-  background: #555;
-  color: #fff;
-}
-
 .tag-remove {
   margin-left: 5px;
   cursor: pointer;
@@ -1205,32 +1252,10 @@ body.dark-mode .suggestion-item:hover {
   overflow-y: auto;
 }
 
-.dark-mode .tag-suggestions {
-  background: #333;
-  color: #fff;
-  border: 1px solid #555;
-}
-
-.suggestion-item {
-  padding: 10px;
-  cursor: pointer;
-}
-
-.suggestion-item:hover {
-  background: #f1f1f1;
-}
-
-.dark-mode .suggestion-item:hover {
-  background: #555;
-}
-
 .no-category {
   color: #999;
 }
 
-.dark-mode .no-category {
-  color: #ccc;
-}
 #createBlogFormContainer {
   margin: 0;
 }
@@ -1702,13 +1727,6 @@ nts */ .form-group {
   display: none;
 }
 
-body.dark-mode .cl-component {
-  background-color: #ffffff;
-  color: #000000;
-  border-radius: 8px;
-  padding: 20px;
-}
-
 /* Image Modal */
 .image-modal {
   display: none;
@@ -1746,315 +1764,6 @@ body.dark-mode .cl-component {
   color: #ff8c00;
 }
 
-/* Media Queries */
-
-@media screen and (max-width: 576px) {
-  .nav-links {
-    flex-wrap: wrap;
-  }
-
-  .nav-links a {
-    font-size: 14px;
-  }
-
-  .user-actions {
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-  }
-
-  .create-blog-btn {
-    width: 100%;
-    text-align: center;
-  }
-
-  .logo {
-    height: 30px;
-  }
-
-  .search-bar {
-    margin: 10px 0;
-  }
-
-  .dark-mode-toggle {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-  }
-  .logo {
-    height: 30px;
-  }
-
-  .darklogo {
-    height: 40px;
-  }
-
-  .nav-links a {
-    font-size: 16px;
-  }
-
-  .create-blog-btn {
-    padding: 8px 12px;
-    font-size: 14px;
-  }
-
-  .form-actions {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .submit-btn,
-  .preview-btn,
-  .cancel-btn {
-    width: 100%;
-  }
-
-  .preview-gallery {
-    grid-template-columns: repeat(1, 1fr);
-  }
-
-  .modal-content {
-    width: 95%;
-  }
-
-  .uploaded-images-container {
-    grid-template-columns: repeat(1, 1fr);
-  }
-
-  .tags-list {
-    flex-wrap: wrap;
-  }
-
-  .tag-item {
-    margin: 2px;
-  }
-  .image-modal {
-    padding: 10px;
-  }
-
-  .close-modal {
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
-  }
-}
-@media (max-width: 768px) {
-  .navbar-container {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-  }
-
-  .nav-left {
-    flex: 1;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-  }
-
-  .nav-right {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .search-bar {
-    width: 100%;
-    margin: 10px 0;
-    order: 2; /* Move search bar below profile, logo, and toggle */
-  }
-
-  .search-bar input {
-    width: 100%;
-  }
-
-  .nav-links {
-    display: none; /* Hide nav links on mobile */
-  }
-
-  .user-profile,
-  .dark-mode-toggle {
-    display: flex;
-    align-items: center;
-  }
-
-  .dark-mode-toggle {
-    margin-left: 10px;
-  }
-  .navbar {
-    position: relative;
-    padding: 10px 0;
-  }
-
-  .navbar-container {
-    flex-direction: column;
-    gap: 15px;
-    padding: 10px;
-  }
-
-  .nav-left {
-    width: 100%;
-    justify-content: space-between;
-    padding: 0 10px;
-  }
-
-  .nav-right {
-    width: 100%;
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .search-bar {
-    width: 100%;
-    order: 2;
-  }
-
-  .search-bar input {
-    width: 100%;
-    padding: 10px;
-  }
-
-  .nav-links {
-    width: 100%;
-    flex-direction: row;
-    justify-content: center;
-    gap: 15px;
-    order: 3;
-  }
-
-  .nav-links li {
-    margin: 0;
-  }
-
-  .user-actions {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    order: 1;
-  }
-
-  .user-profile {
-    margin: 0;
-  }
-
-  .create-blog-btn {
-    padding: 8px 16px;
-    font-size: 14px;
-  }
-  body.dark-mode .navbar {
-    background-color: #121212;
-  }
-
-  body.dark-mode .search-bar input {
-    background-color: #1e1e1e;
-  }
-  .blog-card {
-    margin: 15px;
-  }
-  #editor {
-    min-height: 150px;
-  }
-
-  .editor-toolbar button {
-    padding: 5px 8px;
-    font-size: 14px;
-  }
-  .blog-cover-image {
-    height: 200px;
-  }
-
-  .blog-title {
-    font-size: 20px;
-  }
-
-  .blog-metadata {
-    flex-wrap: wrap;
-  }
-
-  .blog-tags {
-    flex-wrap: wrap;
-  }
-  .navbar-container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .navbar-container {
-    flex-direction: column;
-    padding: 10px 20px;
-  }
-
-  .nav-left,
-  .nav-right {
-    width: 100%;
-    justify-content: center;
-    margin: 10px 0;
-  }
-
-  .search-bar {
-    width: 100%;
-    margin: 10px 0;
-    order: 2; /* Move search bar below profile, logo, and toggle */
-  }
-
-  .search-bar input {
-    width: 100%;
-  }
-
-  .nav-links {
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-  }
-
-  .create-blog-container {
-    margin: 10px;
-  }
-
-  .editor-toolbar {
-    flex-wrap: wrap;
-    gap: 5px;
-  }
-
-  .form-group input[type="text"]#title {
-    font-size: 24px;
-  }
-
-  .preview-title {
-    font-size: 24px;
-  }
-
-  .preview-cover-image {
-    height: 200px;
-  }
-
-  .uploaded-images-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .nav-links {
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 15px;
-  }
-
-  .search-bar {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
-  .search-bar input {
-    width: 80%;
-    margin-right: 10px;
-  }
-
-  .search-bar i {
-    font-size: 20px;
-  }
-}
-
 /* Add these styles to your existing CSS */
 .suggestion-item.no-category {
   color: #666;
@@ -2066,11 +1775,6 @@ body.dark-mode .cl-component {
 
 .suggestion-item.no-category:hover {
   background-color: transparent;
-}
-
-/* Dark mode support */
-body.dark-mode .suggestion-item.no-category {
-  color: #999;
 }
 
 /* User Profile Styles */
@@ -2094,28 +1798,6 @@ body.dark-mode .suggestion-item.no-category {
   color: white !important;
 }
 
-/* Dark mode toggle adjustments */
-.dark-mode-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  margin-left: 20px;
-  cursor: pointer;
-  border-radius: 50%;
-  transition: background-color 0.3s;
-}
-
-.dark-mode-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.dark-mode-toggle i {
-  color: white;
-  font-size: 20px;
-}
-
 /* Blog Card Styles */
 .blog-card {
   background: #fff;
@@ -2124,11 +1806,6 @@ body.dark-mode .suggestion-item.no-category {
   margin: 20px auto;
   max-width: 800px;
   overflow: hidden;
-}
-
-.dark-mode .blog-card {
-  background: #1e1e1e;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .blog-cover-image {
@@ -2177,11 +1854,6 @@ body.dark-mode .suggestion-item.no-category {
   margin-bottom: 10px;
   color: #333;
 }
-
-.dark-mode .blog-title {
-  color: #fff;
-}
-
 .blog-metadata {
   display: flex;
   gap: 15px;
@@ -2208,10 +1880,6 @@ body.dark-mode .suggestion-item.no-category {
   line-height: 1.6;
 }
 
-.dark-mode .blog-excerpt {
-  color: #ccc;
-}
-
 .no-blogs {
   text-align: center;
   padding: 40px;
@@ -2226,37 +1894,6 @@ body.dark-mode .suggestion-item.no-category {
 
   #sign-in {
     height: -webkit-fill-available;
-  }
-}
-
-/* Navigation Responsive Styles */
-@media screen and (max-width: 992px) {
-  .search-bar input {
-    width: 25vw;
-  }
-
-  .preview-blog-container {
-    margin: 20px;
-  }
-
-  .preview-cover-image {
-    height: 300px;
-  }
-  .navbar-container {
-    padding: 10px 20px;
-  }
-
-  .search-bar input {
-    width: 200px;
-  }
-}
-@media screen and (max-width: 1200px) {
-  .navbar-container {
-    padding: 0 20px;
-  }
-
-  .create-blog-container {
-    margin: 20px;
   }
 }
 
@@ -2355,11 +1992,6 @@ body.dark-mode .suggestion-item.no-category {
 
 .close-modal:hover {
   color: #ff8c00;
-}
-
-/* Dark mode adjustments */
-.dark-mode .uploaded-images-container {
-  border-top-color: #444;
 }
 
 /* Uploaded images container styles */
@@ -2471,19 +2103,6 @@ body.dark-mode .suggestion-item.no-category {
 
 .close-modal:hover {
   color: #ff8c00;
-}
-
-/* Dark mode adjustments */
-.dark-mode .image-modal {
-  background: rgba(0, 0, 0, 0.95);
-}
-
-.dark-mode .remove-image-btn {
-  background: rgba(255, 0, 0, 0.9);
-}
-
-.dark-mode .remove-image-btn:hover {
-  background: red;
 }
 
 /* Modal styles - update or add these styles */
@@ -2700,18 +2319,6 @@ body.dark-mode .suggestion-item.no-category {
   transform: scale(1.1);
 }
 
-/* ...existing code... */
-
-body:not(.dark-mode) .preview-title,
-body:not(.dark-mode) .preview-content,
-body:not(.dark-mode) .preview-content h2 {
-  color: #000; /* Change text color to black in light theme */
-}
-
-body:not(.dark-mode) .preview-content blockquote {
-  color: #333; /* Adjust blockquote color */
-}
-
 /* Menu icon styles */
 .blog-card .menu-icon {
   position: absolute;
@@ -2752,31 +2359,9 @@ body:not(.dark-mode) .preview-content blockquote {
   background: #f5f5f5;
 }
 
-body.dark-mode .blog-card .menu-dropdown {
-  background: #333;
-  border-color: #444;
-}
-
-body.dark-mode .blog-card .menu-dropdown a {
-  color: #fff;
-}
-
-body.dark-mode .blog-card .menu-dropdown a:hover {
-  background: #444;
-}
-
 /* Category styles */
 .blog-category {
   color: #000; /* Default color for categories */
-}
-
-body:not(.dark-mode) .blog-category.technology,
-body:not(.dark-mode) .blog-category.lifestyle {
-  color: #000; /* Set color to black for technology and lifestyle categories in light theme */
-}
-
-body.dark-mode .blog-category {
-  color: #fff; /* Set color to white for categories in dark theme */
 }
 
 /* Blog card header and menu styles */
@@ -2830,25 +2415,6 @@ body.dark-mode .blog-category {
 .menu-dropdown a:hover {
   background: #f5f5f5;
   color: #ff8c00;
-}
-
-/* Dark mode support */
-body.dark-mode .menu-dropdown {
-  background: #333;
-  border-color: #444;
-}
-
-body.dark-mode .menu-dropdown a {
-  color: #fff;
-}
-
-body.dark-mode .menu-dropdown a:hover {
-  background: #444;
-  color: #ff8c00;
-}
-
-body.dark-mode .menu-icon {
-  color: #fff;
 }
 
 /* Blog card styles */
@@ -2920,36 +2486,36 @@ body.dark-mode .menu-icon {
 
 /* Add to existing styles */
 .save-draft-btn {
-    margin-left: auto !important;
-    background-color: #4CAF50 !important;
-    color: white !important;
+  margin-left: auto !important;
+  background-color: #4caf50 !important;
+  color: white !important;
 }
 
 .save-draft-btn:hover {
-    background-color: #45a049 !important;
+  background-color: #45a049 !important;
 }
 
 .editor-notification {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #4CAF50;
-    color: white;
-    padding: 12px 24px;
-    border-radius: 4px;
-    animation: slideIn 0.3s ease-out;
-    z-index: 1000;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #4caf50;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 4px;
+  animation: slideIn 0.3s ease-out;
+  z-index: 1000;
 }
 
 @keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 /* Navbar Styles */
@@ -2969,7 +2535,6 @@ body.dark-mode .menu-icon {
 }
 
 .navbar .search-bar input {
-  padding: 5px;
   margin-right: 10px;
 }
 
@@ -2999,10 +2564,6 @@ body.dark-mode .menu-icon {
 .navbar .user-profile {
   display: flex;
   align-items: center;
-}
-
-.navbar .dark-mode-toggle {
-  cursor: pointer;
 }
 
 /* Create Post Container Styles */
@@ -3115,7 +2676,7 @@ body.dark-mode .menu-icon {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background: #4CAF50;
+  background: #4caf50;
   color: white;
   padding: 12px 24px;
   border-radius: 4px;
@@ -3134,13 +2695,9 @@ body.dark-mode .menu-icon {
   }
 }
 
-/* Save Draft Button Hover */
 .save-draft-btn:hover {
   background-color: #45a049;
 }
-
-/* ...existing code... */
-
 .search-results {
   position: absolute;
   top: 100%;
@@ -3171,22 +2728,6 @@ body.dark-mode .menu-icon {
   color: #666;
 }
 
-/* Dark mode support */
-body.dark-mode .search-results {
-  background: #333;
-  border-color: #444;
-}
-
-body.dark-mode .search-result-item:hover {
-  background: #444;
-}
-
-body.dark-mode .search-result-item i {
-  color: #fff;
-}
-
-/* ...existing code... */
-
 .footer-container {
   background-color: #333;
   color: #fff;
@@ -3214,12 +2755,6 @@ body.dark-mode .search-result-item i {
 
 .footer-links a:hover {
   text-decoration: underline;
-}
-
-/* ...existing code... */
-
-body, html {
-  height: 100%;
 }
 
 .wrapper {
@@ -3261,8 +2796,6 @@ main {
   text-decoration: underline;
 }
 
-/* Update/Add these styles in your style.css file */
-
 .footer-container {
   background-color: #333;
   color: #fff;
@@ -3271,9 +2804,8 @@ main {
   position: relative; /* Add this */
 }
 
-/* Add this new style to create border with margins */
 .footer-container::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 20px;
   bottom: 20px;
@@ -3284,26 +2816,304 @@ main {
   border-radius: 4px;
 }
 
-/* Optional hover effect */
 .footer-container:hover::before {
   border-color: rgba(255, 255, 255, 0.2);
   transition: border-color 0.3s ease;
 }
 
-/* For dark mode */
-body.dark-mode .footer-container::before {
-  border-color: rgba(255, 255, 255, 0.1);
+/*
+@media screen and (max-width: 576px) {
+  .nav-links {
+    flex-wrap: wrap;
+  }
+
+  .nav-links a {
+    font-size: 14px;
+  }
+
+  .user-actions {
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .create-blog-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .logo {
+    height: 30px;
+  }
+
+  .search-bar {
+    margin: 10px 0;
+  }
+
+  .logo {
+    height: 30px;
+  }
+
+  .nav-links a {
+    font-size: 16px;
+  }
+
+  .create-blog-btn {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .submit-btn,
+  .preview-btn,
+  .cancel-btn {
+    width: 100%;
+  }
+
+  .preview-gallery {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .modal-content {
+    width: 95%;
+  }
+
+  .uploaded-images-container {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .tags-list {
+    flex-wrap: wrap;
+  }
+
+  .tag-item {
+    margin: 2px;
+  }
+  .image-modal {
+    padding: 10px;
+  }
+
+  .close-modal {
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+  }
+}
+@media (max-width: 768px) {
+  .navbar-container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+  }
+
+  .nav-left {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .nav-right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .search-bar {
+    width: 100%;
+    margin: 10px 0;
+    order: 2;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .navbar {
+    position: relative;
+    padding: 10px 0;
+  }
+
+  .navbar-container {
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
+  }
+
+  .nav-left {
+    width: 100%;
+    justify-content: space-between;
+    padding: 0 10px;
+  }
+
+  .nav-right {
+    width: 100%;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .search-bar {
+    width: 100%;
+    order: 2;
+  }
+
+  .search-bar input {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .nav-links {
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+    gap: 15px;
+    order: 3;
+  }
+
+  .nav-links li {
+    margin: 0;
+  }
+
+  .user-actions {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    order: 1;
+  }
+
+  .user-profile {
+    margin: 0;
+  }
+
+  .create-blog-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .blog-card {
+    margin: 15px;
+  }
+  #editor {
+    min-height: 150px;
+  }
+
+  .editor-toolbar button {
+    padding: 5px 8px;
+    font-size: 14px;
+  }
+  .blog-cover-image {
+    height: 200px;
+  }
+
+  .blog-title {
+    font-size: 20px;
+  }
+
+  .blog-metadata {
+    flex-wrap: wrap;
+  }
+
+  .blog-tags {
+    flex-wrap: wrap;
+  }
+  .navbar-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .navbar-container {
+    flex-direction: column;
+    padding: 10px 20px;
+  }
+
+  .nav-left,
+  .nav-right {
+    width: 100%;
+    justify-content: center;
+    margin: 10px 0;
+  }
+
+  .search-bar {
+    width: 100%;
+    margin: 10px 0;
+    order: 2;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .create-blog-container {
+    margin: 10px;
+  }
+
+  .editor-toolbar {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .form-group input[type="text"]#title {
+    font-size: 24px;
+  }
+
+  .preview-title {
+    font-size: 24px;
+  }
+
+  .preview-cover-image {
+    height: 200px;
+  }
+
+  .uploaded-images-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .nav-links {
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  .search-bar {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 }
 
-body.dark-mode .footer-container:hover::before {
-  border-color: rgba(255, 255, 255, 0.2);
-}
+@media screen and (max-width: 992px) {
+  .search-bar input {
+    width: 25vw;
+  }
 
-/* Light mode styles */
-body:not(.dark-mode) .footer-container::before {
-  border-color: rgba(0, 0, 0, 0.1);
-}
+  .preview-blog-container {
+    margin: 20px;
+  }
 
-body:not(.dark-mode) .footer-container:hover::before {
-  border-color: rgba(0, 0, 0, 0.2);
+  .preview-cover-image {
+    height: 300px;
+  }
+  .navbar-container {
+    padding: 10px 20px;
+  }
+
+  .search-bar input {
+    width: 200px;
+  }
 }
+@media screen and (max-width: 1200px) {
+  .navbar-container {
+    padding: 0 20px;
+  }
+
+  .create-blog-container {
+    margin: 20px;
+  }
+}*/

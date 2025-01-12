@@ -64,78 +64,94 @@ export function createBlogComponent(blogData = {}) {
     const form = document.getElementById("createBlogForm");
     const editor = document.getElementById("editor");
     const formContainer = document.getElementById("createBlogFormContainer");
-    const isDarkMode = document.body.classList.contains('dark-mode');
+    const isDarkMode = document.body.classList.contains("dark-mode");
     const initialLogoSrc = isDarkMode ? "./logo.svg" : "./dark-logo.svg";
-    const logoImage = document.getElementById('logoImage');
+    const logoImage = document.getElementById("logoImage");
     if (logoImage) {
-        logoImage.src = initialLogoSrc;
+      logoImage.src = initialLogoSrc;
     }
     // Set initial states for animation
-    gsap.set(formContainer, { 
+    gsap.set(formContainer, {
       opacity: 0,
-      y: 50 
+      y: 50,
     });
-    
+
     gsap.set(".form-group", {
       opacity: 0,
-      y: 20
+      y: 20,
     });
-    
+
     gsap.set(".editor-toolbar button", {
       opacity: 0,
-      scale: 0.8
+      scale: 0.8,
     });
-    
+
     gsap.set("#editor", {
       opacity: 0,
-      y: 20
+      y: 20,
     });
-    
+
     gsap.set(".form-actions button", {
       opacity: 0,
-      y: 20
+      y: 20,
     });
 
     // Entrance animation timeline
     const tl = gsap.timeline();
-    
+
     tl.to(formContainer, {
       opacity: 1,
       y: 0,
       duration: 0.6,
-      ease: "power3.out"
+      ease: "power3.out",
     })
-    .to(".form-group", {
-      opacity: 1,
-      y: 0,
-      duration: 0.4,
-      stagger: 0.1,
-      ease: "power2.out"
-    }, "-=0.2")
-    .to(".editor-toolbar button", {
-      opacity: 1,
-      scale: 1,
-      duration: 0.3,
-      stagger: 0.05,
-      ease: "back.out(1.7)"
-    }, "-=0.2")
-    .to("#editor", {
-      opacity: 1,
-      y: 0,
-      duration: 0.4,
-      ease: "power2.out"
-    }, "-=0.2")
-    .to(".form-actions button", {
-      opacity: 1,
-      y: 0,
-      duration: 0.3,
-      stagger: 0.1,
-      ease: "power2.out"
-    }, "-=0.2");
+      .to(
+        ".form-group",
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          stagger: 0.1,
+          ease: "power2.out",
+        },
+        "-=0.2"
+      )
+      .to(
+        ".editor-toolbar button",
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.3,
+          stagger: 0.05,
+          ease: "back.out(1.7)",
+        },
+        "-=0.2"
+      )
+      .to(
+        "#editor",
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          ease: "power2.out",
+        },
+        "-=0.2"
+      )
+      .to(
+        ".form-actions button",
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.3,
+          stagger: 0.1,
+          ease: "power2.out",
+        },
+        "-=0.2"
+      );
 
     // Prevent form submission on Enter key
-    form.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter' && e.target.id === 'tags-input') {
+    form.addEventListener("keypress", (e) => {
+      if (e.key === "Enter" && e.target.id === "tags-input") {
         e.preventDefault();
       }
     });
@@ -247,9 +263,9 @@ export function createBlogComponent(blogData = {}) {
                 if (typeof window.displayBlogs === "function") {
                   window.displayBlogs();
                 }
-              }
+              },
             });
-          }
+          },
         });
       } catch (error) {
         console.error("Error publishing blog:", error);
@@ -263,6 +279,7 @@ export function createBlogComponent(blogData = {}) {
 
     // Initialize cover image upload
     const coverImageContainer = document.getElementById("coverImageContainer");
+    const removeCoverImageBtn = document.getElementById("removeCoverImage");
 
     // Handle drag and drop
     coverImageContainer.addEventListener("dragover", (e) => {
@@ -284,7 +301,12 @@ export function createBlogComponent(blogData = {}) {
     });
 
     // Handle click to upload
-    coverImageContainer.addEventListener("click", () => {
+    coverImageContainer.addEventListener("click", (e) => {
+      // Check if click target is the remove button or its children
+      if (e.target.closest('.remove-cover-image-btn')) {
+        return; // Exit if remove button was clicked
+      }
+
       const input = document.createElement("input");
       input.type = "file";
       input.accept = "image/*";
@@ -296,29 +318,22 @@ export function createBlogComponent(blogData = {}) {
       input.click();
     });
 
-    // Handle image function
-    function handleCoverImage(file) {
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        try {
-          const optimizedImage = await optimizeImageData(e.target.result);
-          const coverImagePreview =
-            document.getElementById("coverImagePreview");
-          const coverImagePlaceholder = document.getElementById(
-            "coverImagePlaceholder"
-          );
-          const removeCoverImageBtn =
-            document.getElementById("removeCoverImage");
-
-          coverImagePreview.src = optimizedImage;
-          coverImagePreview.style.display = "block";
-          coverImagePlaceholder.style.display = "none";
-          removeCoverImageBtn.style.display = "flex";
-        } catch (error) {
-          console.error("Error optimizing image:", error);
+    // Add separate handler for remove button
+    if (removeCoverImageBtn) {
+      removeCoverImageBtn.addEventListener("click", (e) => {
+        e.stopPropagation(); // Prevent event from bubbling up to container
+        const coverImagePreview = document.getElementById("coverImagePreview");
+        const coverImagePlaceholder = document.getElementById("coverImagePlaceholder");
+        
+        if (coverImagePreview) {
+          coverImagePreview.src = "";
+          coverImagePreview.style.display = "none";
         }
-      };
-      reader.readAsDataURL(file);
+        if (coverImagePlaceholder) {
+          coverImagePlaceholder.style.display = "flex";
+        }
+        removeCoverImageBtn.style.display = "none";
+      });
     }
 
     // Remove content image related code and functions
@@ -338,33 +353,40 @@ export function createBlogComponent(blogData = {}) {
     // Cancel button
     const cancelBtn = document.getElementById("cancelBtn");
     if (cancelBtn) {
-        cancelBtn.addEventListener("click", () => {
-            const hasDraft = localStorage.getItem('blog-draft');
-            
-            if (!hasDraft) {
-                // No draft saved - check for unsaved changes
-                const hasContent = hasFormContent();
-                if (hasContent) {
-                    if (confirm("Are you sure you want to leave? All unsaved changes will be lost.")) {
-                        closeForm();
-                    }
-                } else {
-                    closeForm();
-                }
-            } else {
-                // Draft exists - just close without warning
-                closeForm();
+      cancelBtn.addEventListener("click", () => {
+        const hasDraft = localStorage.getItem("blog-draft");
+
+        if (!hasDraft) {
+          // No draft saved - check for unsaved changes
+          const hasContent = hasFormContent();
+          if (hasContent) {
+            if (
+              confirm(
+                "Are you sure you want to leave? All unsaved changes will be lost."
+              )
+            ) {
+              closeForm();
             }
-        });
+          } else {
+            closeForm();
+          }
+        } else {
+          // Draft exists - just close without warning
+          closeForm();
+        }
+      });
     }
 
     // Helper function to check if form has content
     function hasFormContent() {
-        return document.getElementById("title").value || 
-               editor.innerHTML || 
-               document.getElementById("category").value || 
-               JSON.parse(document.getElementById("tags-hidden").value || "[]").length > 0 || 
-               document.getElementById("coverImagePreview").src;
+      return (
+        document.getElementById("title").value ||
+        editor.innerHTML ||
+        document.getElementById("category").value ||
+        JSON.parse(document.getElementById("tags-hidden").value || "[]")
+          .length > 0 ||
+        document.getElementById("coverImagePreview").src
+      );
     }
 
     // Helper function to close form without clearing draft
@@ -378,34 +400,37 @@ export function createBlogComponent(blogData = {}) {
           formContainer.style.display = "none";
           document.querySelector(".navbar").style.display = "block";
           document.getElementById("content").style.display = "block";
-          
+
           // Animate navbar and content back in
           gsap.from([".navbar", "#content"], {
             opacity: 0,
             y: -20,
             duration: 0.5,
             stagger: 0.1,
-            ease: "power2.out"
+            ease: "power2.out",
           });
-        }
+        },
       });
     }
 
     // Initialize tags input with correct scope
-    const tagsInput = document.getElementById('tags-input');
-    const tagsList = document.getElementById('tags-list');
-    const tagsHidden = document.getElementById('tags-hidden');
+    const tagsInput = document.getElementById("tags-input");
+    const tagsList = document.getElementById("tags-list");
+    const tagsHidden = document.getElementById("tags-hidden");
     let tags = [];
 
     if (tagsInput) {
-      tagsInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && tagsInput.value.trim()) {
+      tagsInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && tagsInput.value.trim()) {
           e.preventDefault();
-          const tag = tagsInput.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
+          const tag = tagsInput.value
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9-]/g, "");
           if (tag && !tags.includes(tag) && tags.length < 5) {
             tags.push(tag);
             updateTags();
-            tagsInput.value = '';
+            tagsInput.value = "";
           }
         }
       });
@@ -413,18 +438,22 @@ export function createBlogComponent(blogData = {}) {
 
     function updateTags() {
       tagsHidden.value = JSON.stringify(tags);
-      tagsList.innerHTML = tags.map(tag => `
+      tagsList.innerHTML = tags
+        .map(
+          (tag) => `
         <span class="tag-item">
           <i class="fas fa-hashtag"></i>${tag}
           <span class="tag-remove" data-tag="${tag}">×</span>
         </span>
-      `).join('');
+      `
+        )
+        .join("");
 
       // Add click handlers for remove buttons
-      document.querySelectorAll('.tag-remove').forEach(button => {
-        button.addEventListener('click', (e) => {
+      document.querySelectorAll(".tag-remove").forEach((button) => {
+        button.addEventListener("click", (e) => {
           const tagToRemove = e.target.dataset.tag;
-          tags = tags.filter(t => t !== tagToRemove);
+          tags = tags.filter((t) => t !== tagToRemove);
           updateTags();
         });
       });
@@ -434,23 +463,25 @@ export function createBlogComponent(blogData = {}) {
         opacity: 0,
         scale: 0.5,
         duration: 0.3,
-        ease: "back.out(1.7)"
+        ease: "back.out(1.7)",
       });
     }
 
     // Add theme change observer
     const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.attributeName === 'class' && 
-                mutation.target === document.body) {
-                updateLogoForTheme();
-            }
-        });
+      mutations.forEach((mutation) => {
+        if (
+          mutation.attributeName === "class" &&
+          mutation.target === document.body
+        ) {
+          updateLogoForTheme();
+        }
+      });
     });
 
     observer.observe(document.body, {
-        attributes: true,
-        attributeFilter: ['class']
+      attributes: true,
+      attributeFilter: ["class"],
     });
 
     // Initial logo setup
@@ -471,112 +502,132 @@ export function createBlogComponent(blogData = {}) {
 
     // Save draft function - only called by Save Draft button
     function saveDraft() {
-        const draftData = {
-            title: document.getElementById("title").value,
-            content: editor.innerHTML,
-            category: document.getElementById("category").value,
-            tags: JSON.parse(document.getElementById("tags-hidden").value || "[]"),
-            coverImage: document.getElementById("coverImagePreview").src || '',
-            lastSaved: new Date().toISOString()
-        };
+      const draftData = {
+        title: document.getElementById("title").value,
+        content: editor.innerHTML,
+        category: document.getElementById("category").value,
+        tags: JSON.parse(document.getElementById("tags-hidden").value || "[]"),
+        coverImage: document.getElementById("coverImagePreview").src || "",
+        lastSaved: new Date().toISOString(),
+      };
 
-        localStorage.setItem('blog-draft', JSON.stringify(draftData));
-        showNotification('Draft saved successfully!');
+      localStorage.setItem("blog-draft", JSON.stringify(draftData));
+      showNotification("Draft saved successfully!");
     }
 
     // Manual save draft button
-    const saveDraftBtn = document.querySelector('.save-draft-btn');
+    const saveDraftBtn = document.querySelector(".save-draft-btn");
     if (saveDraftBtn) {
-        saveDraftBtn.addEventListener('click', saveDraft);
+      saveDraftBtn.addEventListener("click", saveDraft);
     }
 
     // Only load draft when creating new blog
     function loadDraft() {
-        const savedDraft = localStorage.getItem('blog-draft');
-        if (savedDraft) {
-            const draft = JSON.parse(savedDraft);
-            
-            document.getElementById("title").value = draft.title || '';
-            editor.innerHTML = draft.content || '';
-            document.getElementById("category").value = draft.category || '';
-            
-            // Restore cover image properly
-            if (draft.coverImage) {
-                const coverPreview = document.getElementById("coverImagePreview");
-                const coverPlaceholder = document.getElementById("coverImagePlaceholder");
-                const removeCoverBtn = document.getElementById("removeCoverImage");
-                
-                if (coverPreview && coverPlaceholder && removeCoverBtn) {
-                    coverPreview.src = draft.coverImage;
-                    coverPreview.style.display = "block";
-                    coverPlaceholder.style.display = "none";
-                    removeCoverBtn.style.display = "flex";
-                }
-            }
-            
-            // Restore tags
-            if (draft.tags && draft.tags.length > 0) {
-                document.getElementById("tags-hidden").value = JSON.stringify(draft.tags);
-                window.tags = draft.tags;
-                const tagsList = document.getElementById("tags-list");
-                if (tagsList) {
-                    tagsList.innerHTML = draft.tags.map(tag => `
+      const savedDraft = localStorage.getItem("blog-draft");
+      if (savedDraft) {
+        const draft = JSON.parse(savedDraft);
+
+        document.getElementById("title").value = draft.title || "";
+        editor.innerHTML = draft.content || "";
+        document.getElementById("category").value = draft.category || "";
+
+        // Restore cover image properly
+        if (draft.coverImage) {
+          const coverPreview = document.getElementById("coverImagePreview");
+          const coverPlaceholder = document.getElementById(
+            "coverImagePlaceholder"
+          );
+          const removeCoverBtn = document.getElementById("removeCoverImage");
+
+          if (coverPreview && coverPlaceholder && removeCoverBtn) {
+            coverPreview.src = draft.coverImage;
+            coverPreview.style.display = "block";
+            coverPlaceholder.style.display = "none";
+            removeCoverBtn.style.display = "flex";
+          }
+        }
+
+        // Restore tags
+        if (draft.tags && draft.tags.length > 0) {
+          document.getElementById("tags-hidden").value = JSON.stringify(
+            draft.tags
+          );
+          window.tags = draft.tags;
+          const tagsList = document.getElementById("tags-list");
+          if (tagsList) {
+            tagsList.innerHTML = draft.tags
+              .map(
+                (tag) => `
                         <span class="tag-item">
                             <i class="fas fa-hashtag"></i>${tag}
                             <span class="tag-remove" data-tag="${tag}">×</span>
                         </span>
-                    `).join('');
-                    
-                    document.querySelectorAll('.tag-remove').forEach(button => {
-                        button.addEventListener('click', (e) => {
-                            const tagToRemove = e.target.dataset.tag;
-                            window.tags = window.tags.filter(t => t !== tagToRemove);
-                            updateTags();
-                        });
-                    });
-                }
-            }
+                    `
+              )
+              .join("");
 
-            showNotification('Draft restored');
+            document.querySelectorAll(".tag-remove").forEach((button) => {
+              button.addEventListener("click", (e) => {
+                const tagToRemove = e.target.dataset.tag;
+                window.tags = window.tags.filter((t) => t !== tagToRemove);
+                updateTags();
+              });
+            });
+          }
         }
+
+        showNotification("Draft restored");
+      }
     }
 
     // Only call loadDraft when creating new blog (not editing)
-    const isEditing = document.getElementById("createBlogFormContainer").dataset.editBlogId;
+    const isEditing = document.getElementById("createBlogFormContainer").dataset
+      .editBlogId;
     if (!isEditing) {
-        loadDraft();
+      loadDraft();
     }
 
     // Add underline to existing commands
-    const commands = ["bold", "italic", "underline", "insertOrderedList", "insertUnorderedList", "formatBlock"];
+    const commands = [
+      "bold",
+      "italic",
+      "underline",
+      "insertOrderedList",
+      "insertUnorderedList",
+      "formatBlock",
+    ];
     const toolbarButtons = document.querySelectorAll(".editor-toolbar button");
-    
+
     toolbarButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-            const command = button.getAttribute("data-command");
-            const value = button.getAttribute("data-value") || "";
-            
-            if (commands.includes(command)) {
-                if (command === "formatBlock") {
-                    // Check if the current block is already a heading
-                    const isHeading = document.queryCommandValue("formatBlock") === "h2";
-                    
-                    if (isHeading) {
-                        // If it's already a heading, change it back to paragraph
-                        document.execCommand("formatBlock", false, "p");
-                        button.classList.remove("active");
-                    } else {
-                        // If it's not a heading, make it a heading
-                        document.execCommand("formatBlock", false, value);
-                        button.classList.add("active");
-                    }
-                } else {
-                    document.execCommand(command, false, value);
-                    button.classList.toggle("active", document.queryCommandState(command));
-                }
+      button.addEventListener("click", () => {
+        const command = button.getAttribute("data-command");
+        const value = button.getAttribute("data-value") || "";
+
+        if (commands.includes(command)) {
+          if (command === "formatBlock") {
+            // Check if the current block is already a heading
+            const isHeading =
+              document.queryCommandValue("formatBlock") === "h2";
+
+            if (isHeading) {
+              // If it's already a heading, change it back to paragraph
+              document.execCommand("formatBlock", false, "p");
+              button.classList.remove("active");
+            } else {
+              // If it's not a heading, make it a heading
+              document.execCommand("formatBlock", false, value);
+              button.classList.add("active");
             }
-            editor.focus();
-        });
+          } else {
+            document.execCommand(command, false, value);
+            button.classList.toggle(
+              "active",
+              document.queryCommandState(command)
+            );
+          }
+        }
+        editor.focus();
+      });
     });
 
     // Update button states when selection changes
@@ -589,31 +640,41 @@ export function createBlogComponent(blogData = {}) {
         if (command === "formatBlock") {
           const isHeading = document.queryCommandValue("formatBlock") === "h2";
           button.classList.toggle("active", isHeading);
-        } else if (["bold", "italic", "insertOrderedList", "insertUnorderedList"].includes(command)) {
-          button.classList.toggle("active", document.queryCommandState(command));
+        } else if (
+          [
+            "bold",
+            "italic",
+            "insertOrderedList",
+            "insertUnorderedList",
+          ].includes(command)
+        ) {
+          button.classList.toggle(
+            "active",
+            document.queryCommandState(command)
+          );
         }
       });
     }
 
     // Update form submit handler to clear draft after successful publish
-    const form = document.getElementById('createBlogForm');
+    const form = document.getElementById("createBlogForm");
     const originalSubmitHandler = form.onsubmit;
     form.onsubmit = async (e) => {
-        e.preventDefault();
-        
-        try {
-            // Call original submit handler if it exists
-            if (originalSubmitHandler) {
-                await originalSubmitHandler.call(form, e);
-            }
+      e.preventDefault();
 
-            // If publish was successful, clear the draft
-            localStorage.removeItem('blog-draft');
-            showNotification('Blog published successfully!');
-        } catch (error) {
-            console.error('Error publishing blog:', error);
-            showNotification('Error publishing blog');
+      try {
+        // Call original submit handler if it exists
+        if (originalSubmitHandler) {
+          await originalSubmitHandler.call(form, e);
         }
+
+        // If publish was successful, clear the draft
+        localStorage.removeItem("blog-draft");
+        showNotification("Blog published successfully!");
+      } catch (error) {
+        console.error("Error publishing blog:", error);
+        showNotification("Error publishing blog");
+      }
     };
   }
 
@@ -702,165 +763,62 @@ function compressImage(dataUrl, maxWidth = 1200) {
   });
 }
 
-// Add storage management functions
-const storageManager = {
-  // Clean up old data to free space
-  cleanup: () => {
-    try {
-      // Remove blogs older than 30 days
-      const blogs = JSON.parse(sessionStorage.getItem("blogs") || "[]");
-      const thirtyDaysAgo = new Date();
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
-      const filteredBlogs = blogs.filter(
-        (blog) => new Date(blog.createdAt) > thirtyDaysAgo
-      );
-
-      sessionStorage.setItem("blogs", JSON.stringify(filteredBlogs));
-    } catch (error) {
-      console.error("Storage cleanup failed:", error);
-    }
-  },
-
-  // Save blog with optimized images
-  saveBlog: async (blogData) => {
-    try {
-      // Optimize cover image if exists
-      if (blogData.coverImage) {
-        blogData.coverImage = await optimizeImageData(blogData.coverImage);
-      }
-
-      // Get and filter existing blogs
-      let blogs = JSON.parse(sessionStorage.getItem("blogs") || "[]");
-
-      // Limit to most recent 50 blogs
-      blogs = blogs.slice(-49);
-      blogs.push(blogData);
-
-      sessionStorage.setItem("blogs", JSON.stringify(blogs));
-      return true;
-    } catch (error) {
-      console.error("Failed to save blog:", error);
-      return false;
-    }
-  },
-};
-
-// Add CSS for improved image layout
-const style = document.createElement("style");
-style.textContent = `
-  .uploaded-images-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 10px 0;
-  }
-
-  .uploaded-image-container {
-    position: relative;
-    width: 150px;
-    height: 150px;
-  }
-
-  .image-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    border-radius: 8px;
-  }
-
-  .thumbnail {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-
-  .thumbnail:hover {
-    transform: scale(1.05);
-  }
-
-  .remove-image-btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: rgba(255, 0, 0, 0.8);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .image-wrapper:hover .remove-image-btn {
-    opacity: 1;
-  }
-`;
-
-document.head.appendChild(style);
-
-// Helper functions for form handling
-function resetForm() {
-  const form = document.getElementById("createBlogForm");
-  const editor = document.getElementById("editor");
-  form.reset();
-  editor.innerHTML = "";
-  document.getElementById("coverImagePreview").style.display = "none";
-  document.getElementById("coverImagePlaceholder").style.display = "flex";
-  document.getElementById("removeCoverImage").style.display = "none";
-  document.getElementById("tags-list").innerHTML = "";
-}
-
-function updateUIAfterSubmission() {
-  document.getElementById("createBlogFormContainer").style.display = "none";
-  document.querySelector(".navbar").style.display = "block";
-  document.getElementById("content").style.display = "block";
-  if (typeof window.displayBlogs === "function") {
-    window.displayBlogs();
-  }
-}
-
-const CATEGORY_TAGS = {
-  technology: ['javascript', 'react', 'nodejs', 'python', 'webdev', 'coding', 'programming', 'tech', 'software', 'development'],
-  lifestyle: ['health', 'fitness', 'wellness', 'mindfulness', 'motivation', 'selfcare', 'productivity', 'lifestyle', 'personal', 'growth'],
-  travel: ['adventure', 'wanderlust', 'explore', 'vacation', 'destination', 'tourism', 'journey', 'traveltips', 'wandering', 'travellife'],
-  food: ['cooking', 'recipe', 'foodie', 'cuisine', 'baking', 'healthy', 'delicious', 'foodlover', 'homemade', 'culinary']
-};
-
 // Add notification function
 function showNotification(message) {
-    const notification = document.createElement('div');
-    notification.className = 'editor-notification';
-    notification.textContent = message;
-    document.body.appendChild(notification);
+  const notification = document.createElement("div");
+  notification.className = "editor-notification";
+  notification.textContent = message;
+  document.body.appendChild(notification);
 
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
+  setTimeout(() => {
+    notification.remove();
+  }, 3000);
 }
 
 // Add this function to handle logo theme changes
 function updateLogoForTheme() {
-    const logoImage = document.getElementById('logoImage');
-    if (logoImage) {
-        // Animate logo change
+  const logoImage = document.getElementById("logoImage");
+  if (logoImage) {
+    // Animate logo change
+    gsap.to(logoImage, {
+      opacity: 1,
+      duration: 0.3,
+      onComplete: () => {
+        logoImage.src = newSrc;
         gsap.to(logoImage, {
-            opacity: 1,
-            duration: 0.3,
-            onComplete: () => {
-                logoImage.src = newSrc;
-                gsap.to(logoImage, {
-                    opacity: 1,
-                    duration: 0.3
-                });
-            }
+          opacity: 1,
+          duration: 0.3,
         });
+      },
+    });
+  }
+}
+
+function handleCoverImage(file) {
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    try {
+      const optimizedImage = await optimizeImageData(e.target.result);
+      const coverImagePreview = document.getElementById("coverImagePreview");
+      const coverImagePlaceholder = document.getElementById("coverImagePlaceholder");
+      const removeCoverImageBtn = document.getElementById("removeCoverImage");
+
+      if (coverImagePreview) {
+        coverImagePreview.src = optimizedImage;
+        coverImagePreview.style.display = "block";
+      }
+
+      if (coverImagePlaceholder) {
+        coverImagePlaceholder.style.display = "none"; 
+      }
+
+      if (removeCoverImageBtn) {
+        removeCoverImageBtn.style.display = "flex";
+      }
+
+    } catch (error) {
+      console.error("Error optimizing image:", error);
     }
+  };
+  reader.readAsDataURL(file);
 }
