@@ -71,11 +71,6 @@ export function navbarComponent() {
 
             // Initialize blog form
             initializeCreateBlog();
-
-            // Initialize editor is now part of createBlogComponent
-            if (document.getElementById("editor")) {
-              initializeTagsInput();
-            }
           }
         } catch (error) {
           console.error("Error loading create blog component:", error);

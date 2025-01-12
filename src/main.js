@@ -719,13 +719,6 @@ function initializeTagsInput() {
       }
     });
   }
-
-  // Close suggestions when clicking outside
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest(".tags-input-container")) {
-      tagSuggestions.style.display = "none";
-    }
-  });
 }
 
 // Make sure to call initializeTagsInput when the form is loaded
@@ -975,21 +968,9 @@ function displaySearchResults(results) {
 
 // Initialize search functionality
 function initializeSearch() {
-  const searchInput = document.getElementById("search-input");
   const searchResultsContainer = document.createElement("div");
   searchResultsContainer.id = "search-results";
   searchResultsContainer.className = "search-results";
-  document.querySelector(".search-bar").appendChild(searchResultsContainer);
-
-  searchInput.addEventListener("input", (e) => {
-    const query = e.target.value.trim();
-    if (query) {
-      const results = filterBlogs(query);
-      displaySearchResults(results);
-    } else {
-      searchResultsContainer.style.display = "none";
-    }
-  });
 
   searchResultsContainer.addEventListener("click", (e) => {
     const resultItem = e.target.closest(".search-result-item");
@@ -997,7 +978,6 @@ function initializeSearch() {
       const blogId = resultItem.dataset.id;
       const blog = JSON.parse(sessionStorage.getItem("blogs") || "[]").find(b => b.id === parseInt(blogId));
       if (blog) {
-        // Display the selected blog
         displayBlogs([blog]);
       }
       searchResultsContainer.style.display = "none";

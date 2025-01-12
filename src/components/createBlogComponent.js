@@ -466,26 +466,6 @@ export function createBlogComponent(blogData = {}) {
         ease: "back.out(1.7)",
       });
     }
-
-    // Add theme change observer
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (
-          mutation.attributeName === "class" &&
-          mutation.target === document.body
-        ) {
-          updateLogoForTheme();
-        }
-      });
-    });
-
-    observer.observe(document.body, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-
-    // Initial logo setup
-    updateLogoForTheme();
   };
 
   // Move editor initialization into a separate function
@@ -789,24 +769,6 @@ function showNotification(message) {
   }, 3000);
 }
 
-// Add this function to handle logo theme changes
-function updateLogoForTheme() {
-  const logoImage = document.getElementById("logoImage");
-  if (logoImage) {
-    // Animate logo change
-    gsap.to(logoImage, {
-      opacity: 1,
-      duration: 0.3,
-      onComplete: () => {
-        logoImage.src = newSrc;
-        gsap.to(logoImage, {
-          opacity: 1,
-          duration: 0.3,
-        });
-      },
-    });
-  }
-}
 
 function handleCoverImage(file) {
   const reader = new FileReader();
