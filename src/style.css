@@ -144,6 +144,7 @@ body.dark-mode .dark-mode-toggle i.fa-sun {
   height: 80px;
   display: block;
   z-index: 1000;
+  filter: brightness(0.9);
 }
 body.dark-mode .darklogo {
   filter: brightness(1);
@@ -171,15 +172,7 @@ body.dark-mode .darklogo {
 }
 
 .dark-mode .navbar {
-  background-color: #1e1e1e;
-  color: #ffffff;
-}
-.dark-mode .navbar {
-  background-color: #1e1e1e;
-  color: #ffffff;
-}
-
-.dark-mode .editor-btn {
+  background-color: #121212;
   color: #ffffff;
 }
 
@@ -259,13 +252,6 @@ body.dark-mode .suggestion-item.no-category {
   background: rgba(0, 0, 0, 0.95);
 }
 
-.dark-mode .remove-image-btn {
-  background: rgba(255, 0, 0, 0.9);
-}
-
-.dark-mode .remove-image-btn:hover {
-  background: red;
-}
 body.dark-mode .blog-card .menu-dropdown {
   background: #333;
   border-color: #444;
@@ -311,10 +297,6 @@ body.dark-mode .footer-container:hover::before {
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-body.dark-mode .navbar {
-  background-color: #121212;
-}
-
 body.dark-mode .search-bar input {
   background-color: #1e1e1e;
 }
@@ -340,24 +322,6 @@ body.dark-mode .search-bar input {
   transform: scale(1.05);
 }
 
-.remove-image-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
-  background: red;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 2px 5px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-}
-
 /* Modal styles */
 .image-modal {
   display: none;
@@ -372,146 +336,14 @@ body.dark-mode .search-bar input {
   align-items: center;
 }
 
-.modal-content {
-  max-width: 90%;
-  max-height: 90vh;
-  object-fit: contain;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.close-modal {
-  position: absolute;
-  top: 15px;
-  right: 25px;
-  color: #f1f1f1;
-  font-size: 35px;
-  cursor: pointer;
-}
-
-/* Remove image button styles */
-.remove-image-btn {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background: red;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 12px;
-  padding: 2px 5px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-}
-.modal-content {
-  max-width: 90%;
-  max-height: 90vh;
-  object-fit: contain;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.close-modal {
-  position: absolute;
-  top: 15px;
-  right: 25px;
-  color: #f1f1f1;
-  font-size: 35px;
-  cursor: pointer;
-}
-
-.close-modal:hover {
-  color: #ff8c00;
-}
-
 /* Flex container for uploaded images */
 .uploaded-images-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.close-modal:hover {
-  color: #ff8c00;
-} /* Add these styles to your existing CSS */
-
-/* Remove image button styles */
-.remove-image-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
-  background: red;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 2px 5px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-}
-
-.modal-content {
-  max-width: 90%;
-  max-height: 90vh;
-  object-fit: contain;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.close-modal {
-  position: absolute;
-  top: 15px;
-  right: 25px;
-  color: #f1f1f1;
-  font-size: 35px;
-  cursor: pointer;
-}
-
-.close-modal:hover {
-  color: #ff8c00;
-}
-
-/* Flex container for uploaded images */
-.uploaded-images-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.modal-content {
-  max-width: 90%;
-  max-height: 90vh;
-  object-fit: contain;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.close-modal {
-  position: absolute;
-  top: 15px;
-  right: 25px;
-  color: #f1f1f1;
-  font-size: 35px;
-  cursor: pointer;
-}
-
-.close-modal:hover {
-  color: #ff8c00;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  padding: 15px;
+  margin-top: 20px;
+  border-top: 1px solid #ddd;
 }
 
 .navbar-container {
@@ -521,6 +353,7 @@ body.dark-mode .search-bar input {
   max-width: 1200px;
   margin: 0 auto;
   height: 100%;
+  padding: 0 20px;
 }
 
 .nav-left {
@@ -530,56 +363,14 @@ body.dark-mode .search-bar input {
   align-items: center;
 }
 
-.remove-image-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
-  background: red;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 12px;
-  padding: 2px 5px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-}
-
-.remove-image-btn:hover {
-  background: darkred;
-}
-
-.modal-content {
-  max-width: 90%;
-  max-height: 90vh;
-  object-fit: contain;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.close-modal {
-  position: absolute;
-  top: 15px;
-  right: 25px;
-  color: #f1f1f1;
-  font-size: 35px;
-  cursor: pointer;
-}
-
-.close-modal:hover {
-  color: #ff8c00;
-}
-
 /* Flex container for uploaded images */
 .uploaded-images-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  padding: 15px;
+  margin-top: 20px;
+  border-top: 1px solid #ddd;
 }
 
 .uploaded-image-item {
@@ -625,26 +416,6 @@ body.dark-mode .search-bar input {
 
 .remove-content-image-btn:hover {
   background: rgba(255, 0, 0, 1);
-}
-
-.modal-content {
-  position: relative;
-  max-width: 90%;
-  max-height: 90vh;
-}
-
-.close-modal {
-  position: absolute;
-  top: 15px;
-  right: 25px;
-  color: white;
-  font-size: 35px;
-  cursor: pointer;
-  padding: 5px;
-}
-
-.close-modal:hover {
-  color: #ff8c00;
 }
 
 .nav-right {
@@ -772,57 +543,6 @@ body.dark-mode .search-bar input {
   opacity: 0.8;
 }
 
-/* Navbar styles */
-.navbar {
-  background-color: #ffffff; /* Default light mode background */
-  color: #000000; /* Default light mode text color */
-  padding: 10px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* Nav links styles */
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 20px;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: inherit;
-}
-
-/* User profile styles */
-.user-profile {
-  display: flex;
-  align-items: center;
-}
-
-#user-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.cl-userButton {
-  width: 50px; /* Increase the size */
-  height: 50px; /* Increase the size */
-}
-
-.cl-userButton img {
-  width: 100%; /* Ensure the image fits the container */
-  height: 100%; /* Ensure the image fits the container */
-  border-radius: 50%;
-  object-fit: cover;
-  cursor: pointer;
-}
-
-.cl-userButton img:hover {
-  opacity: 0.8;
-}
-
 #mode-icon {
   font-size: 24px;
 }
@@ -846,6 +566,7 @@ body.dark-mode .search-bar input {
 
 #createBlogFormContainer {
   margin: 0;
+  padding: 0;
 }
 
 /* Form Elements */
@@ -870,13 +591,14 @@ body.dark-mode .search-bar input {
 }
 
 .editor-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-  color: inherit;
-  pointer-events: all;
+  position: relative;
   padding: 8px 12px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  pointer-events: all;
   margin: 0 2px;
 }
 
@@ -896,55 +618,17 @@ body.dark-mode .search-bar input {
 
 /* Uploaded images container styles */
 .uploaded-images-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  padding: 15px;
+  margin-top: 20px;
+  border-top: 1px solid #ddd;
 }
 
 .uploaded-image-item {
   position: relative;
   display: inline-block;
-}
-
-.remove-image-btn {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background: red;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 12px;
-  padding: 2px 5px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-}
-
-.modal-content {
-  max-width: 90%;
-  max-height: 90vh;
-  object-fit: contain;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.close-modal {
-  position: absolute;
-  top: 15px;
-  right: 25px;
-  color: #f1f1f1;
-  font-size: 35px;
-  cursor: pointer;
-}
-
-.close-modal:hover {
-  color: #ff8c00;
 }
 
 /* Tags input styles */
@@ -981,6 +665,7 @@ body.dark-mode .search-bar input {
   align-items: center;
   gap: 5px;
   font-size: 14px;
+  border-radius: 3px;
 }
 
 .tag-remove {
@@ -1066,14 +751,6 @@ body.dark-mode .search-bar input {
   color: #999;
 }
 
-#createBlogFormContainer {
-  margin: 0;
-}
-
-#createBlogForm#createBlogFormContainer {
-  margin: 0;
-  padding: 0;
-}
 nts */ .form-group {
   margin-bottom: 20px;
 }
@@ -1236,7 +913,6 @@ nts */ .form-group {
   transform: scale(1.05);
 }
 
-/* Remove Image Buttons */
 .remove-image-btn,
 .remove-cover-image-btn {
   position: absolute;
@@ -1254,6 +930,7 @@ nts */ .form-group {
   justify-content: center;
   font-size: 16px;
   z-index: 2;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
 }
 
 .remove-image-btn:hover,
@@ -1328,6 +1005,7 @@ nts */ .form-group {
 }
 
 .editor-btn {
+  position: relative;
   padding: 8px 12px;
   background-color: #fff;
   border: 1px solid #ddd;
@@ -1382,11 +1060,6 @@ nts */ .form-group {
 /* Ensure uploaded images don't trigger unwanted clicks */
 .uploaded-image-item img {
   pointer-events: none;
-}
-
-.uploaded-image-item .remove-image-btn {
-  pointer-events: all;
-  z-index: 2;
 }
 
 /* Preview Blog */
@@ -1537,29 +1210,6 @@ nts */ .form-group {
   display: none;
 }
 
-.modal-content {
-  max-width: 90%;
-  max-height: 90vh;
-  object-fit: contain;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.close-modal {
-  position: absolute;
-  top: 15px;
-  right: 25px;
-  color: #f1f1f1;
-  font-size: 35px;
-  cursor: pointer;
-}
-
-.close-modal:hover {
-  color: #ff8c00;
-}
-
 /* Add these styles to your existing CSS */
 .suggestion-item.no-category {
   color: #666;
@@ -1596,6 +1246,7 @@ nts */ .form-group {
 
 /* Blog Card Styles */
 .blog-card {
+  position: relative;
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -1698,9 +1349,12 @@ nts */ .form-group {
 
 /* Uploaded images container styles */
 .uploaded-images-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  padding: 15px;
   margin-top: 20px;
   border-top: 1px solid #ddd;
-  padding-top: 20px;
 }
 
 .uploaded-images-list {
@@ -1727,50 +1381,6 @@ nts */ .form-group {
 
 .uploaded-image-item img:hover {
   transform: scale(1.05);
-}
-
-.remove-image-btn {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: rgba(255, 0, 0, 0.8);
-  color: white;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  transition: background-color 0.2s ease;
-  z-index: 2;
-  pointer-events: all;
-}
-
-.remove-image-btn:hover {
-  background: rgba(255, 0, 0, 1);
-}
-
-.modal-content {
-  position: relative;
-  max-width: 90%;
-  max-height: 90vh;
-}
-
-.close-modal {
-  position: absolute;
-  top: -35px;
-  right: -35px;
-  color: white;
-  font-size: 30px;
-  cursor: pointer;
-  padding: 5px;
-}
-
-.close-modal:hover {
-  color: #ff8c00;
 }
 
 /* Uploaded images container styles */
@@ -1800,83 +1410,17 @@ nts */ .form-group {
   transform: scale(1.05);
 }
 
-.image-wrapper:hover .remove-image-btn {
+.image-wrapper:hover {
   opacity: 1;
 }
 
-.remove-image-btn {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 25px;
-  height: 25px;
-  background: rgba(255, 0, 0, 0.8);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  opacity: 0;
-  transition: opacity 0.3s ease, background-color 0.3s ease;
-  z-index: 2;
-  pointer-events: all;
-}
-
-.remove-image-btn:hover {
-  background: rgba(255, 0, 0, 1);
-}
-
-
-.modal-content {
-  position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
-}
-
-.modal-image-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-image-container img {
-  max-width: 100%;
-  max-height: 90vh;
-  object-fit: contain;
-}
-
-.close-modal {
-  position: absolute;
-  top: -35px;
-  right: -35px;
-  color: white;
-  font-size: 30px;
-  cursor: pointer;
-  padding: 5px;
-  transition: color 0.3s ease;
-}
-
-.close-modal:hover {
-  color: #ff8c00;
-}
-
-
-.modal-content {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .modal-image-container {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   max-width: 90%;
-  max-height: 90vh;
+  max-height: 90%;
 }
 
 .modal-image-container img {
@@ -1885,155 +1429,6 @@ nts */ .form-group {
   object-fit: contain;
   display: block;
   margin: 0 auto;
-}
-
-.close-modal {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  color: white;
-  font-size: 35px;
-  cursor: pointer;
-  padding: 10px;
-  z-index: 1001;
-}
-
-.close-modal:hover {
-  color: #ff8c00;
-}
-
-.modal-content {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-}
-
-.modal-image-container {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  max-width: 90%;
-  max-height: 90%;
-}
-
-.modal-image-container img {
-  max-width: 100%;
-  max-height: 90vh;
-  object-fit: contain;
-}
-
-.close-modal {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  color: white;
-  font-size: 35px;
-  cursor: pointer;
-  padding: 10px;
-  z-index: 1001;
-}
-
-.close-modal:hover {
-  color: #ff8c00;
-  width: 40px;
-  height: 40px;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  font-size: 24px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.3s ease;
-}
-
-.close-modal:hover {
-  background: rgba(0, 0, 0, 0.8);
-  color: #ff8c00;
-  transform: scale(1.1);
-}
-
-.modal-content {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-image-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  max-width: 90%;
-  max-height: 90%;
-}
-
-.modal-image-container img {
-  max-width: 100%;
-  max-height: 90vh;
-  object-fit: contain;
-  display: block;
-}
-
-.close-modal {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  font-size: 24px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.3s ease;
-}
-
-.close-modal:hover {
-  background: rgba(0, 0, 0, 0.8);
-  color: #ff8c00;
-  transform: scale(1.1);
-}
-
-/* Update Remove button styles */
-.remove-image-btn {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 24px;
-  height: 24px;
-  background: rgba(255, 0, 0, 0.8);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  opacity: 0;
-}
-
-.uploaded-image-container:hover .remove-image-btn {
-  opacity: 1;
-}
-
-.remove-image-btn:hover {
-  background: red;
-  transform: scale(1.1);
 }
 
 /* Menu icon styles */
@@ -2052,27 +1447,27 @@ nts */ .form-group {
 }
 
 /* Menu dropdown styles */
-.blog-card .menu-dropdown {
+.menu-dropdown {
   display: none;
   position: absolute;
-  top: 30px;
+  top: 40px;
   right: 10px;
-  background: #fff;
+  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+  z-index: 3;
 }
 
-.blog-card .menu-dropdown a {
+.menu-dropdown a {
   display: block;
-  padding: 10px;
+  padding: 10px 20px;
   color: #333;
   text-decoration: none;
   transition: background 0.3s ease;
 }
 
-.blog-card .menu-dropdown a:hover {
+.menu-dropdown a:hover {
   background: #f5f5f5;
 }
 
@@ -2228,6 +1623,8 @@ nts */ .form-group {
   background-color: #333;
   color: #fff;
   padding: 10px 20px;
+  display: flex;
+  align-items: center;
 }
 
 .navbar .logo {
@@ -2427,6 +1824,7 @@ nts */ .form-group {
   color: #fff;
   padding: 20px;
   text-align: center;
+  position: relative;
 }
 
 .footer-links {
@@ -2880,3 +2278,70 @@ body.dark-mode .editor-btn::after {
     margin: 20px;
   }
 }*/
+
+
+/* Replace all .close-modal instances with this consolidated version */
+.close-modal {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  z-index: 1001;
+}
+
+.close-modal:hover {
+  background: rgba(0, 0, 0, 0.8);
+  color: #ff8c00;
+  transform: scale(1.1);
+}
+
+/* Replace all .navbar-container instances with this consolidated version */
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 100%;
+  padding: 0 20px;
+}
+
+/* Replace all .modal-image-container instances with this consolidated version */
+.modal-image-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.modal-image-container img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  display: block;
+}
+
+/* Replace duplicate dark mode navbar styles with this */
+.dark-mode .navbar {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+/* Replace duplicate #createBlogFormContainer styles with this */
+#createBlogFormContainer {
+  margin: 0;
+  padding: 0;
+}

@@ -3,13 +3,7 @@ import { createBlogComponent } from "./components/createBlogComponent.js";
 import { footerComponent } from "./components/footerComponent.js"; // Import the footer component
 import { gsap } from 'gsap';
 import Lenis from 'lenis'
-// Add this at the top of the file
-const CATEGORY_TAGS = {
-    technology: ['javascript', 'react', 'nodejs', 'python', 'webdev', 'coding', 'programming', 'tech', 'software', 'development'],
-    lifestyle: ['health', 'fitness', 'wellness', 'mindfulness', 'motivation', 'selfcare', 'productivity', 'lifestyle', 'personal', 'growth'],
-    travel: ['adventure', 'wanderlust', 'explore', 'vacation', 'destination', 'tourism', 'journey', 'traveltips', 'wandering', 'travellife'],
-    food: ['cooking', 'recipe', 'foodie', 'cuisine', 'baking', 'healthy', 'delicious', 'foodlover', 'homemade', 'culinary']
-};
+
 
 // Initialize Lenis
 const lenis = new Lenis();
@@ -21,6 +15,7 @@ function raf(time) {
 }
 
 requestAnimationFrame(raf);
+
 // Initialize Clerk
 window.initializeClerk = async function () {
   try {
@@ -62,7 +57,7 @@ function animateBlogs() {
         y: 60,
         opacity: 0,
         stagger: {
-            amount: 1.2,  // Total stagger time
+            amount: 1.2,
             from: "start"
         },
         ease: "power3.out"
@@ -608,10 +603,6 @@ function initializeTagsInput() {
     const searchTerm = input.toLowerCase();
     const selectedCategory = categorySelect.value;
 
-    // Get category-specific tags
-    const categorySpecificTags = selectedCategory
-      ? CATEGORY_TAGS[selectedCategory]
-      : [];
 
     // Filter tags based on search term
     const filteredTags = categorySpecificTags
@@ -814,7 +805,7 @@ const handleCreatePost = async (e) => {
   window.location.href = "/";
 };
 
-// Add this to your initialization code
+// Add this to your existing initialization code
 document.addEventListener("DOMContentLoaded", () => {
   // Hide content when create post is visible
   const createPostFormContainer = document.getElementById(
