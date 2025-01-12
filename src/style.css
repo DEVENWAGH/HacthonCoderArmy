@@ -109,9 +109,7 @@ body.dark-mode .preview-blog-container {
 body.dark-mode .preview-header {
   border-bottom-color: #444;
 }
-body.dark-mode #editor:focus {
-  border-color: #ff8c00;
-}
+
 body.dark-mode .preview-header h2,
 body.dark-mode .preview-title,
 body.dark-mode .preview-content,
@@ -171,7 +169,6 @@ body.dark-mode .darklogo {
 .dark-mode-toggle:hover {
   color: #333;
   background-color: rgba(255, 255, 255, 0.1);
-
 }
 
 .dark-mode .navbar {
@@ -186,11 +183,7 @@ body.dark-mode .darklogo {
 .dark-mode .editor-btn {
   color: #ffffff;
 }
-.dark-mode #editor {
-  background-color: #333;
-  color: #fff;
-  border: 1px solid #555;
-}
+
 body.dark-mode #tags-input {
   background: #333;
   color: #fff;
@@ -288,20 +281,10 @@ body.dark-mode .blog-card .menu-dropdown a:hover {
 }
 
 body.dark-mode .blog-category {
-  color: #fff; /* Set color to white for categories in dark theme */
-}
-
-body.dark-mode .menu-dropdown {
-  background: #333;
-  border-color: #444;
-}
-
-body.dark-mode .menu-dropdown a {
   color: #fff;
 }
 
 body.dark-mode .menu-dropdown a:hover {
-  background: #444;
   color: #ff8c00;
 }
 
@@ -343,246 +326,37 @@ body.dark-mode .search-bar input {
   gap: 10px;
 }
 .thumbnail {
-  height: auto;
-  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
   margin: 5px;
-  border-radius: 4px;
-  transition: transform 0.2s;
-  max-width: 100px;
-  body.dark-mode #editor {
-    background-color: #333;
-    border-color: #444;
-    color: #fff;
-  }
-  .search-bar {
-    display: flex;
-    align-items: center;
-    position: relative;
-    height: 40px; /* Increased height */
-  }
-
-  .thumbnail:hover {
-    transform: scale(1.05);
-  }
-
-  /* Remove image button styles */
-  .remove-image-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: red;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 2px 5px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-  }
-
-  /* Modal styles */
-  .image-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .modal-content {
-    max-width: 90%;
-    max-height: 90vh;
-    object-fit: contain;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  .close-modal {
-    position: absolute;
-    top: 15px;
-    right: 25px;
-    color: #f1f1f1;
-    font-size: 35px;
-    cursor: pointer;
-  }
-  /* Add these styles to your existing CSS */
-
-  /* Thumbnail styles */
-  .thumbnail {
-    max-width: 100px;
-    height: auto;
-    cursor: pointer;
-    margin: 5px;
-    border-radius: 4px;
-    transition: transform 0.2s;
-    position: relative;
-  }
-
-  .thumbnail:hover {
-    transform: scale(1.05);
-  }
-
-  /* Remove image button styles */
-  .remove-image-btn {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: red;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 12px;
-    padding: 2px 5px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-  }
-  /* Modal styles */
-  .image-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .modal-content {
-    max-width: 90%;
-    max-height: 90vh;
-    object-fit: contain;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  .close-modal {
-    position: absolute;
-    top: 15px;
-    right: 25px;
-    color: #f1f1f1;
-    font-size: 35px;
-    cursor: pointer;
-  }
-
-  .close-modal:hover {
-    color: #ff8c00;
-  }
-
-  /* Flex container for uploaded images */
-  .uploaded-images-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .close-modal:hover {
-    color: #ff8c00;
-  } /* Add these styles to your existing CSS */
-
-  /* Thumbnail styles */
-  .thumbnail {
-    max-width: 100px;
-    height: auto;
-    cursor: pointer;
-    margin: 5px;
-    border-radius: 4px;
-    transition: transform 0.2s;
-    position: relative;
-  }
-
-  .thumbnail:hover {
-    transform: scale(1.05);
-  }
-
-  /* Remove image button styles */
-  .remove-image-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: red;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 2px 5px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-  }
-  /* Modal styles */
-  .image-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .modal-content {
-    max-width: 90%;
-    max-height: 90vh;
-    object-fit: contain;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  .close-modal {
-    position: absolute;
-    top: 15px;
-    right: 25px;
-    color: #f1f1f1;
-    font-size: 35px;
-    cursor: pointer;
-  }
-
-  .close-modal:hover {
-    color: #ff8c00;
-  }
-
-  /* Flex container for uploaded images */
-  .uploaded-images-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  height: auto;
+  position: relative;
   cursor: pointer;
-  margin: 5px;
-  border-radius: 4px;
   transition: transform 0.2s;
 }
 
 .thumbnail:hover {
   transform: scale(1.05);
+}
+
+.remove-image-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 2px 5px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
 }
 
 /* Modal styles */
@@ -618,11 +392,128 @@ body.dark-mode .search-bar input {
   cursor: pointer;
 }
 
+/* Remove image button styles */
+.remove-image-btn {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 5px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+.modal-content {
+  max-width: 90%;
+  max-height: 90vh;
+  object-fit: contain;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  color: #f1f1f1;
+  font-size: 35px;
+  cursor: pointer;
+}
+
 .close-modal:hover {
   color: #ff8c00;
 }
 
-/* Layout */
+/* Flex container for uploaded images */
+.uploaded-images-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.close-modal:hover {
+  color: #ff8c00;
+} /* Add these styles to your existing CSS */
+
+/* Remove image button styles */
+.remove-image-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 2px 5px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+.modal-content {
+  max-width: 90%;
+  max-height: 90vh;
+  object-fit: contain;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  color: #f1f1f1;
+  font-size: 35px;
+  cursor: pointer;
+}
+
+.close-modal:hover {
+  color: #ff8c00;
+}
+
+/* Flex container for uploaded images */
+.uploaded-images-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.modal-content {
+  max-width: 90%;
+  max-height: 90vh;
+  object-fit: contain;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  color: #f1f1f1;
+  font-size: 35px;
+  cursor: pointer;
+}
+
+.close-modal:hover {
+  color: #ff8c00;
+}
 
 .navbar-container {
   display: flex;
@@ -638,24 +529,8 @@ body.dark-mode .search-bar input {
   display: flex;
   justify-content: center;
   align-items: center;
-} /* Add these styles to your existing CSS */
-
-/* Thumbnail styles */
-.thumbnail {
-  max-width: 100px;
-  height: auto;
-  cursor: pointer;
-  margin: 5px;
-  border-radius: 4px;
-  transition: transform 0.2s;
-  position: relative;
 }
 
-.thumbnail:hover {
-  transform: scale(1.05);
-}
-
-/* Remove image button styles */
 .remove-image-btn {
   position: absolute;
   top: 0;
@@ -676,20 +551,6 @@ body.dark-mode .search-bar input {
 
 .remove-image-btn:hover {
   background: darkred;
-}
-
-/* Modal styles */
-.image-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
 }
 
 .modal-content {
@@ -765,20 +626,6 @@ body.dark-mode .search-bar input {
 
 .remove-content-image-btn:hover {
   background: rgba(255, 0, 0, 1);
-}
-
-/* Image Modal Styles */
-.image-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.9);
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
 }
 
 .modal-content {
@@ -858,7 +705,7 @@ body.dark-mode .search-bar input {
   background-color: #e07b00;
 }
 
- /* Search */
+/* Search */
 .search-bar {
   display: flex;
   align-items: center;
@@ -936,12 +783,6 @@ body.dark-mode .search-bar input {
   align-items: center;
 }
 
-/* Search bar styles */
-.search-bar {
-  display: flex;
-  align-items: center;
-}
-
 /* Nav links styles */
 .nav-links {
   list-style: none;
@@ -983,7 +824,6 @@ body.dark-mode .search-bar input {
   opacity: 0.8;
 }
 
-
 #mode-icon {
   font-size: 24px;
 }
@@ -1022,7 +862,6 @@ body.dark-mode .search-bar input {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-
 
 /* Editor toolbar styles */
 .editor-toolbar {
@@ -1068,20 +907,6 @@ body.dark-mode .search-bar input {
   display: inline-block;
 }
 
-.thumbnail {
-  max-width: 100px;
-  height: auto;
-  cursor: pointer;
-  margin: 5px;
-  border-radius: 4px;
-  transition: transform 0.2s;
-  position: relative;
-}
-
-.thumbnail:hover {
-  transform: scale(1.05);
-}
-
 .remove-image-btn {
   position: absolute;
   top: 5px;
@@ -1098,20 +923,6 @@ body.dark-mode .search-bar input {
   justify-content: center;
   width: 20px;
   height: 20px;
-}
-
-/* Modal styles */
-.image-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
 }
 
 .modal-content {
@@ -1727,20 +1538,6 @@ nts */ .form-group {
   display: none;
 }
 
-/* Image Modal */
-.image-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
-}
-
 .modal-content {
   max-width: 90%;
   max-height: 90vh;
@@ -1895,9 +1692,6 @@ nts */ .form-group {
   #sign-in {
     height: -webkit-fill-available;
   }
-}
-
-@supports (-webkit-touch-callout: none) {
   .navbar {
     padding-bottom: env(safe-area-inset-bottom);
   }
@@ -1960,20 +1754,6 @@ nts */ .form-group {
   background: rgba(255, 0, 0, 1);
 }
 
-/* Image modal styles */
-.image-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.9);
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
-}
-
 .modal-content {
   position: relative;
   max-width: 90%;
@@ -2025,14 +1805,6 @@ nts */ .form-group {
   opacity: 1;
 }
 
-.thumbnail {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px;
-  transition: transform 0.3s ease;
-}
-
 .remove-image-btn {
   position: absolute;
   top: 5px;
@@ -2058,19 +1830,6 @@ nts */ .form-group {
   background: rgba(255, 0, 0, 1);
 }
 
-/* Modal styles */
-.image-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
 
 .modal-content {
   position: relative;
@@ -2105,19 +1864,6 @@ nts */ .form-group {
   color: #ff8c00;
 }
 
-/* Modal styles - update or add these styles */
-.image-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
-}
 
 .modal-content {
   position: relative;
@@ -2155,20 +1901,6 @@ nts */ .form-group {
 
 .close-modal:hover {
   color: #ff8c00;
-}
-
-/* Updated Modal styles */
-.image-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
 }
 
 .modal-content {
@@ -2226,20 +1958,6 @@ nts */ .form-group {
   background: rgba(0, 0, 0, 0.8);
   color: #ff8c00;
   transform: scale(1.1);
-}
-
-/* Update Modal styles */
-.image-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
 }
 
 .modal-content {
@@ -2529,12 +2247,12 @@ nts */ .form-group {
   height: 40px;
 }
 
-.navbar .search-bar {
+.navbar {
   display: flex;
   align-items: center;
 }
 
-.navbar .search-bar input {
+.navbar input {
   margin-right: 10px;
 }
 
