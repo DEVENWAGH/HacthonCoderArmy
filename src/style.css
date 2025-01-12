@@ -3261,21 +3261,49 @@ main {
   text-decoration: underline;
 }
 
-/* Custom Scrollbar Styles */
-::-webkit-scrollbar {
-  width: 12px; /* Width of the scrollbar */
+/* Update/Add these styles in your style.css file */
+
+.footer-container {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  position: relative; /* Add this */
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Background of the scrollbar track */
+/* Add this new style to create border with margins */
+.footer-container::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  bottom: 20px;
+  left: 40px;
+  right: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+  border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb {
-  background-color: #888; /* Color of the scrollbar thumb */
-  border-radius: 10px; /* Roundness of the scrollbar thumb */
-  border: 3px solid #f1f1f1; /* Padding around the scrollbar thumb */
+/* Optional hover effect */
+.footer-container:hover::before {
+  border-color: rgba(255, 255, 255, 0.2);
+  transition: border-color 0.3s ease;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background-color: #555; /* Color of the scrollbar thumb on hover */
+/* For dark mode */
+body.dark-mode .footer-container::before {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .footer-container:hover::before {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Light mode styles */
+body:not(.dark-mode) .footer-container::before {
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+body:not(.dark-mode) .footer-container:hover::before {
+  border-color: rgba(0, 0, 0, 0.2);
 }
