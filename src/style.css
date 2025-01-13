@@ -47,13 +47,6 @@ body:not(.dark-mode) .blog-category.technology,
 body:not(.dark-mode) .blog-category.lifestyle {
   color: #000;
 }
-body:not(.dark-mode) .footer-container::before {
-  border-color: rgba(0, 0, 0, 0.1);
-}
-
-body:not(.dark-mode) .footer-container:hover::before {
-  border-color: rgba(0, 0, 0, 0.2);
-}
 body:not(.dark-mode) .preview-content blockquote {
   color: #333;
 }
@@ -1903,7 +1896,6 @@ main {
   transform: scale(1.1);
 }
 
-/* Replace all .modal-image-container instances with this consolidated version */
 .modal-image-container {
   position: relative;
   display: flex;
@@ -2003,7 +1995,7 @@ main {
     justify-content: center;
   }
 }
-/* Add to your style.css */
+
 .blog-card {
     transform-origin: center center;
     backface-visibility: hidden;
@@ -2011,7 +2003,7 @@ main {
     transition: box-shadow 0.3s ease;
 }
 
-/* Optional: Add perspective for smoother scale animations */
+
 .blog-card {
     perspective: 1000px;
 }
