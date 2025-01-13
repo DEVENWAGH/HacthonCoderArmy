@@ -7,8 +7,8 @@
   [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 </div>
 
-## 📋 Table of Contents
-- [Introduction](#introduction)
+## 📋 Quick Links
+- [Live Demo](https://echoblogs.vercel.app)
 - [Features](#features)
 - [How to Use](#how-to-use)
 - [Technical Details](#technical-details)
@@ -16,110 +16,80 @@
 - [Contributing](#contributing)
 - [License](#license)
 
-## 🌟 Introduction <a name="introduction"></a>
-EchoBlogs is a modern, interactive blogging platform that enables users to create, edit, and share rich content. Built with vanilla JavaScript, it provides a seamless blogging experience with features like real-time editing, image optimization, and responsive design. The platform focuses on user experience with dark/light mode support and smooth animations.
+## 🚀 Introduction
+EchoBlogs is a lightning-fast, modern blogging platform built with vanilla JavaScript. No frameworks, no bloat - just pure performance and elegant design.
 
-## ✨ Features <a name="features"></a>
+## ✨ Key Features
 
-### Core Features
-- **Authentication System**
-  - Secure login/signup via Clerk
-  - Protected routes and content
-  - User profile management
+### 🔐 Authentication
+- Secure login/signup via Clerk
+- Protected content
+- User profiles
 
-- **Rich Text Editor**
-  - Text formatting (Bold, Italic, Underline)
-  - Lists support (Ordered & Unordered)
-  - Image drag & drop
-  - Auto-saving drafts
-  - Real-time preview
+### 📝 Rich Text Editor
+- Keyboard shortcuts (Ctrl/Cmd + B/I/U)
+- Lists & headings support
+- Drag & drop images
+- Auto-save drafts
 
-- **Blog Management**
-  - Create, edit, and delete posts
-  - Category organization
-  - Tag system with suggestions
-  - Cover image support
-  - Draft saving
+### 📱 Modern UI/UX
+- Responsive design
+- Dark/light mode
+- GSAP animations
+- Cross-platform support
+- Mobile-first approach
 
-- **Search Functionality**
-  - Real-time search
-  - Multi-criteria search (title, category, tags)
-  - Instant results
-  - Search suggestions
-  - Mobile-responsive search
+### 🎯 Blog Management
+- Create, edit, delete posts
+- Categories & tags
+- Image optimization
+- Search functionality
+- Draft system
 
-### User Experience Features
-- **Theme System**
-  - Dark/Light mode toggle
-  - Theme persistence
-  - Smooth transitions
+## 🛠️ Installation
 
-- **Responsive Design**
-  - Mobile-first approach
-  - Adaptive layouts
-  - Touch-friendly interface
+```bash
+# Clone repository
+git clone https://github.com/yourusername/echoblogs.git
 
-## 🚀 How to Use <a name="how-to-use"></a>
+# Install dependencies 
+npm install
 
-### Getting Started
-1. Register/Login using Clerk authentication
-2. Navigate using the responsive navbar
-3. Use dark/light mode toggle for preferred theme
+# Set up environment variables
+cp .env.example .env
+# Add your Clerk key to .env
+
+# Start development server
+npm run dev
+```
+
+## 💡 Usage
 
 ### Creating a Blog
-1. Click "Create Blog" in navigation
+1. Login with Clerk
+2. Click "Create Blog"
+3. Add title, content & cover image
+4. Use formatting toolbar or keyboard shortcuts:
+   - Bold: Ctrl/⌘ + B
+   - Italic: Ctrl/⌘ + I
+   - Underline: Ctrl/⌘ + U
+   - Lists: Ctrl/⌘ + 1/8
+5. Add tags (up to 5)
+6. Save draft or publish
 
-2. Fill in blog details:
-   - Add cover image (drag & drop supported)
-   - Enter title
-   - Select category
-   - Add tags (up to 5)
-   - Write content using rich editor
+### Managing Content
+- Use search to find posts
+- Edit/delete from post menu
+- Toggle dark mode for comfort
+- Drafts auto-save every minute
 
-3. Use the toolbar for formatting:
-   - Text styles (B, I, U)
-   - Lists
-   - Headings
-
-4. Save or Publish:
-   - Click "Save Draft" to save progress
-   - Click "Publish" when ready
-
-### Managing Blogs
-- Search blogs using the search bar
-- Edit existing blogs using the menu
-- Delete unwanted posts
-- View all blogs in responsive grid layout
-
-## 🛠 Technical Details <a name="technical-details"></a>
-
-### Technologies Used
-- **HTML5**
-  - Semantic markup
-  - Responsive meta tags
-  - SVG support
-
-- **CSS3**
-  - Flexbox/Grid layouts
-  - Custom properties
-  - Animations
-  - Media queries
-  - Dark mode support
-
-- **JavaScript**
-  - ES6+ features
-  - DOM manipulation
-  - Event handling
-  - Local/Session storage
-  - Async/Await
-  - Modules
-
-### Libraries & Tools
-- Clerk (Authentication)
-- GSAP (Animations)
-- Lenis (Smooth scroll)
-- Font Awesome (Icons)
-- Vite (Build tool)
+## 🔧 Tech Stack
+- HTML5 & CSS3
+- Vanilla JavaScript (ES6+)
+- GSAP Animation
+- Clerk Auth
+- Vite
+- LocalStorage/SessionStorage
 
 ## 🔮 Future Enhancements <a name="future-enhancements"></a>
 
@@ -139,7 +109,6 @@ EchoBlogs is a modern, interactive blogging platform that enables users to creat
 
 ### Technical Improvements
 - Backend integration
-- Full-text search
 - Image optimization
 - Analytics dashboard
 - PWA support
@@ -147,7 +116,16 @@ EchoBlogs is a modern, interactive blogging platform that enables users to creat
 - Multi-language support
 
 ## 🤝 Contributing
-Contributions welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details.
+1. Fork the repo
+2. Create feature branch: `git checkout -b feature/amazing`
+3. Commit: `git commit -m "Add amazing feature"`
+4. Push: `git push origin feature/amazing`
+5. Open pull request
 
 ## 📄 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT © [MIT](./LICENSE)
+
+---
+<div align="center">
+  Made with ❤️ by <a href="https://www.linkedin.com/in/deven-wagh-5691b7271/">DEVEN WAGH</a>
+</div>
