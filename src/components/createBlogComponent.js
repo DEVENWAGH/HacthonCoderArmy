@@ -600,15 +600,30 @@ export function createBlogComponent(blogData = {}) {
     });
 
     function saveDraft() {
+      // Get all form values
+      const title = document.getElementById("title").value.trim();
+      const content = editor.innerHTML.trim();
+      const category = document.getElementById("category").value.trim();
+      const tags = JSON.parse(document.getElementById("tags-hidden").value || "[]");
+      const coverImage = document.getElementById("coverImagePreview").src || "";
+    
+      // Check if draft has any meaningful content
+      const hasContent = title || content || category || tags.length > 0 || coverImage;
+    
+      if (!hasContent) {
+        showNotification("Cannot save an empty draft.");
+        return;
+      }
+    
       const draftData = {
-        title: document.getElementById("title").value,
-        content: editor.innerHTML,
-        category: document.getElementById("category").value,
-        tags: JSON.parse(document.getElementById("tags-hidden").value || "[]"),
-        coverImage: document.getElementById("coverImagePreview").src || "",
+        title,
+        content,
+        category,
+        tags,
+        coverImage,
         lastSaved: new Date().toISOString(),
       };
-
+    
       localStorage.setItem("blog-draft", JSON.stringify(draftData));
       showNotification("Draft saved successfully!");
     }
