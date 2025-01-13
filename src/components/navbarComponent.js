@@ -13,8 +13,6 @@ export function navbarComponent() {
                     <i class="fas fa-search" id="search-icon"></i>
                 </div>
                 <ul class="nav-links">
-                    <li><a href="/blogs">Blog</a></li>
-                    <li>
                         <button class="create-blog-btn" id="loadCreateBlogBtn">
                             Create Blog
                         </button>
