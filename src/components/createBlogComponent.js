@@ -267,6 +267,9 @@ export function createBlogComponent(blogData = {}) {
             });
           },
         });
+
+        // After successfully saving the blog, clear the draft
+        localStorage.removeItem("blog-draft");
       } catch (error) {
         console.error("Error publishing blog:", error);
         // Remove alert and silently handle the error
@@ -512,6 +515,14 @@ export function createBlogComponent(blogData = {}) {
       }
     });
 
+    // Add global keyboard shortcut for saving draft
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        saveDraft();
+      }
+    });
+
     // Add toolbar buttons click handlers
     const commands = [
       "bold",
@@ -602,6 +613,7 @@ export function createBlogComponent(blogData = {}) {
     // Manual save draft button
     const saveDraftBtn = document.querySelector(".save-draft-btn");
     if (saveDraftBtn) {
+      saveDraftBtn.title = "Save Draft (Ctrl+S)";
       saveDraftBtn.addEventListener("click", saveDraft);
     }
 
@@ -669,6 +681,50 @@ export function createBlogComponent(blogData = {}) {
       .editBlogId;
     if (!isEditing) {
       loadDraft();
+    }
+
+    // Update the function to show notification with auto-hide timer and better styling
+    function showNotification(message) {
+      // Remove any existing notifications first
+      const existingNotification = document.querySelector('.editor-notification');
+      if (existingNotification) {
+        existingNotification.remove();
+      }
+  
+      const notification = document.createElement("div");
+      notification.className = "editor-notification";
+      notification.textContent = message;
+  
+      // Add progress bar element
+      const progress = document.createElement("div");
+      progress.className = "notification-progress";
+      notification.appendChild(progress);
+  
+      document.body.appendChild(notification);
+  
+      // Animate progress bar
+      gsap.to(progress, {
+        width: "100%",
+        duration: 3,
+        ease: "none",
+        onComplete: () => {
+          gsap.to(notification, {
+            opacity: 0,
+            y: -10,
+            duration: 0.3,
+            onComplete: () => notification.remove()
+          });
+        }
+      });
+  
+      // Add hover pause functionality
+      notification.addEventListener('mouseenter', () => {
+        gsap.getTweensOf(progress).forEach(t => t.pause());
+      });
+  
+      notification.addEventListener('mouseleave', () => {
+        gsap.getTweensOf(progress).forEach(t => t.resume());
+      });
     }
   }
 
