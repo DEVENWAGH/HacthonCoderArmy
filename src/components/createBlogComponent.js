@@ -487,120 +487,288 @@ export function createBlogComponent(blogData = {}) {
   function initializeEditor(editor) {
     if (!editor) return;
 
-    // Check platform for shortcut text
-    const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
-    const modKey = isMac ? '⌘' : 'Ctrl';
-
-    // Get toolbar buttons once
-    const toolbarButtons = document.querySelectorAll(".editor-toolbar button");
-    
-    // Update tooltips with correct OS-specific shortcuts
-    toolbarButtons.forEach(button => {
-      const command = button.getAttribute('data-command');
-      if (command) {
-        switch(command) {
-          case 'bold':
-            button.setAttribute('title', `Bold (${modKey}+B)`);
-            break;
-          case 'italic':
-            button.setAttribute('title', `Italic (${modKey}+I)`);
-            break;
-          case 'underline':
-            button.setAttribute('title', `Underline (${modKey}+U)`);
-            break;
-          case 'insertOrderedList':
-            button.setAttribute('title', `Numbered List (${modKey}+1)`);
-            break;
-          case 'insertUnorderedList':
-            button.setAttribute('title', `Bullet List (${modKey}+8)`);
-            break;
-          case 'formatBlock':
-            button.setAttribute('title', `Toggle Heading (${modKey}+H)`);
-            break;
-          case 'saveDraft':
-            button.setAttribute('title', `Save Draft (${modKey}+S)`);
-            break;
-        }
-      }
-    });
-
-    // Update keyboard shortcuts for both Mac and Windows
-    editor.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && !e.shiftKey) {
-        switch(e.key.toLowerCase()) {
-          case 'b':
+    // Add keyboard shortcut handler
+    editor.addEventListener("keydown", (e) => {
+      // Check if ctrl or cmd key is pressed
+      if (e.ctrlKey || e.metaKey) {
+        switch (e.key.toLowerCase()) {
+          case "b": // Bold
             e.preventDefault();
-            document.execCommand('bold', false);
+            document.execCommand("bold", false, null);
             updateButtonStates();
             break;
-          case 'i':
+          case "i": // Italic
             e.preventDefault();
-            document.execCommand('italic', false);
+            document.execCommand("italic", false, null);
             updateButtonStates();
             break;
-          case 'u':
+          case "u": // Underline
             e.preventDefault();
-            document.execCommand('underline', false);
+            document.execCommand("underline", false, null);
             updateButtonStates();
             break;
-          case '1':
+          case "1": // Ordered List
             e.preventDefault();
-            document.execCommand('insertOrderedList', false);
+            document.execCommand("insertOrderedList", false, null);
             updateButtonStates();
             break;
-          case '8':
+          case "8": // Unordered List (Ctrl + 8 for bullet point)
             e.preventDefault();
-            document.execCommand('insertUnorderedList', false);
+            document.execCommand("insertUnorderedList", false, null);
             updateButtonStates();
             break;
-          case 'h':
+          case "h": {
+            // Heading
             e.preventDefault();
             const selection = window.getSelection();
             const closestBlock = selection.focusNode?.parentElement;
-            const isHeading = closestBlock?.tagName?.toLowerCase() === 'h2';
-            document.execCommand('formatBlock', false, isHeading ? 'p' : 'h2');
+            const isHeading = closestBlock?.tagName?.toLowerCase() === "h2";
+            document.execCommand("formatBlock", false, isHeading ? "p" : "h2");
             updateButtonStates();
             break;
+          }
         }
       }
     });
 
-    // Add click handlers for toolbar buttons
-    toolbarButtons.forEach(button => {
-      const command = button.getAttribute('data-command');
-      if (command) {
-        button.addEventListener('click', () => {
-          if (command === 'formatBlock') {
-            const isHeading = document.queryCommandValue('formatBlock') === 'h2';
-            document.execCommand('formatBlock', false, isHeading ? 'p' : 'h2');
-          } else {
-            document.execCommand(command, false);
-          }
-          editor.focus();
-          updateButtonStates();
-        });
+    // Add global keyboard shortcut for saving draft
+    document.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        saveDraft();
       }
+    });
+
+    // Add toolbar buttons click handlers
+    const commands = [
+      "bold",
+      "italic",
+      "underline",
+      "insertOrderedList",
+      "insertUnorderedList",
+      "formatBlock",
+    ];
+
+    const toolbarButtons = document.querySelectorAll(".editor-toolbar button");
+
+    toolbarButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const command = button.getAttribute("data-command");
+        const value = button.getAttribute("data-value") || "";
+
+        if (commands.includes(command)) {
+          if (command === "formatBlock") {
+            const isHeading =
+              document.queryCommandValue("formatBlock") === "h2";
+            document.execCommand("formatBlock", false, isHeading ? "p" : "h2");
+            button.classList.toggle("active", !isHeading);
+          } else {
+            document.execCommand(command, false, value);
+            button.classList.toggle(
+              "active",
+              document.queryCommandState(command)
+            );
+          }
+        }
+        editor.focus();
+      });
     });
 
     // Update button states
     function updateButtonStates() {
-      toolbarButtons.forEach(button => {
-        const command = button.getAttribute('data-command');
-        if (command === 'formatBlock') {
-          const isHeading = document.queryCommandValue('formatBlock') === 'h2';
-          button.classList.toggle('active', isHeading);
-        } else if (command) {
-          button.classList.toggle('active', document.queryCommandState(command));
+      toolbarButtons.forEach((button) => {
+        const command = button.getAttribute("data-command");
+        if (command === "formatBlock") {
+          const isHeading = document.queryCommandValue("formatBlock") === "h2";
+          button.classList.toggle("active", isHeading);
+        } else if (commands.includes(command)) {
+          button.classList.toggle(
+            "active",
+            document.queryCommandState(command)
+          );
         }
       });
     }
 
-    // Update states on selection change
-    editor.addEventListener('click', updateButtonStates);
-    editor.addEventListener('keyup', updateButtonStates);
+    // Update button states on selection change
+    editor.addEventListener("click", updateButtonStates);
+    editor.addEventListener("keyup", updateButtonStates);
 
-    // Initialize button states
-    updateButtonStates();
+    // Add tooltips
+    toolbarButtons.forEach((button) => {
+      const command = button.getAttribute("data-command");
+      switch (command) {
+        case "bold":
+          button.title = "Bold (Ctrl+B)";
+          break;
+        case "italic":
+          button.title = "Italic (Ctrl+I)";
+          break;
+        case "underline":
+          button.title = "Underline (Ctrl+U)";
+          break;
+        case "insertOrderedList":
+          button.title = "Numbered List (Ctrl+1)";
+          break;
+        case "insertUnorderedList":
+          button.title = "Bullet List (Ctrl+8)";
+          break;
+        case "formatBlock":
+          button.title = "Toggle Heading (Ctrl+H)";
+          break;
+      }
+    });
+
+    function saveDraft() {
+      // Get all form values
+      const title = document.getElementById("title").value.trim();
+      const content = editor.innerHTML.trim();
+      const category = document.getElementById("category").value.trim();
+      const tags = JSON.parse(
+        document.getElementById("tags-hidden").value || "[]"
+      );
+      const coverImage = document.getElementById("coverImagePreview").src || "";
+
+      // Check if draft has any meaningful content
+      const hasContent =
+        title || content || category || tags.length > 0 || coverImage;
+
+      if (!hasContent) {
+        showNotification("Cannot save an empty draft.");
+        return;
+      }
+
+      const draftData = {
+        title,
+        content,
+        category,
+        tags,
+        coverImage,
+        lastSaved: new Date().toISOString(),
+      };
+
+      localStorage.setItem("blog-draft", JSON.stringify(draftData));
+      showNotification("Draft saved successfully!");
+    }
+
+    // Manual save draft button
+    const saveDraftBtn = document.querySelector(".save-draft-btn");
+    if (saveDraftBtn) {
+      saveDraftBtn.title = "Save Draft (Ctrl+S)";
+      saveDraftBtn.addEventListener("click", saveDraft);
+    }
+
+    // Only load draft when creating new blog
+    function loadDraft() {
+      const savedDraft = localStorage.getItem("blog-draft");
+      if (savedDraft) {
+        const draft = JSON.parse(savedDraft);
+
+        document.getElementById("title").value = draft.title || "";
+        editor.innerHTML = draft.content || "";
+        document.getElementById("category").value = draft.category || "";
+
+        // Restore cover image properly
+        if (draft.coverImage) {
+          const coverPreview = document.getElementById("coverImagePreview");
+          const coverPlaceholder = document.getElementById(
+            "coverImagePlaceholder"
+          );
+          const removeCoverBtn = document.getElementById("removeCoverImage");
+
+          if (coverPreview && coverPlaceholder && removeCoverBtn) {
+            coverPreview.src = draft.coverImage;
+            coverPreview.style.display = "block";
+            coverPlaceholder.style.display = "none";
+            removeCoverBtn.style.display = "flex";
+          }
+        }
+
+        // Restore tags
+        if (draft.tags && draft.tags.length > 0) {
+          document.getElementById("tags-hidden").value = JSON.stringify(
+            draft.tags
+          );
+          window.tags = draft.tags;
+          const tagsList = document.getElementById("tags-list");
+          if (tagsList) {
+            tagsList.innerHTML = draft.tags
+              .map(
+                (tag) => `
+                        <span class="tag-item">
+                            <i class="fas fa-hashtag"></i>${tag}
+                            <span class="tag-remove" data-tag="${tag}">×</span>
+                        </span>
+                    `
+              )
+              .join("");
+
+            document.querySelectorAll(".tag-remove").forEach((button) => {
+              button.addEventListener("click", (e) => {
+                const tagToRemove = e.target.dataset.tag;
+                window.tags = window.tags.filter((t) => t !== tagToRemove);
+                updateTags();
+              });
+            });
+          }
+        }
+
+        showNotification("Draft restored");
+      }
+    }
+
+    // Only call loadDraft when creating new blog (not editing)
+    const isEditing = document.getElementById("createBlogFormContainer").dataset
+      .editBlogId;
+    if (!isEditing) {
+      loadDraft();
+    }
+
+    // Update the function to show notification with auto-hide timer and better styling
+    function showNotification(message) {
+      // Remove any existing notifications first
+      const existingNotification = document.querySelector(
+        ".editor-notification"
+      );
+      if (existingNotification) {
+        existingNotification.remove();
+      }
+
+      const notification = document.createElement("div");
+      notification.className = "editor-notification";
+      notification.textContent = message;
+
+      // Add progress bar element
+      const progress = document.createElement("div");
+      progress.className = "notification-progress";
+      notification.appendChild(progress);
+
+      document.body.appendChild(notification);
+
+      // Animate progress bar
+      gsap.to(progress, {
+        width: "100%",
+        duration: 3,
+        ease: "none",
+        onComplete: () => {
+          gsap.to(notification, {
+            opacity: 0,
+            y: -10,
+            duration: 0.3,
+            onComplete: () => notification.remove(),
+          });
+        },
+      });
+
+      // Add hover pause functionality
+      notification.addEventListener("mouseenter", () => {
+        gsap.getTweensOf(progress).forEach((t) => t.pause());
+      });
+
+      notification.addEventListener("mouseleave", () => {
+        gsap.getTweensOf(progress).forEach((t) => t.resume());
+      });
+    }
   }
 
   return { template, initializeCreateBlog };
