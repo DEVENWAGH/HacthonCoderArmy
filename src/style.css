@@ -292,9 +292,7 @@ body.dark-mode .search-bar input {
 .dark-mode .uploaded-images-container {
   border-top-color: #444;
 }
-.dark-mode .image-modal {
-  background: rgba(0, 0, 0, 0.95);
-}
+
 .dark-mode .footer-container {
   background-color: #121212;
   color: #ffffff;
@@ -330,42 +328,6 @@ body.dark-mode .search-bar input {
   padding: 1rem;
 }
 
-.uploaded-images-preview {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.thumbnail {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px;
-  transition: transform 0.3s ease;
-  margin: 5px;
-  position: relative;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.thumbnail:hover {
-  transform: scale(1.05);
-}
-
-/* Modal styles */
-.image-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Flex container for uploaded images */
 .uploaded-images-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -388,74 +350,6 @@ body.dark-mode .search-bar input {
 .uploaded-image-item {
   position: relative;
   display: inline-block;
-}
-
-/* Content Image Styles */
-.content-image-wrapper {
-  display: inline-block;
-  position: relative;
-  margin: 10px;
-}
-
-.content-image {
-  max-width: 200px;
-  height: auto;
-  border-radius: 4px;
-  transition: transform 0.2s ease;
-}
-
-.content-image:hover {
-  transform: scale(1.02);
-}
-
-.remove-content-image-btn {
-  position: absolute;
-  bottom: -10px;
-  right: -10px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: rgba(255, 0, 0, 0.8);
-  color: white;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  transition: background-color 0.2s ease;
-}
-
-.remove-content-image-btn:hover {
-  background: rgba(255, 0, 0, 1);
-}
-
-/* Navigation Links */
-.nav-links {
-  display: flex;
-  list-style: none;
-  gap: 20px;
-  align-items: center;
-}
-
-.nav-links li {
-  display: flex;
-  align-items: center;
-}
-
-.nav-links a {
-  color: #fff !important;
-  text-decoration: none;
-  font-size: 18px;
-  font-weight: 600;
-  text-transform: capitalize;
-  letter-spacing: 0.5px;
-  transition: color 0.2s ease;
-}
-
-.nav-links a:hover {
-  color: #ff8c00 !important;
-  transform: translateY(-1px);
 }
 
 /* Search */
@@ -949,7 +843,6 @@ nts */ .form-group {
   margin: 0 2px;
 }
 
-
 #editor {
   min-height: 300px;
   padding: 20px;
@@ -1248,10 +1141,6 @@ nts */ .form-group {
 }
 /* Fix for iOS Safari 100vh issue */
 @supports (-webkit-touch-callout: none) {
-  .image-modal {
-    height: -webkit-fill-available;
-  }
-
   #sign-in {
     height: -webkit-fill-available;
   }
@@ -1308,23 +1197,6 @@ nts */ .form-group {
   position: relative;
   width: 150px;
   height: 150px;
-}
-
-.image-wrapper {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.image-wrapper:hover .thumbnail {
-  transform: scale(1.05);
-}
-
-.image-wrapper:hover {
-  opacity: 1;
 }
 
 .modal-image-container {
@@ -1569,28 +1441,6 @@ main {
 
 .logo:hover {
   transform: scale(1.05);
-}
-
-/* Navigation Links */
-.nav-links {
-  display: flex;
-  list-style: none;
-  gap: 2rem;
-  margin: 0;
-  padding: 0;
-}
-
-.nav-links a {
-  color: #fff;
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.nav-links a:hover {
-  color: #ff8c00;
-  transform: translateY(-1px);
 }
 
 /* CSS */
@@ -1974,45 +1824,16 @@ main {
     border-radius: 1rem;
   }
 
-  .search-bar input:focus {
-    border-color: #ff8c00;
-  }
-  .uploaded-images-preview {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .thumbnail {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 8px;
-    transition: transform 0.3s ease;
-    margin: 5px;
-    position: relative;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-
-  .thumbnail:hover {
-    transform: scale(1.05);
-  }
-
-  /* Modal styles */
-  .image-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
+  .create-blog-btn {
+    position: absolute;
+    margin: 0;
+    top: 115%;
+    left: 50%;
+    transform: translate(-50%, -130%);
+    padding: 0.25rem 0.5rem;
     z-index: 1000;
-    justify-content: center;
-    align-items: center;
   }
 
-  /* Flex container for uploaded images */
   .uploaded-images-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -2036,128 +1857,6 @@ main {
     position: relative;
     display: inline-block;
   }
-
-  /* Content Image Styles */
-  .content-image-wrapper {
-    display: inline-block;
-    position: relative;
-    margin: 10px;
-  }
-
-  .content-image {
-    max-width: 200px;
-    height: auto;
-    border-radius: 4px;
-    transition: transform 0.2s ease;
-  }
-
-  .content-image:hover {
-    transform: scale(1.02);
-  }
-
-  .remove-content-image-btn {
-    position: absolute;
-    bottom: -10px;
-    right: -10px;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: rgba(255, 0, 0, 0.8);
-    color: white;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    transition: background-color 0.2s ease;
-  }
-
-  .remove-content-image-btn:hover {
-    background: rgba(255, 0, 0, 1);
-  }
-
-  /* Navigation Links */
-  .nav-links {
-    display: flex;
-    list-style: none;
-    gap: 20px;
-    align-items: center;
-  }
-
-  .nav-links li {
-    display: flex;
-    align-items: center;
-  }
-
-  .nav-links a {
-    color: #fff !important;
-    text-decoration: none;
-    font-size: 18px;
-    font-weight: 600;
-    text-transform: capitalize;
-    letter-spacing: 0.5px;
-    transition: color 0.2s ease;
-  }
-
-  .nav-links a:hover {
-    color: #ff8c00 !important;
-    transform: translateY(-1px);
-  }
-  /* CSS */
-  .create-blog-btn {
-    --b: 3px; /* border thickness */
-    --s: 0.45em; /* size of the corner */
-    --color: #373b44;
-
-    padding: calc(0.5em + var(--s)) calc(0.9em + var(--s));
-    color: var(--color);
-    --_p: var(--s);
-    background: conic-gradient(
-        from 90deg at var(--b) var(--b),
-        #0000 90deg,
-        var(--color) 0
-      )
-      var(--_p) var(--_p) / calc(100% - var(--b) - 2 * var(--_p))
-      calc(100% - var(--b) - 2 * var(--_p));
-    transition: 0.3s linear, color 0s, background-color 0s;
-    outline: var(--b) solid #0000;
-    outline-offset: 0.6em;
-    font-size: 16px;
-
-    border: 0;
-
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-  }
-
-  .create-blog-btn:hover,
-  .create-blog-btn:focus-visible {
-    --_p: 0px;
-    outline-color: var(--color);
-    outline-offset: 0.05em;
-  }
-
-  .create-blog-btn:active {
-    background: var(--color);
-    color: #fff;
-  }
-  /* .create-blog-btn {
-    background-color: #ff8c00;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  .create-blog-btn:hover {
-    background-color: #e67e00;
-  } */
-
-  /* Create Blog Form */
   .create-blog-container {
     max-width: 800px;
     margin: 1rem auto;
@@ -2937,10 +2636,6 @@ main {
   }
   /* Fix for iOS Safari 100vh issue */
   @supports (-webkit-touch-callout: none) {
-    .image-modal {
-      height: -webkit-fill-available;
-    }
-
     #sign-in {
       height: -webkit-fill-available;
     }
@@ -2994,23 +2689,6 @@ main {
     position: relative;
     width: 150px;
     height: 150px;
-  }
-
-  .image-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-
-  .image-wrapper:hover .thumbnail {
-    transform: scale(1.05);
-  }
-
-  .image-wrapper:hover {
-    opacity: 1;
   }
 
   .modal-image-container {
@@ -3222,27 +2900,6 @@ main {
     align-items: center;
     min-height: calc(100vh - 100px - 64px);
     text-align: center;
-  }
-
-  .nav-links a {
-    display: none;
-  }
-
-  /* Create Blog Button */
-  .create-blog-btn {
-    background-color: #ff8c00;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .create-blog-btn:hover {
-    background-color: #e67e00;
-    transform: translateY(-1px);
   }
 
   /* Editor Notification Styles */
@@ -3531,11 +3188,6 @@ main {
 
   .user-profile {
     margin: 0;
-  }
-
-  .create-blog-btn {
-    padding: 8px 16px;
-    font-size: 14px;
   }
 
   .blog-card {

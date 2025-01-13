@@ -60,7 +60,7 @@ export function createBlogComponent(blogData = {}) {
         </div>
     `;
 
-  const styleSheet = document.createElement('style');
+  const styleSheet = document.createElement("style");
   styleSheet.textContent = `
       #editor[contenteditable=true]:empty:before {
           content: attr(data-placeholder);
@@ -316,7 +316,7 @@ export function createBlogComponent(blogData = {}) {
     // Handle click to upload
     coverImageContainer.addEventListener("click", (e) => {
       // Check if click target is the remove button or its children
-      if (e.target.closest('.remove-cover-image-btn')) {
+      if (e.target.closest(".remove-cover-image-btn")) {
         return; // Exit if remove button was clicked
       }
 
@@ -336,8 +336,10 @@ export function createBlogComponent(blogData = {}) {
       removeCoverImageBtn.addEventListener("click", (e) => {
         e.stopPropagation(); // Prevent event from bubbling up to container
         const coverImagePreview = document.getElementById("coverImagePreview");
-        const coverImagePlaceholder = document.getElementById("coverImagePlaceholder");
-        
+        const coverImagePlaceholder = document.getElementById(
+          "coverImagePlaceholder"
+        );
+
         if (coverImagePreview) {
           coverImagePreview.src = "";
           coverImagePreview.style.display = "none";
@@ -486,41 +488,42 @@ export function createBlogComponent(blogData = {}) {
     if (!editor) return;
 
     // Add keyboard shortcut handler
-    editor.addEventListener('keydown', (e) => {
+    editor.addEventListener("keydown", (e) => {
       // Check if ctrl or cmd key is pressed
       if (e.ctrlKey || e.metaKey) {
-        switch(e.key.toLowerCase()) {
-          case 'b': // Bold
+        switch (e.key.toLowerCase()) {
+          case "b": // Bold
             e.preventDefault();
-            document.execCommand('bold', false, null);
+            document.execCommand("bold", false, null);
             updateButtonStates();
             break;
-          case 'i': // Italic
+          case "i": // Italic
             e.preventDefault();
-            document.execCommand('italic', false, null);
+            document.execCommand("italic", false, null);
             updateButtonStates();
             break;
-          case 'u': // Underline
+          case "u": // Underline
             e.preventDefault();
-            document.execCommand('underline', false, null);
+            document.execCommand("underline", false, null);
             updateButtonStates();
             break;
-          case '1': // Ordered List
+          case "1": // Ordered List
             e.preventDefault();
-            document.execCommand('insertOrderedList', false, null);
+            document.execCommand("insertOrderedList", false, null);
             updateButtonStates();
             break;
-          case '8': // Unordered List (Ctrl + 8 for bullet point)
+          case "8": // Unordered List (Ctrl + 8 for bullet point)
             e.preventDefault();
-            document.execCommand('insertUnorderedList', false, null);
+            document.execCommand("insertUnorderedList", false, null);
             updateButtonStates();
             break;
-          case 'h': { // Heading
+          case "h": {
+            // Heading
             e.preventDefault();
             const selection = window.getSelection();
             const closestBlock = selection.focusNode?.parentElement;
-            const isHeading = closestBlock?.tagName?.toLowerCase() === 'h2';
-            document.execCommand('formatBlock', false, isHeading ? 'p' : 'h2');
+            const isHeading = closestBlock?.tagName?.toLowerCase() === "h2";
+            document.execCommand("formatBlock", false, isHeading ? "p" : "h2");
             updateButtonStates();
             break;
           }
@@ -529,8 +532,8 @@ export function createBlogComponent(blogData = {}) {
     });
 
     // Add global keyboard shortcut for saving draft
-    document.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+    document.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
         e.preventDefault();
         saveDraft();
       }
@@ -539,11 +542,11 @@ export function createBlogComponent(blogData = {}) {
     // Add toolbar buttons click handlers
     const commands = [
       "bold",
-      "italic", 
+      "italic",
       "underline",
       "insertOrderedList",
       "insertUnorderedList",
-      "formatBlock"
+      "formatBlock",
     ];
 
     const toolbarButtons = document.querySelectorAll(".editor-toolbar button");
@@ -555,12 +558,16 @@ export function createBlogComponent(blogData = {}) {
 
         if (commands.includes(command)) {
           if (command === "formatBlock") {
-            const isHeading = document.queryCommandValue("formatBlock") === "h2";
+            const isHeading =
+              document.queryCommandValue("formatBlock") === "h2";
             document.execCommand("formatBlock", false, isHeading ? "p" : "h2");
             button.classList.toggle("active", !isHeading);
           } else {
             document.execCommand(command, false, value);
-            button.classList.toggle("active", document.queryCommandState(command));
+            button.classList.toggle(
+              "active",
+              document.queryCommandState(command)
+            );
           }
         }
         editor.focus();
@@ -575,7 +582,10 @@ export function createBlogComponent(blogData = {}) {
           const isHeading = document.queryCommandValue("formatBlock") === "h2";
           button.classList.toggle("active", isHeading);
         } else if (commands.includes(command)) {
-          button.classList.toggle("active", document.queryCommandState(command));
+          button.classList.toggle(
+            "active",
+            document.queryCommandState(command)
+          );
         }
       });
     }
@@ -585,26 +595,26 @@ export function createBlogComponent(blogData = {}) {
     editor.addEventListener("keyup", updateButtonStates);
 
     // Add tooltips
-    toolbarButtons.forEach(button => {
-      const command = button.getAttribute('data-command');
-      switch(command) {
-        case 'bold':
-          button.title = 'Bold (Ctrl+B)';
+    toolbarButtons.forEach((button) => {
+      const command = button.getAttribute("data-command");
+      switch (command) {
+        case "bold":
+          button.title = "Bold (Ctrl+B)";
           break;
-        case 'italic':
-          button.title = 'Italic (Ctrl+I)'; 
+        case "italic":
+          button.title = "Italic (Ctrl+I)";
           break;
-        case 'underline':
-          button.title = 'Underline (Ctrl+U)';
+        case "underline":
+          button.title = "Underline (Ctrl+U)";
           break;
-        case 'insertOrderedList':
-          button.title = 'Numbered List (Ctrl+1)';
+        case "insertOrderedList":
+          button.title = "Numbered List (Ctrl+1)";
           break;
-        case 'insertUnorderedList': 
-          button.title = 'Bullet List (Ctrl+8)';
+        case "insertUnorderedList":
+          button.title = "Bullet List (Ctrl+8)";
           break;
-        case 'formatBlock':
-          button.title = 'Toggle Heading (Ctrl+H)';
+        case "formatBlock":
+          button.title = "Toggle Heading (Ctrl+H)";
           break;
       }
     });
@@ -614,17 +624,20 @@ export function createBlogComponent(blogData = {}) {
       const title = document.getElementById("title").value.trim();
       const content = editor.innerHTML.trim();
       const category = document.getElementById("category").value.trim();
-      const tags = JSON.parse(document.getElementById("tags-hidden").value || "[]");
+      const tags = JSON.parse(
+        document.getElementById("tags-hidden").value || "[]"
+      );
       const coverImage = document.getElementById("coverImagePreview").src || "";
-    
+
       // Check if draft has any meaningful content
-      const hasContent = title || content || category || tags.length > 0 || coverImage;
-    
+      const hasContent =
+        title || content || category || tags.length > 0 || coverImage;
+
       if (!hasContent) {
         showNotification("Cannot save an empty draft.");
         return;
       }
-    
+
       const draftData = {
         title,
         content,
@@ -633,7 +646,7 @@ export function createBlogComponent(blogData = {}) {
         coverImage,
         lastSaved: new Date().toISOString(),
       };
-    
+
       localStorage.setItem("blog-draft", JSON.stringify(draftData));
       showNotification("Draft saved successfully!");
     }
@@ -714,22 +727,24 @@ export function createBlogComponent(blogData = {}) {
     // Update the function to show notification with auto-hide timer and better styling
     function showNotification(message) {
       // Remove any existing notifications first
-      const existingNotification = document.querySelector('.editor-notification');
+      const existingNotification = document.querySelector(
+        ".editor-notification"
+      );
       if (existingNotification) {
         existingNotification.remove();
       }
-  
+
       const notification = document.createElement("div");
       notification.className = "editor-notification";
       notification.textContent = message;
-  
+
       // Add progress bar element
       const progress = document.createElement("div");
       progress.className = "notification-progress";
       notification.appendChild(progress);
-  
+
       document.body.appendChild(notification);
-  
+
       // Animate progress bar
       gsap.to(progress, {
         width: "100%",
@@ -740,18 +755,18 @@ export function createBlogComponent(blogData = {}) {
             opacity: 0,
             y: -10,
             duration: 0.3,
-            onComplete: () => notification.remove()
+            onComplete: () => notification.remove(),
           });
-        }
+        },
       });
-  
+
       // Add hover pause functionality
-      notification.addEventListener('mouseenter', () => {
-        gsap.getTweensOf(progress).forEach(t => t.pause());
+      notification.addEventListener("mouseenter", () => {
+        gsap.getTweensOf(progress).forEach((t) => t.pause());
       });
-  
-      notification.addEventListener('mouseleave', () => {
-        gsap.getTweensOf(progress).forEach(t => t.resume());
+
+      notification.addEventListener("mouseleave", () => {
+        gsap.getTweensOf(progress).forEach((t) => t.resume());
       });
     }
   }
@@ -853,14 +868,15 @@ function showNotification(message) {
   }, 3000);
 }
 
-
 function handleCoverImage(file) {
   const reader = new FileReader();
   reader.onload = async (e) => {
     try {
       const optimizedImage = await optimizeImageData(e.target.result);
       const coverImagePreview = document.getElementById("coverImagePreview");
-      const coverImagePlaceholder = document.getElementById("coverImagePlaceholder");
+      const coverImagePlaceholder = document.getElementById(
+        "coverImagePlaceholder"
+      );
       const removeCoverImageBtn = document.getElementById("removeCoverImage");
 
       if (coverImagePreview) {
@@ -869,13 +885,12 @@ function handleCoverImage(file) {
       }
 
       if (coverImagePlaceholder) {
-        coverImagePlaceholder.style.display = "none"; 
+        coverImagePlaceholder.style.display = "none";
       }
 
       if (removeCoverImageBtn) {
         removeCoverImageBtn.style.display = "flex";
       }
-
     } catch (error) {
       console.error("Error optimizing image:", error);
     }
