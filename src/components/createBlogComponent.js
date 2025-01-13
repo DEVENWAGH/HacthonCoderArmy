@@ -49,7 +49,7 @@ export function createBlogComponent(blogData = {}) {
                         <button type="button" class="editor-btn" data-command="formatBlock" data-value="h2" title="Toggle Heading (Ctrl+H)"><i class="fas fa-heading"></i></button>
                         <button type="button" class="editor-btn save-draft-btn" id="saveDraftBtn"><i class="fas fa-save"></i> Save Draft</button>
                     </div>
-                    <div id="editor" contenteditable="true"></div>
+                    <div id="editor" contenteditable="true" data-placeholder="What's on your mind?"></div>
                     <textarea id="content" name="content" style="display: none;"></textarea>
                 </div>
                 <div class="form-actions">
@@ -59,6 +59,16 @@ export function createBlogComponent(blogData = {}) {
             </form>
         </div>
     `;
+
+  const styleSheet = document.createElement('style');
+  styleSheet.textContent = `
+      #editor[contenteditable=true]:empty:before {
+          content: attr(data-placeholder);
+          color: #aaa;
+          font-style: italic;
+      }
+  `;
+  document.head.appendChild(styleSheet);
 
   const initializeCreateBlog = () => {
     const form = document.getElementById("createBlogForm");
