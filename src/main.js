@@ -576,39 +576,6 @@ function initializeEditor() {
   });
 }
 
-// Handle cover image upload
-function handleCoverImageUpload() {
-  const coverImageInput = document.getElementById("coverImage");
-  const coverImagePreview = document.getElementById("coverImagePreview");
-  const coverImagePlaceholder = document.getElementById(
-    "coverImagePlaceholder"
-  );
-  const removeCoverImageBtn = document.getElementById("removeCoverImage");
-
-  coverImageInput.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        coverImagePreview.src = event.target.result;
-        coverImagePreview.style.display = "block";
-        coverImagePlaceholder.style.display = "none";
-        removeCoverImageBtn.style.display = "flex";
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-
-  removeCoverImageBtn.addEventListener("click", (e) => {
-    e.stopPropagation(); // Prevent the click event from bubbling up
-    coverImagePreview.src = "";
-    coverImagePreview.style.display = "none";
-    coverImagePlaceholder.style.display = "flex";
-    removeCoverImageBtn.style.display = "none";
-    coverImageInput.value = "";
-  });
-}
-
 // Initialize create post button
 document.addEventListener("DOMContentLoaded", () => {
   const createBlogBtn =
@@ -622,7 +589,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (createBlogBtn) {
     createBlogBtn.addEventListener("click", (e) => {
       e.preventDefault();
-      
       gsap.to([navbar, content], {
         duration: 0.5,
         opacity: 0,
