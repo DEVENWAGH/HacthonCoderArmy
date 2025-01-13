@@ -2282,3 +2282,22 @@ main {
     justify-content: center;
   }
 }
+/* Add to your style.css */
+.blog-card {
+    transform-origin: center center;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+    transition: box-shadow 0.3s ease;
+}
+
+/* Optional: Add perspective for smoother scale animations */
+.blog-card {
+    perspective: 1000px;
+}
+
+/* Ensure container has proper overflow handling */
+#content {
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+}

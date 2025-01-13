@@ -3,7 +3,10 @@ import { createBlogComponent } from "./components/createBlogComponent.js";
 import { footerComponent } from "./components/footerComponent.js"; // Import the footer component
 import { gsap } from 'gsap';
 import Lenis from 'lenis'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'; // Add this import
 
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 // Initialize Lenis
 const lenis = new Lenis();
@@ -52,35 +55,126 @@ window.initializeClerk = async function () {
 
 // Update the animation function with more varied durations
 function animateBlogs() {
-    gsap.from(".blog-card", {
-        duration: 0.8,
-        y: 60,
-        opacity: 0,
-        stagger: {
-            amount: 1.2,
-            from: "start"
-        },
-        ease: "power3.out"
+    // Get all blog cards
+    const blogCards = document.querySelectorAll('.blog-card');
+    
+    // Animate each blog card
+    blogCards.forEach((card, index) => {
+        // Initial state - move cards off screen and make them transparent
+        gsap.set(card, {
+            y: 100,
+            opacity: 0,
+            scale: 0.95
+        });
+
+        // Create scroll trigger animation
+        gsap.to(card, {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: card,
+                start: "top bottom-=100", // Start animation when card is 100px from entering viewport
+                end: "top center",
+                toggleActions: "play none none reverse", // Play animation when entering, reverse when leaving
+                // markers: true, // Helpful for debugging
+            },
+            delay: index * 0.1 // Stagger the animations
+        });
+
+        // Animate blog elements separately
+        const title = card.querySelector('.blog-title');
+        const tags = card.querySelectorAll('.tag');
+        const excerpt = card.querySelector('.blog-excerpt');
+
+        if (title) {
+            gsap.from(title, {
+                x: -50,
+                opacity: 0,
+                duration: 0.6,
+                delay: index * 0.1 + 0.3,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top bottom-=100",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        }
+
+        if (tags.length) {
+            gsap.from(tags, {
+                y: 20,
+                opacity: 0,
+                duration: 0.4,
+                stagger: 0.1,
+                delay: index * 0.1 + 0.4,
+                ease: "back.out(1.7)",
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top bottom-=100",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        }
+
+        if (excerpt) {
+            gsap.from(excerpt, {
+                y: 30,
+                opacity: 0,
+                duration: 0.6,
+                delay: index * 0.1 + 0.5,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top bottom-=100",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        }
+
+        // Add hover animation
+        card.addEventListener('mouseenter', () => {
+            gsap.to(card, {
+                scale: 1.02,
+                boxShadow: "0 10px 20px rgba(0,0,0,0.15)",
+                duration: 0.3,
+                ease: "power2.out"
+            });
+        });
+
+        card.addEventListener('mouseleave', () => {
+            gsap.to(card, {
+                scale: 1,
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                duration: 0.3,
+                ease: "power2.out"
+            });
+        });
     });
 
-    // Animate blog elements separately for more interest
-    gsap.from(".blog-title", {
-        duration: 0.6,
-        x: -30,
-        opacity: 0,
-        stagger: 0.2,
-        delay: 0.3,
-        ease: "back.out(1.2)"
-    });
+    // Add a reveal animation for the "No blogs" message if it exists
+    const noBlogsMessage = document.querySelector('.no-blogs');
+    if (noBlogsMessage) {
+        gsap.from(noBlogsMessage, {
+            y: 50,
+            opacity: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: noBlogsMessage,
+                start: "top bottom-=100",
+                toggleActions: "play none none reverse"
+            }
+        });
+    }
+}
 
-    gsap.from(".blog-tags .tag", {
-        duration: 0.4,
-        scale: 0,
-        opacity: 0,
-        stagger: 0.1,
-        delay: 0.5,
-        ease: "elastic.out(1, 0.7)"
-    });
+// Make sure ScrollTrigger is refreshed when new blogs are added
+function refreshScrollTrigger() {
+    ScrollTrigger.refresh();
 }
 
 // Update displayBlogs function
@@ -205,6 +299,7 @@ window.displayBlogs = function (filteredBlogs = null) {
 
         // After rendering blogs, animate them
         animateBlogs();
+        refreshScrollTrigger();
 
     } catch (error) {
         console.error("Error displaying blogs:", error);
