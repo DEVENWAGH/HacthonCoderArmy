@@ -346,16 +346,6 @@ body.dark-mode .search-bar input {
   border-top: 1px solid #ddd;
 }
 
-.navbar-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-  height: 100%;
-  padding: 0 20px;
-}
-
 .nav-left {
   flex: 1;
   display: flex;
@@ -550,7 +540,7 @@ body.dark-mode .search-bar input {
 /* Create Blog Form */
 .create-blog-container {
   max-width: 800px;
-  margin: 0 auto;
+  margin: 1rem auto;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -1618,20 +1608,17 @@ nts */ .form-group {
   }
 }
 
-/* Navbar Styles */
+Navbar Styles
 .navbar {
   background-color: #333;
   color: #fff;
-  padding: 1.5rem 0; /* Increased padding */
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  transition: background-color 0.3s ease;
-  height: 80px; /* Added explicit height */
+  padding: 1.5rem 0;
+  height: 100%;
   display: flex;
   align-items: center;
+  position: relative;
+  width: 100%;
 }
-
 .navbar-container {
   display: flex;
   justify-content: space-between;
@@ -1639,24 +1626,63 @@ nts */ .form-group {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
-  height: 100%;
+  height: auto;
+  width: 100%;
 }
 
+/* Ensure proper flex distribution */
 .nav-left {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   gap: 2rem;
 }
 
 .nav-right {
+  flex: 1;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 1.5rem;
+}
+
+/* Update the wrapper and main content styles */
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Update footer styles to stick to bottom when content is short */
+.footer-container {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  width: 100%;
+  margin-top: auto; /* This pushes footer to bottom when content is short */
+}
+
+/* No blogs message container */
+.no-blogs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 100px - 64px); /* viewport height minus navbar and footer */
+  text-align: center;
 }
 
 /* Logo */
 .logo {
-  height: 40px;
+  height: 50px;
   width: auto;
   transition: transform 0.2s ease;
 }
@@ -2226,17 +2252,6 @@ body.dark-mode .editor-btn::after {
   transform: scale(1.1);
 }
 
-/* Replace all .navbar-container instances with this consolidated version */
-.navbar-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-  height: 100%;
-  padding: 0 20px;
-}
-
 /* Replace all .modal-image-container instances with this consolidated version */
 .modal-image-container {
   position: relative;
@@ -2254,7 +2269,6 @@ body.dark-mode .editor-btn::after {
   display: block;
 }
 
-/* Replace duplicate dark mode navbar styles with this */
 .dark-mode .navbar {
   background-color: #121212;
 }
