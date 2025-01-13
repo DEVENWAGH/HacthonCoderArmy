@@ -1,4 +1,7 @@
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function footerComponent() {
   const template = `
@@ -30,7 +33,14 @@ export function footerComponent() {
     });
 
     // Create main timeline
-    const tl = gsap.timeline();
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: footer,
+        start: "top bottom",
+        end: "top center",
+        toggleActions: "play none none reverse"
+      }
+    });
 
     // Animate footer in with staggered text
     tl.to(footer, {
@@ -44,7 +54,19 @@ export function footerComponent() {
       y: 0,
       duration: 0.6,
       stagger: 0.2,
-      ease: 'back.out(1.2)'
+      ease: 'back.out(1.2)',
+      onStart: () => {
+        gsap.fromTo([year, brand, rights], {
+          scale: 0.8,
+          rotation: -10
+        }, {
+          scale: 1,
+          rotation: 0,
+          duration: 0.6,
+          stagger: 0.2,
+          ease: 'back.out(1.7)'
+        });
+      }
     }, '-=0.5');
 
     // Hover animation for brand name
@@ -112,8 +134,7 @@ export function footerComponent() {
       }
 
       scrollTimeout = window.requestAnimationFrame(() => {
-        const currentScrollPosition = window.pageYOffset;
-        
+        const currentScrollPosition = window.scrollY;
         if (currentScrollPosition > lastScrollPosition) {
           // Scrolling down - smooth hide
           gsap.to(footer, {
@@ -128,17 +149,7 @@ export function footerComponent() {
             y: 0,
             opacity: 1,
             duration: 0.5,
-            ease: 'power2.out',
-            onComplete: () => {
-              // Add subtle bounce effect
-              gsap.to(footer, {
-                y: -2,
-                duration: 0.1,
-                ease: 'power1.out',
-                yoyo: true,
-                repeat: 1
-              });
-            }
+            ease: 'power2.out'
           });
         }
         

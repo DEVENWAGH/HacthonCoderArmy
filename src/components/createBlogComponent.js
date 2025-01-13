@@ -505,12 +505,15 @@ export function createBlogComponent(blogData = {}) {
             document.execCommand('insertUnorderedList', false, null);
             updateButtonStates();
             break;
-          case 'h': // Heading
+          case 'h': { // Heading
             e.preventDefault();
-            const isHeading = document.queryCommandValue('formatBlock') === 'h2';
+            const selection = window.getSelection();
+            const closestBlock = selection.focusNode?.parentElement;
+            const isHeading = closestBlock?.tagName?.toLowerCase() === 'h2';
             document.execCommand('formatBlock', false, isHeading ? 'p' : 'h2');
             updateButtonStates();
             break;
+          }
         }
       }
     });
