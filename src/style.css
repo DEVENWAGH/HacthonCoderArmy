@@ -58,11 +58,29 @@ body:not(.dark-mode) .footer-container:hover::before {
 body:not(.dark-mode) .preview-content blockquote {
   color: #333;
 }
+body.dark-mode .editor-notification {
+  background: #2196F3;
+  color: #fff;
+}
+body.dark-mode .notification-progress {
+  background: rgba(255, 255, 255, 0.9);
+}
+body.dark-mode .editor-btn[title]::before {
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+}
 body.dark-mode {
   background-color: #121212;
   color: #ffffff;
 }
+body.dark-mode .editor-btn::before {
+  background-color: #555;
+  color: #fff;
+}
 
+body.dark-mode .editor-btn::after {
+  border-top-color: #555;
+}
 .dark-mode .create-blog-container {
   background-color: #000000;
   color: #ffffff;
@@ -140,40 +158,8 @@ body.dark-mode .cover-image-placeholder:hover {
 body.dark-mode .dark-mode-toggle i.fa-sun {
   color: #ffeb3b;
 }
-.darklogo {
-  height: 80px;
-  display: block;
-  z-index: 1000;
-  filter: brightness(0.9);
-}
 body.dark-mode .darklogo {
   filter: brightness(1);
-}
-
-.dark-mode-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  border-radius: 50%;
-  transition: background-color 0.3s;
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: #666;
-  padding: 1rem;
-}
-
-.dark-mode-toggle:hover {
-  color: #333;
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.dark-mode .navbar {
-  background-color: #121212;
-  color: #ffffff;
 }
 
 body.dark-mode #tags-input {
@@ -199,18 +185,6 @@ body.dark-mode #tag-suggestions {
 body.dark-mode .suggestion-item:hover {
   background: #444;
 }
-.dark-mode .tag-item {
-  background: #555;
-  color: #fff;
-}
-.dark-mode .editor-btn.active {
-  background-color: #ff8c00;
-  color: #fff;
-  border-color: #ff8c00;
-}
-.dark-mode .no-category {
-  color: #ccc;
-}
 body.dark-mode .cl-component {
   background-color: #ffffff;
   color: #000000;
@@ -221,37 +195,6 @@ body.dark-mode .cl-component {
 body.dark-mode .suggestion-item.no-category {
   color: #999;
 }
-
-.dark-mode-toggle i {
-  color: white;
-  font-size: 20px;
-}
-.dark-mode .blog-title {
-  color: #fff;
-}
-.dark-mode .blog-content {
-  color: #ccc;
-}
-.dark-mode .blog-content blockquote {
-  color: #aaa;
-}
-.dark-mode .blog-content h2 {
-  color: #fff;
-}
-.dark-mode .blog-card {
-  background: #1e1e1e;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-.dark-mode .blog-excerpt {
-  color: #ccc;
-}
-.dark-mode .uploaded-images-container {
-  border-top-color: #444;
-}
-.dark-mode .image-modal {
-  background: rgba(0, 0, 0, 0.95);
-}
-
 body.dark-mode .blog-card .menu-dropdown {
   background: #333;
   border-color: #444;
@@ -301,6 +244,94 @@ body.dark-mode .search-bar input {
   background-color: #1e1e1e;
 }
 
+.dark-mode .search-bar input {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .search-bar input:focus {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.dark-mode-toggle:hover {
+  color: #333;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .navbar {
+  background-color: #121212;
+  color: #ffffff;
+}
+.dark-mode .tag-item {
+  background: #555;
+  color: #fff;
+}
+.dark-mode .editor-btn.active {
+  background-color: #ff8c00;
+  color: #fff;
+  border-color: #ff8c00;
+}
+.dark-mode .no-category {
+  color: #ccc;
+}
+
+.dark-mode-toggle i {
+  color: white;
+  font-size: 20px;
+}
+.dark-mode .blog-title {
+  color: #fff;
+}
+.dark-mode .blog-content {
+  color: #ccc;
+}
+.dark-mode .blog-content blockquote {
+  color: #aaa;
+}
+.dark-mode .blog-content h2 {
+  color: #fff;
+}
+.dark-mode .blog-card {
+  background: #1e1e1e;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.dark-mode .blog-excerpt {
+  color: #ccc;
+}
+.dark-mode .uploaded-images-container {
+  border-top-color: #444;
+}
+.dark-mode .image-modal {
+  background: rgba(0, 0, 0, 0.95);
+}
+.dark-mode .footer-container {
+  background-color: #121212;
+}
+.dark-mode .navbar {
+  background-color: #121212;
+}
+.darklogo {
+  height: 80px;
+  display: block;
+  z-index: 1000;
+  filter: brightness(0.9);
+}
+
+.dark-mode-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #666;
+  padding: 1rem;
+}
+
 .uploaded-images-preview {
   display: flex;
   flex-wrap: wrap;
@@ -344,13 +375,6 @@ body.dark-mode .search-bar input {
   padding: 15px;
   margin-top: 20px;
   border-top: 1px solid #ddd;
-}
-
-.nav-left {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 /* Flex container for uploaded images */
@@ -406,14 +430,6 @@ body.dark-mode .search-bar input {
 
 .remove-content-image-btn:hover {
   background: rgba(255, 0, 0, 1);
-}
-
-.nav-right {
-  flex: 2;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 20px;
 }
 
 .logo {
@@ -1630,22 +1646,6 @@ Navbar Styles
   width: 100%;
 }
 
-/* Ensure proper flex distribution */
-.nav-left {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
-
-.nav-right {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 1.5rem;
-}
-
 /* Update the wrapper and main content styles */
 .wrapper {
   min-height: 100vh;
@@ -1761,20 +1761,6 @@ main {
   transform: translateY(-1px);
 }
 
-/* Dark Mode Styles */
-.dark-mode .navbar {
-  background-color: #121212;
-}
-
-.dark-mode .search-bar input {
-  background-color: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-.dark-mode .search-bar input:focus {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
 /* Editor Notification Styles */
 .editor-notification {
   position: fixed;
@@ -1800,16 +1786,6 @@ main {
   width: 0;
   height: 3px;
   background: rgba(255, 255, 255, 0.7);
-}
-
-/* Dark mode support */
-body.dark-mode .editor-notification {
-  background: #2196F3;
-  color: #fff;
-}
-
-body.dark-mode .notification-progress {
-  background: rgba(255, 255, 255, 0.9);
 }
 
 /* Animation keyframes (if not already defined) */
@@ -1851,11 +1827,6 @@ body.dark-mode .notification-progress {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(-5px);
-}
-
-body.dark-mode .editor-btn[title]::before {
-  background: rgba(255, 255, 255, 0.9);
-  color: #000;
 }
 
 /* Editor Tooltip Styles */
@@ -1900,16 +1871,6 @@ body.dark-mode .editor-btn[title]::before {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(0);
-}
-
-/* Dark mode support */
-body.dark-mode .editor-btn::before {
-  background-color: #555;
-  color: #fff;
-}
-
-body.dark-mode .editor-btn::after {
-  border-top-color: #555;
 }
 
 /* Animation for tooltip entrance */
@@ -2018,21 +1979,6 @@ body.dark-mode .editor-btn::after {
     padding: 10px 20px;
   }
 
-  .nav-left {
-    flex: 1;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-  }
-
-  .nav-right {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 10px;
-  }
-
   .search-bar {
     width: 100%;
     margin: 10px 0;
@@ -2052,18 +1998,6 @@ body.dark-mode .editor-btn::after {
     flex-direction: column;
     gap: 15px;
     padding: 10px;
-  }
-
-  .nav-left {
-    width: 100%;
-    justify-content: space-between;
-    padding: 0 10px;
-  }
-
-  .nav-right {
-    width: 100%;
-    flex-direction: column;
-    gap: 15px;
   }
 
   .search-bar {
@@ -2138,13 +2072,6 @@ body.dark-mode .editor-btn::after {
   .navbar-container {
     flex-direction: column;
     padding: 10px 20px;
-  }
-
-  .nav-left,
-  .nav-right {
-    width: 100%;
-    justify-content: center;
-    margin: 10px 0;
   }
 
   .search-bar {
@@ -2269,10 +2196,6 @@ body.dark-mode .editor-btn::after {
   display: block;
 }
 
-.dark-mode .navbar {
-  background-color: #121212;
-}
-
 /* Replace duplicate #createBlogFormContainer styles with this */
 #createBlogFormContainer {
   margin: 0;
@@ -2294,10 +2217,68 @@ body.dark-mode .editor-btn::after {
   margin: 0;
   font-size: 1rem;
 }
-
-/* Dark mode support for footer */
-.dark-mode .footer-container {
-  background-color: #121212;
+/* Footer Styles */
+.footer {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
 }
 
-/* ...rest of your existing code... */
+.footer-container {
+  padding: 2rem;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.footer-link {
+  color: inherit;
+  text-decoration: none;
+  font-size: 0.9rem;
+  position: relative;
+  padding: 0.5rem;
+}
+
+.footer-link:hover {
+  color: #ff8c00;
+}
+
+/* Dark mode styles */
+.dark-mode .footer-container {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+.dark-mode .footer-link {
+  color: #ffffff;
+}
+
+.dark-mode .footer-link:hover {
+  color: #ff8c00;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
