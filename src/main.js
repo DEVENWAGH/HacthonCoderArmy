@@ -22,25 +22,33 @@ requestAnimationFrame(raf);
 // Initialize Clerk
 window.initializeClerk = async function () {
   try {
-    const baseUrl = import.meta.env.DEV ? 
-      import.meta.env.VITE_DEV_URL : 
-      import.meta.env.VITE_APP_URL;
+    const baseUrl = import.meta.env.DEV
+      ? import.meta.env.VITE_DEV_URL
+      : import.meta.env.VITE_APP_URL;
 
     await Clerk.load({
       signInUrl: import.meta.env.VITE_CLERK_SIGN_IN_URL,
       signUpUrl: import.meta.env.VITE_CLERK_SIGN_UP_URL,
-      afterSignInUrl: `${baseUrl}${import.meta.env.VITE_CLERK_AFTER_SIGN_IN_URL}`,
-      afterSignUpUrl: `${baseUrl}${import.meta.env.VITE_CLERK_AFTER_SIGN_UP_URL}`,
-      unauthorizedUrl: `${baseUrl}${import.meta.env.VITE_CLERK_UNAUTHORIZED_URL}`
+      afterSignInUrl: `${baseUrl}${
+        import.meta.env.VITE_CLERK_AFTER_SIGN_IN_URL
+      }`,
+      afterSignUpUrl: `${baseUrl}${
+        import.meta.env.VITE_CLERK_AFTER_SIGN_UP_URL
+      }`,
+      unauthorizedUrl: `${baseUrl}${
+        import.meta.env.VITE_CLERK_UNAUTHORIZED_URL
+      }`,
     });
 
     if (Clerk.user) {
       // User is authenticated
-      const { navbarComponent } = await import('./components/navbarComponent.js');
+      const { navbarComponent } = await import(
+        "./components/navbarComponent.js"
+      );
       const navbar = navbarComponent();
       document.getElementById("navbarContainer").innerHTML = navbar.template;
       await navbar.initializeNavbar();
-      
+
       // Display blog content
       window.displayBlogs?.();
     } else {
@@ -59,9 +67,8 @@ window.initializeClerk = async function () {
         window.location.href = import.meta.env.VITE_CLERK_SIGN_IN_URL;
       }
     });
-
   } catch (error) {
-    console.error('Failed to initialize Clerk:', error);
+    console.error("Failed to initialize Clerk:", error);
   }
 };
 
