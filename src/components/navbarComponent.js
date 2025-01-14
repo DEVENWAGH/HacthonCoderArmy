@@ -5,25 +5,22 @@ let navbarInitialized = false; // Add this flag at the top level
 
 export function navbarComponent() {
   const template = `
-        <nav class="navbar">
-            <div class="navbar-container">
-                <a href="/"><img class="logo" src="./logo.svg" alt="Logo" /></a>
-                <div class="search-bar">
-                    <input type="text" placeholder="Search posts..." id="search-input" />
-                    <i class="fas fa-search" id="search-icon"></i>
-                </div>
-                <button class="create-blog-btn" id="loadCreateBlogBtn">
-                  Create Blog
-                </button>
-                <div class="user-profile">
-                    <div id="user-button"></div>
-                </div>
-                <div class="dark-mode-toggle">
-                    <i id="mode-icon" class="fas fa-moon"></i>
-                </div>
-            </div>
-        </nav>
-    `;
+    <nav class="navbar">
+      <div class="navbar-container">
+        <a href="/"><img class="logo" src="./logo.svg" alt="Logo" /></a>
+        <div class="search-bar">
+          <input type="text" placeholder="Search posts..." id="search-input" />
+          <i class="fas fa-search" id="search-icon"></i>
+        </div>
+        <button class="create-blog-btn" id="loadCreateBlogBtn">
+          Create Blog
+        </button>
+        <div class="dark-mode-toggle">
+          <i id="mode-icon" class="fas fa-moon"></i>
+        </div>
+      </div>
+    </nav>
+  `;
 
   const initializeNavbar = async () => {
     if (navbarInitialized) return; // Skip if already initialized

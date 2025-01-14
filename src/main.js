@@ -4,6 +4,7 @@ import { footerComponent } from "./components/footerComponent.js"; // Import the
 import { gsap } from "gsap";
 import Lenis from "lenis";
 import { ScrollTrigger } from "gsap/ScrollTrigger"; // Add this import
+import { navbarComponent } from "./components/navbarComponent.js";
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -1101,3 +1102,19 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeSearch();
   displayBlogs(); // Display existing blogs
 });
+
+// Initialize app
+async function initializeApp() {
+  // Initialize navbar
+  const navbar = navbarComponent();
+  document.getElementById("navbarContainer").innerHTML = navbar.template;
+  await navbar.initializeNavbar();
+  
+  // Display blog content
+  window.displayBlogs?.();
+}
+
+// Initialize when the page loads
+window.addEventListener("load", initializeApp);
+
+// ...rest of existing code...
