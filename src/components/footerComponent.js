@@ -90,8 +90,8 @@ export function footerComponent() {
       gsap.to(brand, {
         scale: 1,
         color: document.body.classList.contains("dark-mode")
-          ? "#ffffff"
-          : "#000000",
+          ? "#000000"
+          : "#FFFFFF",
         duration: 0.3,
         ease: "power2.out",
       });

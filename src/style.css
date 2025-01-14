@@ -212,7 +212,7 @@ body.dark-mode .search-bar input {
 }
 
 .dark-mode .navbar {
-  background-color: #121212;
+  background-color: #000000;
   color: #ffffff;
 }
 .dark-mode .tag-item {
@@ -250,11 +250,6 @@ body.dark-mode .search-bar input {
 }
 .dark-mode .blog-excerpt {
   color: #ccc;
-}
-
-.dark-mode .footer-container {
-  background-color: #121212;
-  color: #ffffff;
 }
 
 .darklogo {
@@ -656,43 +651,8 @@ nts */ .form-group {
   padding-left: 8px;
 }
 
-/* Auth */
-#sign-in {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-
-.not-authenticated .navbar,
-.not-authenticated #createBlogFormContainer {
+#createBlogFormContainer {
   display: none;
-}
-
-/* Add these styles to your existing CSS */
-.suggestion-item.no-category {
-  color: #666;
-  font-style: italic;
-  padding: 12px;
-  text-align: center;
-  cursor: default;
-}
-
-.suggestion-item.no-category:hover {
-  background-color: transparent;
-}
-
-/* User Profile Styles */
-.user-profile {
-  display: flex;
-  align-items: center;
-  margin-left: 20px;
 }
 
 /* Blog Card Styles */
@@ -756,9 +716,7 @@ nts */ .form-group {
 
 /* Fix for iOS Safari 100vh issue */
 @supports (-webkit-touch-callout: none) {
-  #sign-in {
-    height: -webkit-fill-available;
-  }
+
   .navbar {
     padding-bottom: env(safe-area-inset-bottom);
   }
@@ -1043,18 +1001,6 @@ nts */ .form-group {
   transform: translateX(-50%) translateY(0);
 }
 
-/* Animation for tooltip entrance */
-@keyframes tooltipIn {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
 .editor-btn:hover::before {
   animation: tooltipIn 0.2s ease-in-out forwards;
 }
@@ -1066,7 +1012,7 @@ nts */ .form-group {
 
 .footer-container {
   height: 2.5rem;
-  background-color: #333;
+  background-color: #ffffff;
   color: #fff;
   padding: 20px;
   text-align: center;

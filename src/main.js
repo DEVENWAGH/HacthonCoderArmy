@@ -1,6 +1,6 @@
 import "./style.css";
 import { createBlogComponent } from "./components/createBlogComponent.js";
-import { footerComponent } from "./components/footerComponent.js"; // Import the footer component
+import { footerComponent } from "./components/footerComponent.js";
 import { gsap } from "gsap";
 import Lenis from "lenis";
 import { ScrollTrigger } from "gsap/ScrollTrigger"; // Add this import
@@ -22,41 +22,17 @@ requestAnimationFrame(raf);
 
 // Initialize Clerk
 window.initializeClerk = async function () {
-  try {
-    const baseUrl = import.meta.env.DEV
-      ? import.meta.env.VITE_DEV_URL
-      : import.meta.env.VITE_APP_URL;
-
-    await Clerk.load({
-      signInUrl: import.meta.env.VITE_CLERK_SIGN_IN_URL,
-      signUpUrl: import.meta.env.VITE_CLERK_SIGN_UP_URL,
-      afterSignInUrl: `${baseUrl}${
-        import.meta.env.VITE_CLERK_AFTER_SIGN_IN_URL
-      }`,
-      afterSignUpUrl: `${baseUrl}${
-        import.meta.env.VITE_CLERK_AFTER_SIGN_UP_URL
-      }`,
-      unauthorizedUrl: `${baseUrl}${
-        import.meta.env.VITE_CLERK_UNAUTHORIZED_URL
-      }`,
-      afterSignOutUrl: import.meta.env.VITE_CLERK_AFTER_SIGN_OUT_URL,
-    });
-
     // Add auth state change listener with state tracking
     let isRedirecting = false;
     Clerk.addListener(({ user }) => {
-      if (isRedirecting) return; // Prevent multiple redirects
+      if (isRedirecting) return;
       isRedirecting = true;
-      
       if (!user) {
-        // Clear storage and redirect
         sessionStorage.clear();
         localStorage.clear();
-        window.location.replace(import.meta.env.VITE_CLERK_AFTER_SIGN_OUT_URL);
       }
     });
 
-    if (Clerk.user) {
       // User is authenticated
       const { navbarComponent } = await import(
         "./components/navbarComponent.js"
@@ -67,19 +43,8 @@ window.initializeClerk = async function () {
 
       // Display blog content
       window.displayBlogs?.();
-    } else {
-      // Show sign in
-      document.getElementById("app").innerHTML = `
-        <section id="sign-in" aria-label="Sign in form"></section>
-      `;
-      Clerk.mountSignIn(document.getElementById("sign-in"));
     }
-  } catch (error) {
-    console.error("Failed to initialize Clerk:", error);
-  }
-};
 
-// Call initializeClerk to start the process
 initializeClerk();
 
 // Update the animation function with more varied durations
@@ -441,7 +406,7 @@ async function handleEditSubmit(e) {
     category: document.getElementById("category").value,
     tags: JSON.parse(document.getElementById("tags-hidden").value || "[]"),
     coverImage: document.getElementById("coverImagePreview").src,
-    author: window.Clerk?.user?.fullName || "Anonymous",
+    author:"Anonymous",
     createdAt: existingBlog?.createdAt || new Date().toISOString(), // Preserve original creation date
     updatedAt: new Date().toISOString(), // Add update date
   };
@@ -853,7 +818,7 @@ function initializePublishButton() {
         tags: JSON.parse(document.getElementById("tags-hidden").value || "[]"),
         coverImage: document.getElementById("coverImagePreview").src,
         createdAt: new Date().toISOString(),
-        author: Clerk.user?.fullName || "Anonymous",
+        author: "Anonymous",
       };
 
       // Save post
@@ -973,7 +938,7 @@ const handleCreateBlog = async (e) => {
     tags: JSON.parse(document.getElementById("tags-hidden").value || "[]"),
     coverImage: document.getElementById("coverImagePreview").src,
     createdAt: new Date().toISOString(),
-    author: window.Clerk?.user?.fullName || "Anonymous",
+    author: "Anonymous",
   };
 
   // Get existing blogs and add new one
@@ -1109,12 +1074,12 @@ async function initializeApp() {
   const navbar = navbarComponent();
   document.getElementById("navbarContainer").innerHTML = navbar.template;
   await navbar.initializeNavbar();
-  
   // Display blog content
   window.displayBlogs?.();
 }
-
+// Initialize and display footer
+const footer = footerComponent();
+document.getElementById("footerContainer").innerHTML = footer.template;
+footer.initializeFooter();
 // Initialize when the page loads
 window.addEventListener("load", initializeApp);
-
-// ...rest of existing code...
