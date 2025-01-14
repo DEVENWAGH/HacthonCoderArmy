@@ -196,7 +196,7 @@ export function createBlogComponent(blogData = {}) {
                 .createdAt
             : new Date().toISOString(),
           updatedAt: new Date().toISOString(),
-          author: window.Clerk?.user?.fullName || "Anonymous",
+          author: "Anonymous",
         };
 
         // Get existing blogs

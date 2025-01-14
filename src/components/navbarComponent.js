@@ -23,13 +23,7 @@ export function navbarComponent() {
   `;
 
   const initializeNavbar = async () => {
-    if (navbarInitialized) return; // Skip if already initialized
-
-    // Mount Clerk user button
-    const userButtonDiv = document.getElementById("user-button");
-    if (userButtonDiv) {
-      Clerk.mountUserButton(userButtonDiv);
-    }
+    if (navbarInitialized) return;
 
     // Dark mode toggle
     const darkModeToggle = document.querySelector(".dark-mode-toggle");
