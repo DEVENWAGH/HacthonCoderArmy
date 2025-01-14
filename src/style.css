@@ -29,8 +29,7 @@ body:not(.dark-mode) .navbar {
   background-color: #ffffff;
 }
 
-body:not(.dark-mode) .create-blog-container,
-body:not(.dark-mode) #sign-in {
+body:not(.dark-mode) .create-blog-container {
   background-color: #ffffff;
   border: 1px solid #000000;
   color: #000000;

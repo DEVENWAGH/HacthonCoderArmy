@@ -20,34 +20,6 @@ function raf(time) {
 
 requestAnimationFrame(raf);
 
-// Initialize Clerk
-window.initializeClerk = async function () {
-    // Add auth state change listener with state tracking
-    let isRedirecting = false;
-    Clerk.addListener(({ user }) => {
-      if (isRedirecting) return;
-      isRedirecting = true;
-      if (!user) {
-        sessionStorage.clear();
-        localStorage.clear();
-      }
-    });
-
-      // User is authenticated
-      const { navbarComponent } = await import(
-        "./components/navbarComponent.js"
-      );
-      const navbar = navbarComponent();
-      document.getElementById("navbarContainer").innerHTML = navbar.template;
-      await navbar.initializeNavbar();
-
-      // Display blog content
-      window.displayBlogs?.();
-    }
-
-initializeClerk();
-
-// Update the animation function with more varied durations
 function animateBlogs() {
   // Get all blog cards
   const blogCards = document.querySelectorAll(".blog-card");
@@ -452,10 +424,6 @@ function deleteBlog(blogId) {
   sessionStorage.setItem("blogs", JSON.stringify(blogs));
   displayBlogs();
 }
-
-// Initialize when the page loads
-window.removeEventListener("load", initializeClerk);
-window.addEventListener("load", initializeClerk, { once: true });
 
 // Function to initialize editor functionality
 function initializeEditor() {
