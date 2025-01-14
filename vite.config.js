@@ -4,6 +4,8 @@ export default defineConfig({
   define: {
     'process.env': {}
   },
-  // This allows you to use environment variables in your code
-  envPrefix: 'VITE_'
+  envPrefix: 'VITE_', // This allows you to use environment variables in your code
+  build: {
+    outDir: 'dist'
+  }
 });
