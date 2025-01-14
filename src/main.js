@@ -253,7 +253,7 @@ window.displayBlogs = function (filteredBlogs = null) {
                               .join("")}
                         </div>
                         <div class="blog-excerpt">
-                            ${blog.content.substring(0, 200)}...
+                            ${blog.content}
                         </div>
                     </div>
                 </div>

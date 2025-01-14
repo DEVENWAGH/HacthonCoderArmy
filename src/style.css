@@ -663,7 +663,10 @@ nts */ .form-group {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 20px auto;
   max-width: 800px;
-  overflow: hidden;
+  overflow: auto;
+  transition: height 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .blog-cover-image {
@@ -673,6 +676,7 @@ nts */ .form-group {
 }
 
 .blog-content {
+  flex-grow: 1;
   padding: 1rem;
   position: relative;
 }
@@ -686,6 +690,9 @@ nts */ .form-group {
 .blog-excerpt {
   color: #555;
   line-height: 1.6;
+  max-height: none;
+  overflow: auto;
+  transition: max-height 0.3s ease;
 }
 
 .blog-title {
