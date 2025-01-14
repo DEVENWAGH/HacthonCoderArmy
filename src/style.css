@@ -849,10 +849,9 @@ nts */ .form-group {
 }
 
 .logo {
-  height: 50px;
+  height: 4rem;
   width: auto;
-  object-fit: contain;
-  margin-top: 10px;
+  object-fit: cover;
   transition: transform 0.2s ease;
 }
 
