@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "version": 2,
   "builds": [
     {
@@ -14,6 +15,20 @@
     {
       "src": "/(.*)",
       "dest": "/index.html"
+=======
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "frame-ancestors 'self' https://*.clerk.dev"
+        }
+      ]
+>>>>>>> f9c41371115755c5c4bad487b42ecd28251c8e2b
     }
   ]
 }
