@@ -1340,7 +1340,7 @@ nts */ .form-group {
     margin-right: 0.5rem;
     padding: 0.8rem;
   }
-  
+
   .search-bar {
     position: absolute;
     top: 1rem;
@@ -1411,44 +1411,6 @@ nts */ .form-group {
     font-size: 1rem;
   }
 }
-@media (max-width: 425px) and (min-width: 375px) {
-  .search-bar i {
-    top: 50%;
-    left: 90%;
-  }
-  .search-bar {
-    position: absolute;
-    top: 1rem;
-    left: 30%;
-    width: 40%;
-  }
-
-  .search-bar input {
-    height: 2rem;
-    width: 100%;
-    padding: 0 0.5rem;
-    margin-right: 0;
-    border-radius: 1rem;
-  }
-  .create-blog-btn {
-    position: absolute;
-    margin: 0;
-    top: 3.5rem;
-    left: 80%;
-    transform: translate(-50%, -130%);
-    padding: 0.5rem 1rem;
-    z-index: 1000;
-  }
-  #user-button {
-    position: absolute;
-    top: 1rem;
-    right: 4rem;
-  }
-  .navbar-container {
-    padding: 0;
-    height: 8rem;
-  }
-}
 @media (max-width: 1024px) and (min-width: 769px) {
   .search-bar i {
     top: 50%;
@@ -1477,9 +1439,52 @@ nts */ .form-group {
     padding: 0.5rem 1rem;
     z-index: 1000;
   }
-  #user-button {
+}
+@media (max-width: 767px) and (min-width: 425px) {
+  .logo {
     position: absolute;
-    top: 1rem;
-    right: 4rem;
+    top: 0;
+    left: 0rem;
+    height: 4rem;
+    padding: 0%;
+    margin: 0%;
+  }
+  .logo:hover {
+    transform: scale(0);
+  }
+  .search-bar i {
+    top: 50%;
+    left: 90%;
+  }
+  .search-bar {
+    position: absolute;
+    top: 4rem;
+    left: 10%;
+    width: 80%;
+  }
+
+  .search-bar input {
+    height: 2rem;
+    width: 100%;
+    padding: 0 0.5rem;
+    margin-right: 0;
+    border-radius: 1rem;
+  }
+  .create-blog-btn {
+    position: absolute;
+    margin: 0;
+    top: 4.2rem;
+    left: 70%;
+    transform: translate(-50%, -130%);
+    padding: 0.5rem 1rem;
+    z-index: 1000;
+  }
+  .dark-mode-toggle {
+    position: absolute;
+    top: 0.8rem;
+    right: .5rem;
+    background: none;
+    margin-right: 0.5rem;
+    padding: 0.8rem;
   }
 }
