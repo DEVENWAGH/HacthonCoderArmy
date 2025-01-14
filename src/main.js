@@ -22,36 +22,45 @@ requestAnimationFrame(raf);
 // Initialize Clerk
 window.initializeClerk = async function () {
   try {
-    await Clerk.load();
+    await Clerk.load({
+      publishableKey: import.meta.env.VITE_CLERK_PUBLISHABLE_KEY,
+      afterSignInUrl: import.meta.env.VITE_CLERK_AFTER_SIGN_IN_URL,
+      afterSignUpUrl: import.meta.env.VITE_CLERK_AFTER_SIGN_UP_URL
+    });
 
-    // Check if the user is authenticated
     if (Clerk.user) {
-      // Import navbar component
-      const { navbarComponent } = await import(
-        "./components/navbarComponent.js"
-      );
-
-      // Create and initialize navbar
+      // User is authenticated
+      const { navbarComponent } = await import('./components/navbarComponent.js');
       const navbar = navbarComponent();
       document.getElementById("navbarContainer").innerHTML = navbar.template;
       await navbar.initializeNavbar();
-
-      // Display posts
-      displayBlogs();
-
-      // Initialize and display footer
-      const footer = footerComponent();
-      document.getElementById("footerContainer").innerHTML = footer.template;
-      footer.initializeFooter();
+      
+      // Display blog content
+      window.displayBlogs?.();
     } else {
-      // Render sign in page
-      document.getElementById("app").innerHTML = `<div id="sign-in"></div>`;
+      // Show sign in
+      document.getElementById("app").innerHTML = `
+        <section id="sign-in" aria-label="Sign in form"></section>
+      `;
       Clerk.mountSignIn(document.getElementById("sign-in"));
     }
+
+    // Add auth state change listener
+    Clerk.addListener(({ user }) => {
+      if (user) {
+        window.location.reload();
+      } else {
+        window.location.href = import.meta.env.VITE_CLERK_SIGN_IN_URL;
+      }
+    });
+
   } catch (error) {
-    console.error("Error initializing Clerk:", error);
+    console.error('Failed to initialize Clerk:', error);
   }
 };
+
+// Call initializeClerk to start the process
+initializeClerk();
 
 // Update the animation function with more varied durations
 function animateBlogs() {
