@@ -38,6 +38,7 @@ window.initializeClerk = async function () {
       unauthorizedUrl: `${baseUrl}${
         import.meta.env.VITE_CLERK_UNAUTHORIZED_URL
       }`,
+      afterSignOutUrl: import.meta.env.VITE_CLERK_AFTER_SIGN_OUT_URL,
     });
 
     if (Clerk.user) {
@@ -64,7 +65,7 @@ window.initializeClerk = async function () {
       if (user) {
         window.location.reload();
       } else {
-        window.location.href = import.meta.env.VITE_CLERK_SIGN_IN_URL;
+        window.location.href = import.meta.env.VITE_CLERK_AFTER_SIGN_OUT_URL;
       }
     });
   } catch (error) {
