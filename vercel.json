@@ -15,7 +15,8 @@
     {
       "src": "/(.*)",
       "dest": "/index.html"
-=======
+    }
+    ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
   ],
@@ -28,7 +29,6 @@
           "value": "frame-ancestors 'self' https://*.clerk.dev"
         }
       ]
->>>>>>> f9c41371115755c5c4bad487b42ecd28251c8e2b
     }
   ]
 }
