@@ -22,10 +22,16 @@ requestAnimationFrame(raf);
 // Initialize Clerk
 window.initializeClerk = async function () {
   try {
+    const baseUrl = import.meta.env.DEV ? 
+      import.meta.env.VITE_DEV_URL : 
+      import.meta.env.VITE_APP_URL;
+
     await Clerk.load({
-      publishableKey: import.meta.env.VITE_CLERK_PUBLISHABLE_KEY,
-      afterSignInUrl: import.meta.env.VITE_CLERK_AFTER_SIGN_IN_URL,
-      afterSignUpUrl: import.meta.env.VITE_CLERK_AFTER_SIGN_UP_URL
+      signInUrl: import.meta.env.VITE_CLERK_SIGN_IN_URL,
+      signUpUrl: import.meta.env.VITE_CLERK_SIGN_UP_URL,
+      afterSignInUrl: `${baseUrl}${import.meta.env.VITE_CLERK_AFTER_SIGN_IN_URL}`,
+      afterSignUpUrl: `${baseUrl}${import.meta.env.VITE_CLERK_AFTER_SIGN_UP_URL}`,
+      unauthorizedUrl: `${baseUrl}${import.meta.env.VITE_CLERK_UNAUTHORIZED_URL}`
     });
 
     if (Clerk.user) {
