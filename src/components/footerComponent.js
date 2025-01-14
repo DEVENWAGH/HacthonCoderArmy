@@ -1,5 +1,5 @@
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,21 +15,21 @@ export function footerComponent() {
   `;
 
   const initializeFooter = () => {
-    const footer = document.querySelector('.footer-container');
-    const year = footer.querySelector('.year');
-    const brand = footer.querySelector('.brand');
-    const rights = footer.querySelector('.rights');
-    
+    const footer = document.querySelector(".footer-container");
+    const year = footer.querySelector(".year");
+    const brand = footer.querySelector(".brand");
+    const rights = footer.querySelector(".rights");
+
     // Initial state
     gsap.set([footer, year, brand, rights], {
       opacity: 0,
-      y: 20
+      y: 20,
     });
 
     gsap.set(footer, {
-      borderTopWidth: '1px',
-      borderTopStyle: 'solid',
-      borderTopColor: 'transparent'
+      borderTopWidth: "1px",
+      borderTopStyle: "solid",
+      borderTopColor: "transparent",
     });
 
     // Create main timeline
@@ -38,8 +38,8 @@ export function footerComponent() {
         trigger: footer,
         start: "top bottom",
         end: "top center",
-        toggleActions: "play none none reverse"
-      }
+        toggleActions: "play none none reverse",
+      },
     });
 
     // Animate footer in with staggered text
@@ -47,79 +47,98 @@ export function footerComponent() {
       opacity: 1,
       y: 0,
       duration: 1,
-      ease: 'power3.out'
-    })
-    .to([year, brand, rights], {
-      opacity: 1,
-      y: 0,
-      duration: 0.6,
-      stagger: 0.2,
-      ease: 'back.out(1.2)',
-      onStart: () => {
-        gsap.fromTo([year, brand, rights], {
-          scale: 0.8,
-          rotation: -10
-        }, {
-          scale: 1,
-          rotation: 0,
-          duration: 0.6,
-          stagger: 0.2,
-          ease: 'back.out(1.7)'
-        });
-      }
-    }, '-=0.5');
+      ease: "power3.out",
+    }).to(
+      [year, brand, rights],
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        stagger: 0.2,
+        ease: "back.out(1.2)",
+        onStart: () => {
+          gsap.fromTo(
+            [year, brand, rights],
+            {
+              scale: 0.8,
+              rotation: -10,
+            },
+            {
+              scale: 1,
+              rotation: 0,
+              duration: 0.6,
+              stagger: 0.2,
+              ease: "back.out(1.7)",
+            }
+          );
+        },
+      },
+      "-=0.5"
+    );
 
     // Hover animation for brand name
-    brand.addEventListener('mouseenter', () => {
+    brand.addEventListener("mouseenter", () => {
       gsap.to(brand, {
         scale: 1.1,
-        color: '#ff8c00',
+        color: "#ff8c00",
         duration: 0.3,
-        ease: 'power2.out'
+        ease: "power2.out",
       });
     });
 
-    brand.addEventListener('mouseleave', () => {
+    brand.addEventListener("mouseleave", () => {
       gsap.to(brand, {
         scale: 1,
-        color: document.body.classList.contains('dark-mode') ? '#ffffff' : '#000000',
+        color: document.body.classList.contains("dark-mode")
+          ? "#ffffff"
+          : "#000000",
         duration: 0.3,
-        ease: 'power2.out'
+        ease: "power2.out",
       });
     });
 
     // Update footer theme animation with enhanced transitions
     const updateFooterTheme = () => {
-      const isDarkMode = document.body.classList.contains('dark-mode');
+      const isDarkMode = document.body.classList.contains("dark-mode");
       const timeline = gsap.timeline();
 
       timeline
         .to(footer, {
-          backgroundColor: isDarkMode ? '#000000' : '#ffffff',
-          color: isDarkMode ? '#ffffff' : '#000000',
+          backgroundColor: isDarkMode ? "#000000" : "#ffffff",
+          color: isDarkMode ? "#ffffff" : "#000000",
           duration: 0.8,
-          ease: 'power2.inOut'
+          ease: "power2.inOut",
         })
-        .to(footer, {
-          borderTopColor: isDarkMode ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)',
-          duration: 0.5,
-          ease: 'power2.inOut'
-        }, '-=0.6')
-        .to(footer, {
-          boxShadow: isDarkMode ? 
-            '0 -2px 10px rgba(255,255,255,0.07)' : 
-            '0 -2px 10px rgba(0,0,0,0.07)',
-          duration: 0.7,
-          ease: 'power2.inOut'  
-        }, '-=0.4');
+        .to(
+          footer,
+          {
+            borderTopColor: isDarkMode
+              ? "rgba(255,255,255,0.15)"
+              : "rgba(0,0,0,0.15)",
+            duration: 0.5,
+            ease: "power2.inOut",
+          },
+          "-=0.6"
+        )
+        .to(
+          footer,
+          {
+            boxShadow: isDarkMode
+              ? "0 -2px 10px rgba(255,255,255,0.07)"
+              : "0 -2px 10px rgba(0,0,0,0.07)",
+            duration: 0.7,
+            ease: "power2.inOut",
+          },
+          "-=0.4"
+        );
     };
 
     // Initial theme setup
     updateFooterTheme();
 
     // Listen for theme changes
-    document.addEventListener('click', (e) => {
-      if (e.target.closest('.dark-mode-toggle')) {
+    document.addEventListener("click", (e) => {
+      if (e.target.closest(".dark-mode-toggle")) {
         updateFooterTheme();
       }
     });
@@ -128,7 +147,7 @@ export function footerComponent() {
     let lastScrollPosition = 0;
     let scrollTimeout;
 
-    window.addEventListener('scroll', () => {
+    window.addEventListener("scroll", () => {
       if (scrollTimeout) {
         window.cancelAnimationFrame(scrollTimeout);
       }
@@ -141,7 +160,7 @@ export function footerComponent() {
             y: 15,
             opacity: 0.9,
             duration: 0.4,
-            ease: 'power3.out'
+            ease: "power3.out",
           });
         } else {
           // Scrolling up - smooth show
@@ -149,10 +168,10 @@ export function footerComponent() {
             y: 0,
             opacity: 1,
             duration: 0.5,
-            ease: 'power2.out'
+            ease: "power2.out",
           });
         }
-        
+
         lastScrollPosition = currentScrollPosition;
       });
     });
@@ -161,9 +180,9 @@ export function footerComponent() {
     gsap.to(brand, {
       scale: 1.05,
       duration: 1.5,
-      ease: 'power1.inOut',
+      ease: "power1.inOut",
       yoyo: true,
-      repeat: -1
+      repeat: -1,
     });
   };
 

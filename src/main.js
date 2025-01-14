@@ -1,9 +1,9 @@
 import "./style.css";
 import { createBlogComponent } from "./components/createBlogComponent.js";
 import { footerComponent } from "./components/footerComponent.js"; // Import the footer component
-import { gsap } from 'gsap';
-import Lenis from 'lenis'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'; // Add this import
+import { gsap } from "gsap";
+import Lenis from "lenis";
+import { ScrollTrigger } from "gsap/ScrollTrigger"; // Add this import
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -55,162 +55,170 @@ window.initializeClerk = async function () {
 
 // Update the animation function with more varied durations
 function animateBlogs() {
-    // Get all blog cards
-    const blogCards = document.querySelectorAll('.blog-card');
-    
-    // Animate each blog card
-    blogCards.forEach((card, index) => {
-        // Initial state - move cards off screen and make them transparent
-        gsap.set(card, {
-            y: 100,
-            opacity: 0,
-            scale: 0.95
-        });
+  // Get all blog cards
+  const blogCards = document.querySelectorAll(".blog-card");
 
-        // Create scroll trigger animation
-        gsap.to(card, {
-            y: 0,
-            opacity: 1,
-            scale: 1,
-            duration: 0.8,
-            ease: "power3.out",
-            scrollTrigger: {
-                trigger: card,
-                start: "top bottom-=100", // Start animation when card is 100px from entering viewport
-                end: "top center",
-                toggleActions: "play none none reverse", // Play animation when entering, reverse when leaving
-                // markers: true, // Helpful for debugging
-            },
-            delay: index * 0.1 // Stagger the animations
-        });
-
-        // Animate blog elements separately
-        const title = card.querySelector('.blog-title');
-        const tags = card.querySelectorAll('.tag');
-        const excerpt = card.querySelector('.blog-excerpt');
-
-        if (title) {
-            gsap.from(title, {
-                x: -50,
-                opacity: 0,
-                duration: 0.6,
-                delay: index * 0.1 + 0.3,
-                ease: "power2.out",
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top bottom-=100",
-                    toggleActions: "play none none reverse"
-                }
-            });
-        }
-
-        if (tags.length) {
-            gsap.from(tags, {
-                y: 20,
-                opacity: 0,
-                duration: 0.4,
-                stagger: 0.1,
-                delay: index * 0.1 + 0.4,
-                ease: "back.out(1.7)",
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top bottom-=100",
-                    toggleActions: "play none none reverse"
-                }
-            });
-        }
-
-        if (excerpt) {
-            gsap.from(excerpt, {
-                y: 30,
-                opacity: 0,
-                duration: 0.6,
-                delay: index * 0.1 + 0.5,
-                ease: "power2.out",
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top bottom-=100",
-                    toggleActions: "play none none reverse"
-                }
-            });
-        }
-
-        // Add hover animation
-        card.addEventListener('mouseenter', () => {
-            gsap.to(card, {
-                scale: 1.02,
-                boxShadow: "0 10px 20px rgba(0,0,0,0.15)",
-                duration: 0.3,
-                ease: "power2.out"
-            });
-        });
-
-        card.addEventListener('mouseleave', () => {
-            gsap.to(card, {
-                scale: 1,
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                duration: 0.3,
-                ease: "power2.out"
-            });
-        });
+  // Animate each blog card
+  blogCards.forEach((card, index) => {
+    // Initial state - move cards off screen and make them transparent
+    gsap.set(card, {
+      y: 100,
+      opacity: 0,
+      scale: 0.95,
     });
 
-    // Add a reveal animation for the "No blogs" message if it exists
-    const noBlogsMessage = document.querySelector('.no-blogs');
-    if (noBlogsMessage) {
-        gsap.from(noBlogsMessage, {
-            y: 50,
-            opacity: 0,
-            duration: 0.8,
-            ease: "power3.out",
-            scrollTrigger: {
-                trigger: noBlogsMessage,
-                start: "top bottom-=100",
-                toggleActions: "play none none reverse"
-            }
-        });
+    // Create scroll trigger animation
+    gsap.to(card, {
+      y: 0,
+      opacity: 1,
+      scale: 1,
+      duration: 0.8,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: card,
+        start: "top bottom-=100", // Start animation when card is 100px from entering viewport
+        end: "top center",
+        toggleActions: "play none none reverse", // Play animation when entering, reverse when leaving
+        // markers: true, // Helpful for debugging
+      },
+      delay: index * 0.1, // Stagger the animations
+    });
+
+    // Animate blog elements separately
+    const title = card.querySelector(".blog-title");
+    const tags = card.querySelectorAll(".tag");
+    const excerpt = card.querySelector(".blog-excerpt");
+
+    if (title) {
+      gsap.from(title, {
+        x: -50,
+        opacity: 0,
+        duration: 0.6,
+        delay: index * 0.1 + 0.3,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: card,
+          start: "top bottom-=100",
+          toggleActions: "play none none reverse",
+        },
+      });
     }
+
+    if (tags.length) {
+      gsap.from(tags, {
+        y: 20,
+        opacity: 0,
+        duration: 0.4,
+        stagger: 0.1,
+        delay: index * 0.1 + 0.4,
+        ease: "back.out(1.7)",
+        scrollTrigger: {
+          trigger: card,
+          start: "top bottom-=100",
+          toggleActions: "play none none reverse",
+        },
+      });
+    }
+
+    if (excerpt) {
+      gsap.from(excerpt, {
+        y: 30,
+        opacity: 0,
+        duration: 0.6,
+        delay: index * 0.1 + 0.5,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: card,
+          start: "top bottom-=100",
+          toggleActions: "play none none reverse",
+        },
+      });
+    }
+
+    // Add hover animation
+    card.addEventListener("mouseenter", () => {
+      gsap.to(card, {
+        scale: 1.02,
+        boxShadow: "0 10px 20px rgba(0,0,0,0.15)",
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    });
+
+    card.addEventListener("mouseleave", () => {
+      gsap.to(card, {
+        scale: 1,
+        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    });
+  });
+
+  // Add a reveal animation for the "No blogs" message if it exists
+  const noBlogsMessage = document.querySelector(".no-blogs");
+  if (noBlogsMessage) {
+    gsap.from(noBlogsMessage, {
+      y: 50,
+      opacity: 0,
+      duration: 0.8,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: noBlogsMessage,
+        start: "top bottom-=100",
+        toggleActions: "play none none reverse",
+      },
+    });
+  }
 }
 
 // Make sure ScrollTrigger is refreshed when new blogs are added
 function refreshScrollTrigger() {
-    ScrollTrigger.refresh();
+  ScrollTrigger.refresh();
 }
 
 // Update displayBlogs function
 window.displayBlogs = function (filteredBlogs = null) {
-    const blogsContainer = document.getElementById("content");
-    const createBlogFormContainer = document.getElementById("createBlogFormContainer");
+  const blogsContainer = document.getElementById("content");
+  const createBlogFormContainer = document.getElementById(
+    "createBlogFormContainer"
+  );
 
-    if (!blogsContainer || createBlogFormContainer.style.display === "block") return;
+  if (!blogsContainer || createBlogFormContainer.style.display === "block")
+    return;
 
-    try {
-        // Use filtered blogs if provided, otherwise get all blogs
-        let blogs = filteredBlogs || JSON.parse(sessionStorage.getItem("blogs") || "[]");
-        blogsContainer.innerHTML = "";
+  try {
+    // Use filtered blogs if provided, otherwise get all blogs
+    let blogs =
+      filteredBlogs || JSON.parse(sessionStorage.getItem("blogs") || "[]");
+    blogsContainer.innerHTML = "";
 
-        if (blogs.length === 0) {
-            blogsContainer.innerHTML = `
+    if (blogs.length === 0) {
+      blogsContainer.innerHTML = `
                 <div class="no-blogs">
                     <h2>No blogs found</h2>
-                    <p>${filteredBlogs ? 'No matching results' : 'Be the first one to create a blog!'}</p>
+                    <p>${
+                      filteredBlogs
+                        ? "No matching results"
+                        : "Be the first one to create a blog!"
+                    }</p>
                 </div>`;
-            
-            gsap.from(".no-blogs", {
-                duration: 0.6,
-                y: 30,
-                opacity: 0,
-                ease: "power2.out"
-            });
-            return;
-        }
 
-        // Sort blogs by date (newest first)
-        blogs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      gsap.from(".no-blogs", {
+        duration: 0.6,
+        y: 30,
+        opacity: 0,
+        ease: "power2.out",
+      });
+      return;
+    }
 
-        blogsContainer.innerHTML = blogs
-          .map(
-            (blog) => `
+    // Sort blogs by date (newest first)
+    blogs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    blogsContainer.innerHTML = blogs
+      .map(
+        (blog) => `
                 <div class="blog-card">
                     <div class="blog-header">
                         <i class="fas fa-ellipsis-v menu-icon"></i>
@@ -234,9 +242,14 @@ window.displayBlogs = function (filteredBlogs = null) {
                         <h2 class="blog-title">${blog.title}</h2>
                         <div class="blog-metadata">
                             <span class="blog-author">${blog.author}</span>
-                            <span class="blog-date">${blog.updatedAt ? 
-                                `${new Date(blog.updatedAt).toLocaleDateString()}` : 
-                                `${new Date(blog.createdAt).toLocaleDateString()}`
+                            <span class="blog-date">${
+                              blog.updatedAt
+                                ? `${new Date(
+                                    blog.updatedAt
+                                  ).toLocaleDateString()}`
+                                : `${new Date(
+                                    blog.createdAt
+                                  ).toLocaleDateString()}`
                             }</span>
                         </div>
                         <div class="blog-category">${blog.category}</div>
@@ -251,60 +264,59 @@ window.displayBlogs = function (filteredBlogs = null) {
                     </div>
                 </div>
             `
-          )
-          .join("");
+      )
+      .join("");
 
-        // Add click listeners to menu icons
-        document.querySelectorAll(".menu-icon").forEach((icon) => {
-          icon.addEventListener("click", (e) => {
-            // Close any open dropdowns first
-            document.querySelectorAll(".menu-dropdown").forEach((dropdown) => {
-              if (dropdown !== e.target.nextElementSibling) {
-                dropdown.style.display = "none";
-              }
-            });
-
-            const dropdown = e.target.nextElementSibling;
-            dropdown.style.display =
-              dropdown.style.display === "block" ? "none" : "block";
-            e.stopPropagation();
-          });
-        });
-
-        // Close dropdowns when clicking outside
-        document.addEventListener("click", () => {
-          document.querySelectorAll(".menu-dropdown").forEach((dropdown) => {
+    // Add click listeners to menu icons
+    document.querySelectorAll(".menu-icon").forEach((icon) => {
+      icon.addEventListener("click", (e) => {
+        // Close any open dropdowns first
+        document.querySelectorAll(".menu-dropdown").forEach((dropdown) => {
+          if (dropdown !== e.target.nextElementSibling) {
             dropdown.style.display = "none";
-          });
+          }
         });
 
-        // Handle edit and delete actions
-        document.querySelectorAll(".edit-blog").forEach((link) => {
-          link.addEventListener("click", (e) => {
-            e.preventDefault();
-            const blogId = parseInt(e.target.dataset.id);
-            editBlog(blogId);
-          });
-        });
+        const dropdown = e.target.nextElementSibling;
+        dropdown.style.display =
+          dropdown.style.display === "block" ? "none" : "block";
+        e.stopPropagation();
+      });
+    });
 
-        document.querySelectorAll(".delete-blog").forEach((link) => {
-          link.addEventListener("click", (e) => {
-            e.preventDefault();
-            const blogId = parseInt(e.target.dataset.id);
-            if (confirm("Are you sure you want to delete this blog?")) {
-              deleteBlog(blogId);
-            }
-          });
-        });
+    // Close dropdowns when clicking outside
+    document.addEventListener("click", () => {
+      document.querySelectorAll(".menu-dropdown").forEach((dropdown) => {
+        dropdown.style.display = "none";
+      });
+    });
 
-        // After rendering blogs, animate them
-        animateBlogs();
-        refreshScrollTrigger();
+    // Handle edit and delete actions
+    document.querySelectorAll(".edit-blog").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const blogId = parseInt(e.target.dataset.id);
+        editBlog(blogId);
+      });
+    });
 
-    } catch (error) {
-        console.error("Error displaying blogs:", error);
-        blogsContainer.innerHTML = '<div class="error">Error loading blogs</div>';
-    }
+    document.querySelectorAll(".delete-blog").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const blogId = parseInt(e.target.dataset.id);
+        if (confirm("Are you sure you want to delete this blog?")) {
+          deleteBlog(blogId);
+        }
+      });
+    });
+
+    // After rendering blogs, animate them
+    animateBlogs();
+    refreshScrollTrigger();
+  } catch (error) {
+    console.error("Error displaying blogs:", error);
+    blogsContainer.innerHTML = '<div class="error">Error loading blogs</div>';
+  }
 };
 
 // Function to edit a blog
@@ -390,7 +402,7 @@ async function handleEditSubmit(e) {
     e.target.closest("#createBlogFormContainer").dataset.editBlogId
   );
   let blogs = JSON.parse(sessionStorage.getItem("blogs") || "[]");
-  const existingBlog = blogs.find(b => b.id === blogId);
+  const existingBlog = blogs.find((b) => b.id === blogId);
 
   // Get updated blog data
   const updatedBlog = {
@@ -402,7 +414,7 @@ async function handleEditSubmit(e) {
     coverImage: document.getElementById("coverImagePreview").src,
     author: window.Clerk?.user?.fullName || "Anonymous",
     createdAt: existingBlog?.createdAt || new Date().toISOString(), // Preserve original creation date
-    updatedAt: new Date().toISOString() // Add update date
+    updatedAt: new Date().toISOString(), // Add update date
   };
 
   // Remove old blog and add updated one
@@ -448,8 +460,8 @@ function deleteBlog(blogId) {
 }
 
 // Initialize when the page loads
-window.removeEventListener('load', initializeClerk);
-window.addEventListener('load', initializeClerk, { once: true });
+window.removeEventListener("load", initializeClerk);
+window.addEventListener("load", initializeClerk, { once: true });
 
 // Function to initialize editor functionality
 function initializeEditor() {
@@ -596,36 +608,36 @@ document.addEventListener("DOMContentLoaded", () => {
         stagger: 0.15,
         ease: "power2.inOut",
         onComplete: () => {
-            navbar.style.display = "none";
-            content.style.display = "none";
-            
-            if (createBlogFormContainer) {
-                const { template, initializeCreateBlog } = createBlogComponent();
-                createBlogFormContainer.innerHTML = template;
-                createBlogFormContainer.style.display = "block";
-                
-                gsap.from(createBlogFormContainer, {
-                    duration: 0.8,
-                    opacity: 0,
-                    y: 50,
-                    ease: "power3.out"
-                });
+          navbar.style.display = "none";
+          content.style.display = "none";
 
-                // Animate form elements
-                gsap.from(".form-group", {
-                    duration: 0.6,
-                    y: 30,
-                    opacity: 0,
-                    stagger: 0.1,
-                    delay: 0.2,
-                    ease: "power2.out"
-                });
+          if (createBlogFormContainer) {
+            const { template, initializeCreateBlog } = createBlogComponent();
+            createBlogFormContainer.innerHTML = template;
+            createBlogFormContainer.style.display = "block";
 
-                initializeCreateBlog();
-                initializeEditor();
-                initializeTagsInput();
-            }
-        }
+            gsap.from(createBlogFormContainer, {
+              duration: 0.8,
+              opacity: 0,
+              y: 50,
+              ease: "power3.out",
+            });
+
+            // Animate form elements
+            gsap.from(".form-group", {
+              duration: 0.6,
+              y: 30,
+              opacity: 0,
+              stagger: 0.1,
+              delay: 0.2,
+              ease: "power2.out",
+            });
+
+            initializeCreateBlog();
+            initializeEditor();
+            initializeTagsInput();
+          }
+        },
       });
     });
   }
@@ -663,7 +675,6 @@ function initializeTagsInput() {
 
     const searchTerm = input.toLowerCase();
     const selectedCategory = categorySelect.value;
-
 
     // Filter tags based on search term
     const filteredTags = categorySpecificTags
@@ -893,93 +904,99 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Update the cancel button handler in createBlogComponent
 function handleCancelBlog() {
-    const createBlogFormContainer = document.getElementById("createBlogFormContainer");
-    const navbar = document.querySelector(".navbar");
-    const content = document.getElementById("content");
+  const createBlogFormContainer = document.getElementById(
+    "createBlogFormContainer"
+  );
+  const navbar = document.querySelector(".navbar");
+  const content = document.getElementById("content");
 
-    gsap.to(createBlogFormContainer, {
-        duration: 0.5,
+  gsap.to(createBlogFormContainer, {
+    duration: 0.5,
+    opacity: 0,
+    y: -30,
+    ease: "power2.inOut",
+    onComplete: () => {
+      createBlogFormContainer.style.display = "none";
+      navbar.style.display = "block";
+      content.style.display = "block";
+
+      gsap.from([navbar, content], {
+        duration: 0.7,
         opacity: 0,
-        y: -30,
-        ease: "power2.inOut",
-        onComplete: () => {
-            createBlogFormContainer.style.display = "none";
-            navbar.style.display = "block";
-            content.style.display = "block";
-
-            gsap.from([navbar, content], {
-                duration: 0.7,
-                opacity: 0,
-                y: 30,
-                stagger: 0.2,
-                ease: "power3.out"
-            });
-        }
-    });
+        y: 30,
+        stagger: 0.2,
+        ease: "power3.out",
+      });
+    },
+  });
 }
 
 // Update form submit handler in initializeCreateBlog
 const handleCreateBlog = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    // Get form data and save blog
-    const formData = {
-        id: Date.now(),
-        title: document.getElementById("title").value,
-        content: document.getElementById("editor").innerHTML,
-        category: document.getElementById("category").value,
-        tags: JSON.parse(document.getElementById("tags-hidden").value || "[]"),
-        coverImage: document.getElementById("coverImagePreview").src,
-        createdAt: new Date().toISOString(),
-        author: window.Clerk?.user?.fullName || "Anonymous"
-    };
+  // Get form data and save blog
+  const formData = {
+    id: Date.now(),
+    title: document.getElementById("title").value,
+    content: document.getElementById("editor").innerHTML,
+    category: document.getElementById("category").value,
+    tags: JSON.parse(document.getElementById("tags-hidden").value || "[]"),
+    coverImage: document.getElementById("coverImagePreview").src,
+    createdAt: new Date().toISOString(),
+    author: window.Clerk?.user?.fullName || "Anonymous",
+  };
 
-    // Get existing blogs and add new one
-    let blogs = JSON.parse(sessionStorage.getItem("blogs") || "[]");
-    blogs.push(formData);
-    sessionStorage.setItem("blogs", JSON.stringify(blogs));
+  // Get existing blogs and add new one
+  let blogs = JSON.parse(sessionStorage.getItem("blogs") || "[]");
+  blogs.push(formData);
+  sessionStorage.setItem("blogs", JSON.stringify(blogs));
 
-    // Animate out create blog form
-    const createBlogFormContainer = document.getElementById("createBlogFormContainer");
-    const navbar = document.querySelector(".navbar");
-    const content = document.getElementById("content");
+  // Animate out create blog form
+  const createBlogFormContainer = document.getElementById(
+    "createBlogFormContainer"
+  );
+  const navbar = document.querySelector(".navbar");
+  const content = document.getElementById("content");
 
-    gsap.to(createBlogFormContainer, {
-        duration: 0.5,
+  gsap.to(createBlogFormContainer, {
+    duration: 0.5,
+    opacity: 0,
+    y: -30,
+    ease: "power2.inOut",
+    onComplete: () => {
+      // Hide form and show navbar/content
+      createBlogFormContainer.style.display = "none";
+      navbar.style.display = "block";
+      content.style.display = "block";
+
+      // Reset form
+      createBlogFormContainer.innerHTML = "";
+
+      // Animate in navbar and content
+      gsap.from([navbar, content], {
+        duration: 0.7,
         opacity: 0,
-        y: -30,
-        ease: "power2.inOut",
+        y: 30,
+        stagger: 0.2,
+        ease: "power3.out",
         onComplete: () => {
-            // Hide form and show navbar/content
-            createBlogFormContainer.style.display = "none";
-            navbar.style.display = "block";
-            content.style.display = "block";
-            
-            // Reset form
-            createBlogFormContainer.innerHTML = "";
-            
-            // Animate in navbar and content
-            gsap.from([navbar, content], {
-                duration: 0.7,
-                opacity: 0,
-                y: 30,
-                stagger: 0.2,
-                ease: "power3.out",
-                onComplete: () => {
-                    // Display blogs after animation completes
-                    displayBlogs();
-                }
-            });
-        }
-    });
+          // Display blogs after animation completes
+          displayBlogs();
+        },
+      });
+    },
+  });
 };
 
 // Add this to your existing initialization code
-document.addEventListener('DOMContentLoaded', () => {
-    const createBlogFormContainer = document.getElementById('createBlogFormContainer');
-    if (createBlogFormContainer) {
-        initializeTagsInput();
-    }
+document.addEventListener("DOMContentLoaded", () => {
+  const createBlogFormContainer = document.getElementById(
+    "createBlogFormContainer"
+  );
+  if (createBlogFormContainer) {
+    initializeTagsInput();
+  }
 });
 
 // Function to filter blogs based on search query
@@ -987,10 +1004,12 @@ function filterBlogs(query) {
   const blogs = JSON.parse(sessionStorage.getItem("blogs") || "[]");
   const lowerCaseQuery = query.toLowerCase();
 
-  return blogs.filter(blog => {
+  return blogs.filter((blog) => {
     const titleMatch = blog.title.toLowerCase().includes(lowerCaseQuery);
     const categoryMatch = blog.category.toLowerCase().includes(lowerCaseQuery);
-    const tagsMatch = blog.tags.some(tag => tag.toLowerCase().includes(lowerCaseQuery));
+    const tagsMatch = blog.tags.some((tag) =>
+      tag.toLowerCase().includes(lowerCaseQuery)
+    );
     return titleMatch || categoryMatch || tagsMatch;
   });
 }
@@ -1003,16 +1022,20 @@ function displaySearchResults(results) {
   if (results.length === 0) {
     searchResultsContainer.innerHTML = `<div class="search-result-item">No results found</div>`;
   } else {
-    searchResultsContainer.innerHTML = results.map(blog => `
+    searchResultsContainer.innerHTML = results
+      .map(
+        (blog) => `
       <div class="search-result-item" data-id="${blog.id}">
         <i class="fas fa-file-alt"></i>
         <div>
           <div><strong>${blog.title}</strong></div>
           <div>${blog.category}</div>
-          <div>${blog.tags.map(tag => `#${tag}`).join(", ")}</div>
+          <div>${blog.tags.map((tag) => `#${tag}`).join(", ")}</div>
         </div>
       </div>
-    `).join("");
+    `
+      )
+      .join("");
   }
 
   searchResultsContainer.style.display = "block";
@@ -1028,7 +1051,9 @@ function initializeSearch() {
     const resultItem = e.target.closest(".search-result-item");
     if (resultItem) {
       const blogId = resultItem.dataset.id;
-      const blog = JSON.parse(sessionStorage.getItem("blogs") || "[]").find(b => b.id === parseInt(blogId));
+      const blog = JSON.parse(sessionStorage.getItem("blogs") || "[]").find(
+        (b) => b.id === parseInt(blogId)
+      );
       if (blog) {
         displayBlogs([blog]);
       }

@@ -717,13 +717,11 @@ nts */ .form-group {
   position: relative;
 }
 
-
 .blog-content ul,
 .blog-content ol {
   margin: 15px 0;
   padding-left: 1.5rem;
 }
-
 
 .blog-excerpt {
   color: #555;
@@ -756,7 +754,6 @@ nts */ .form-group {
   font-size: 14px;
 }
 
-
 /* Fix for iOS Safari 100vh issue */
 @supports (-webkit-touch-callout: none) {
   #sign-in {
@@ -766,7 +763,6 @@ nts */ .form-group {
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
-
 
 /* Menu dropdown styles */
 .menu-dropdown {
@@ -805,7 +801,7 @@ nts */ .form-group {
 
 .menu-icon {
   cursor: pointer;
-  padding: .5rem;
+  padding: 0.5rem;
   font-size: 18px;
   color: #666;
   transition: color 0.3s ease;
@@ -830,12 +826,11 @@ nts */ .form-group {
   overflow: hidden;
 }
 
-
 /* Menu positioning */
 .blog-header {
   position: absolute;
-  top: .2rem;
-  right: .2rem;
+  top: 0.2rem;
+  right: 0.2rem;
   z-index: 10;
 }
 
@@ -891,9 +886,7 @@ nts */ .form-group {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: calc(
-    100vh - 100px - 64px
-  );
+  min-height: calc(100vh - 100px - 64px);
   text-align: center;
 }
 
@@ -1247,7 +1240,7 @@ nts */ .form-group {
   .search-bar input {
     height: 2rem;
     width: 100%;
-    padding: 0 .5rem;
+    padding: 0 0.5rem;
     margin-right: 0;
     border-radius: 1rem;
   }
@@ -1262,7 +1255,7 @@ nts */ .form-group {
     z-index: 1000;
   }
   .blog-card {
-    margin: 1rem .5rem;
+    margin: 1rem 0.5rem;
   }
   .create-blog-container {
     margin: 0.5rem auto;
@@ -1270,7 +1263,7 @@ nts */ .form-group {
   }
 
   #createBlogFormContainer {
-    margin: .5rem;
+    margin: 0.5rem;
     padding: 0;
   }
   .editor-btn {
@@ -1278,7 +1271,7 @@ nts */ .form-group {
     flex-shrink: 0;
   }
   .editor-toolbar {
-    gap: .57rem;
+    gap: 0.57rem;
     flex-wrap: wrap;
   }
   #user-button {
@@ -1364,7 +1357,7 @@ nts */ .form-group {
   .search-bar input {
     height: 2rem;
     width: 100%;
-    padding: 0 .5rem;
+    padding: 0 0.5rem;
     margin-right: 0;
     border-radius: 1rem;
   }
@@ -1387,7 +1380,7 @@ nts */ .form-group {
   }
 
   #createBlogFormContainer {
-    margin: .5rem;
+    margin: 0.5rem;
     padding: 0;
   }
   .editor-btn {
@@ -1395,7 +1388,7 @@ nts */ .form-group {
     flex-shrink: 0;
   }
   .editor-toolbar {
-    gap: .57rem;
+    gap: 0.57rem;
     flex-wrap: wrap;
   }
   #user-button {
@@ -1418,4 +1411,3 @@ nts */ .form-group {
     font-size: 1rem;
   }
 }
-
