@@ -1411,3 +1411,37 @@ nts */ .form-group {
     font-size: 1rem;
   }
 }
+@media (max-width: 1024px) and (min-width: 769px) {
+  .search-bar i {
+    top: 50%;
+    left: 90%;
+  }
+  .search-bar {
+    position: absolute;
+    top: 1rem;
+    left: 30%;
+    width: 40%;
+  }
+
+  .search-bar input {
+    height: 2rem;
+    width: 100%;
+    padding: 0 0.5rem;
+    margin-right: 0;
+    border-radius: 1rem;
+  }
+  .create-blog-btn {
+    position: absolute;
+    margin: 0;
+    top: 3.5rem;
+    left: 80%;
+    transform: translate(-50%, -130%);
+    padding: 0.5rem 1rem;
+    z-index: 1000;
+  }
+  #user-button {
+    position: absolute;
+    top: 1rem;
+    right: 4rem;
+  }
+}

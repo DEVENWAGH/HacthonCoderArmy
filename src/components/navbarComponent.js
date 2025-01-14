@@ -132,17 +132,17 @@ export function navbarComponent() {
         opacity: 0,
         y: -50, // Start from top
       });
-
-      gsap.set(".nav-links li", {
-        opacity: 0,
-        y: -50, // Start from top
-      });
-
-      gsap.set([".user-profile", ".dark-mode-toggle"], {
-        opacity: 0,
-        y: -50, // Start from top
-      });
-
+      if (window.innerWidth <= 768) {
+        gsap.set([".user-profile", ".dark-mode-toggle"], {
+          opacity: 0,
+          y: -100,
+        });
+      } else {
+        gsap.set([".user-profile", ".dark-mode-toggle"], {
+          opacity: 0,
+          y: -50,
+        });
+      }
       // Animation timeline
       const tl = gsap.timeline({
         defaults: {
@@ -181,31 +181,29 @@ export function navbarComponent() {
             opacity: 1,
             duration: 1,
             clearProps: "transform",
-          },
-          "-=0.8"
-        ) // Overlap with logo animation
-        .to(
-          ".nav-links li",
-          {
-            y: 0,
+          }
+        )
+        if (window.innerWidth <= 768) {
+          tl.to([".user-profile", ".dark-mode-toggle"], {
+            y: -60,
             opacity: 1,
             duration: 0.8,
             stagger: 0.2,
             clearProps: "transform",
-          },
-          "-=0.6"
-        ) // Overlap with search bar
-        .to(
-          [".user-profile", ".dark-mode-toggle"],
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.2,
-            clearProps: "transform",
-          },
-          "-=0.4"
-        ); // Overlap with nav links
+          });
+        } else {
+          tl.to(
+            [".user-profile", ".dark-mode-toggle"],
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.8,
+              stagger: 0.2,
+              clearProps: "transform",
+            },
+            "-=0.4"
+          );
+        }
     };
 
     // Run animation only once
