@@ -41,6 +41,20 @@ window.initializeClerk = async function () {
       afterSignOutUrl: import.meta.env.VITE_CLERK_AFTER_SIGN_OUT_URL,
     });
 
+    // Add auth state change listener with state tracking
+    let isRedirecting = false;
+    Clerk.addListener(({ user }) => {
+      if (isRedirecting) return; // Prevent multiple redirects
+      isRedirecting = true;
+      
+      if (!user) {
+        // Clear storage and redirect
+        sessionStorage.clear();
+        localStorage.clear();
+        window.location.replace(import.meta.env.VITE_CLERK_AFTER_SIGN_OUT_URL);
+      }
+    });
+
     if (Clerk.user) {
       // User is authenticated
       const { navbarComponent } = await import(
@@ -59,15 +73,6 @@ window.initializeClerk = async function () {
       `;
       Clerk.mountSignIn(document.getElementById("sign-in"));
     }
-
-    // Add auth state change listener
-    Clerk.addListener(({ user }) => {
-      if (user) {
-        window.location.reload();
-      } else {
-        window.location.href = import.meta.env.VITE_CLERK_AFTER_SIGN_OUT_URL;
-      }
-    });
   } catch (error) {
     console.error("Failed to initialize Clerk:", error);
   }

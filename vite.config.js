@@ -10,6 +10,7 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    host: true
+    host: true,
+    strictPort: true // This ensures Vite only uses port 3000
   }
 });
