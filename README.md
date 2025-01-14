@@ -24,12 +24,6 @@ EchoBlogs is a lightning-fast, modern blogging platform built with vanilla JavaS
 
 ## ✨ Key Features
 
-### 🔐 Authentication
-
-- Secure login/signup via Clerk
-- Protected content
-- User profiles
-
 ### 📝 Rich Text Editor
 
 - Keyboard shortcuts (Ctrl/Cmd + B/I/U)
@@ -74,16 +68,15 @@ npm run dev
 
 ### Creating a Blog
 
-1. Login with Clerk
-2. Click "Create Blog"
-3. Add title, content & cover image
-4. Use formatting toolbar or keyboard shortcuts:
+1. Click "Create Blog"
+2. Add title, content & cover image
+3. Use formatting toolbar or keyboard shortcuts:
    - Bold: Ctrl/⌘ + B
    - Italic: Ctrl/⌘ + I
    - Underline: Ctrl/⌘ + U
    - Lists: Ctrl/⌘ + 1/8
-5. Add tags (up to 5)
-6. Save draft or publish
+4. Add tags (up to 5)
+. Save draft or publish
 
 ### Managing Content
 
@@ -97,7 +90,6 @@ npm run dev
 - HTML5 & CSS3
 - Vanilla JavaScript (ES6+)
 - GSAP Animation
-- Clerk Auth
 - Vite
 - LocalStorage/SessionStorage
 
