@@ -38,11 +38,11 @@ class BlogManager {
     if (isDark) {
       document.documentElement.classList.add("dark");
       document.documentElement.setAttribute("data-theme", "dark");
-      this.modeIcon.className = "text-xl fas fa-sun dark:text-white";
+      this.modeIcon.className = "text-4xl fas fa-sun dark:text-white";
     } else {
       document.documentElement.classList.remove("dark");
       document.documentElement.removeAttribute("data-theme");
-      this.modeIcon.className = "text-xl fas fa-moon dark:text-white";
+      this.modeIcon.className = "text-4xl fas fa-moon dark:text-white";
     }
   }
 
@@ -52,12 +52,12 @@ class BlogManager {
     if (isDark) {
       document.documentElement.classList.remove("dark");
       document.documentElement.removeAttribute("data-theme");
-      this.modeIcon.className = "text-xl fas fa-moon dark:text-white";
+      this.modeIcon.className = "text-4xl fas fa-moon dark:text-white";
       localStorage.setItem("theme", "light");
     } else {
       document.documentElement.classList.add("dark");
       document.documentElement.setAttribute("data-theme", "dark");
-      this.modeIcon.className = "text-xl fas fa-sun dark:text-white";
+      this.modeIcon.className = "text-4xl fas fa-sun dark:text-white";
       localStorage.setItem("theme", "dark");
     }
   }
