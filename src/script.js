@@ -1,93 +1,75 @@
-import { gsap } from "gsap";
-import Lenis from "lenis";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-// Register GSAP plugins
-gsap.registerPlugin(ScrollTrigger);
-
-// Initialize smooth scroll
-const lenis = new Lenis();
-function raf(time) {
-  lenis.raf(time);
-  requestAnimationFrame(raf);
-}
-requestAnimationFrame(raf);
-
 class BlogManager {
   constructor() {
+    this.darkModeToggle = document.getElementById("darkModeToggle");
+    this.modeIcon = document.getElementById("mode-icon");
+    console.log("Dark mode toggle button:", this.darkModeToggle);
+    console.log("Mode icon:", this.modeIcon);
     this.initializeEventListeners();
-    this.setupAnimations();
   }
 
   initializeEventListeners() {
     // Create blog button
-    document.querySelector('.create-blog-btn')?.addEventListener('click', () => this.showCreateBlogForm());
-    
-    // Dark mode toggle 
-    document.querySelector('.dark-mode-toggle')?.addEventListener('click', () => this.toggleDarkMode());
-    
+    document
+      .querySelector(".create-blog-btn")
+      ?.addEventListener("click", () => this.showCreateBlogForm());
+
+    // Dark mode toggle
+    this.darkModeToggle?.addEventListener("click", () => {
+      console.log("Dark mode toggle clicked");
+      this.toggleDarkMode();
+    });
+
     // Search functionality
-    document.getElementById('search-input')?.addEventListener('input', (e) => this.handleSearch(e.target.value));
-    
+    document
+      .getElementById("search-input")
+      ?.addEventListener("input", (e) => this.handleSearch(e.target.value));
+
     this.loadSavedTheme();
     this.displayBlogs();
   }
 
   loadSavedTheme() {
-    document.documentElement.classList.toggle(
-      'dark',
-      localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-    );
-    if (document.documentElement.classList.contains('dark')) {
-      document.getElementById('mode-icon').classList.replace('fa-moon', 'fa-sun');
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    const savedTheme = localStorage.getItem("theme");
+    const isDark = savedTheme === "dark" || (!savedTheme && prefersDark);
+
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+      document.documentElement.setAttribute("data-theme", "dark");
+      this.modeIcon.className = "text-xl fas fa-sun dark:text-white";
+    } else {
+      document.documentElement.classList.remove("dark");
+      document.documentElement.removeAttribute("data-theme");
+      this.modeIcon.className = "text-xl fas fa-moon dark:text-white";
     }
   }
 
   toggleDarkMode() {
-    const isDark = document.documentElement.classList.toggle('dark');
-    document.getElementById('mode-icon').classList.toggle('fa-moon', !isDark);
-    document.getElementById('mode-icon').classList.toggle('fa-sun', isDark);
-    localStorage.theme = isDark ? 'dark' : 'light';
-  }
+    const isDark = document.documentElement.classList.contains("dark");
 
-  setupAnimations() {
-    gsap.fromTo('.blog-card', 
-      { y: 50, opacity: 0 },
-      { 
-        y: 0, 
-        opacity: 1, 
-        duration: 0.6,
-        stagger: 0.2,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: '.blog-card',
-          start: "top bottom-=100",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
+    if (isDark) {
+      document.documentElement.classList.remove("dark");
+      document.documentElement.removeAttribute("data-theme");
+      this.modeIcon.className = "text-xl fas fa-moon dark:text-white";
+      localStorage.setItem("theme", "light");
+    } else {
+      document.documentElement.classList.add("dark");
+      document.documentElement.setAttribute("data-theme", "dark");
+      this.modeIcon.className = "text-xl fas fa-sun dark:text-white";
+      localStorage.setItem("theme", "dark");
+    }
   }
 
   showCreateBlogForm() {
-    const content = document.getElementById('content');
-    const form = document.getElementById('createBlogFormContainer');
+    const content = document.getElementById("content");
+    const form = document.getElementById("createBlogFormContainer");
 
-    gsap.to(content, {
-      opacity: 0,
-      y: -20,
-      duration: 0.3,
-      onComplete: () => {
-        content.style.display = 'none';
-        form.style.display = 'block';
-        form.innerHTML = this.getCreateBlogFormTemplate();
-        this.initializeCreateBlogForm();
-        gsap.from(form, {
-          opacity: 0,
-          y: 20,
-          duration: 0.3
-        });
-      }
-    });
+    content.style.display = "none";
+    form.style.display = "block";
+    form.innerHTML = this.getCreateBlogFormTemplate();
+    this.initializeCreateBlogForm();
   }
 
   getCreateBlogFormTemplate() {
@@ -164,125 +146,172 @@ class BlogManager {
   }
 
   initializeCreateBlogForm() {
-    const form = document.querySelector('form');
-    const tagInput = document.getElementById('tag-input');
-    const tagsContainer = document.getElementById('tags-container');
+    const form = document.querySelector("form");
+    const tagInput = document.getElementById("tag-input");
+    const tagsContainer = document.getElementById("tags-container");
     const tags = new Set();
 
+    const getElementForCommand = (command) => {
+      const commandMap = {
+        bold: "strong",
+        italic: "em",
+        underline: "u",
+        insertOrderedList: "ol",
+        insertUnorderedList: "ul",
+      };
+      return commandMap[command] || "span";
+    };
+
     // Initialize rich text editor buttons
-    document.querySelectorAll('.editor-btn').forEach(button => {
-      button.addEventListener('click', () => {
-        const command = button.dataset.command;
-        if (command === 'createLink') {
-          const url = prompt('Enter URL:');
-          if (url) document.execCommand(command, false, url);
-        } else {
-          document.execCommand(command, false, null);
+    const editor = document.getElementById("editor");
+    editor.designMode = "on";
+    document.querySelectorAll(".editor-btn").forEach((button) => {
+      const command = button.getAttribute("data-command");
+      button.addEventListener("click", () => {
+        try {
+          const selection = window.getSelection();
+          if (selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
+            const element = document.createElement(
+              getElementForCommand(command)
+            );
+            range.surroundContents(element);
+          } else {
+            console.warn("No text selected for formatting");
+          }
+        } catch (e) {
+          console.warn(`Format command ${command} not supported: ${e}`);
+        }
+        try {
+          const selection = window.getSelection();
+          if (selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
+            if (command === "createLink") {
+              const url = prompt("Enter URL:");
+              if (url) {
+                const link = document.createElement("a");
+                link.href = url;
+                range.surroundContents(link);
+              }
+            } else {
+              const element = document.createElement(
+                getElementForCommand(command)
+              );
+              range.surroundContents(element);
+            }
+          } else {
+            console.warn("No text selected for formatting");
+          }
+        } catch (e) {
+          console.warn(`Format command ${command} not supported: ${e}`);
         }
       });
     });
 
     // Handle image upload
-    document.getElementById('coverImage').addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const img = document.createElement('img');
-          img.src = event.target.result;
-          img.classList.add('w-full', 'h-48', 'object-cover', 'rounded-lg');
-          const uploadArea = e.target.parentElement;
-          uploadArea.innerHTML = '';
-          uploadArea.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-      }
-    });
+    const coverImageInput = document.getElementById("coverImage");
+    if (coverImageInput) {
+      coverImageInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const img = document.createElement("img");
+            img.src = event.target.result;
+            img.classList.add("w-full", "h-48", "object-cover", "rounded-lg");
+            const uploadArea = e.target.parentElement;
+            uploadArea.innerHTML = "";
+            uploadArea.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
 
     // Handle tags
-    tagInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
+    tagInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
         e.preventDefault();
         const tag = tagInput.value.trim();
         if (tag && !tags.has(tag)) {
           tags.add(tag);
-          const tagElement = document.createElement('span');
-          tagElement.classList.add('inline-flex', 'items-center', 'gap-1', 'px-3', 'py-1', 'bg-gray-200', 'dark:bg-gray-700', 'rounded-full');
+          const tagElement = document.createElement("span");
+          tagElement.classList.add(
+            "inline-flex",
+            "items-center",
+            "gap-1",
+            "px-3",
+            "py-1",
+            "bg-gray-200",
+            "dark:bg-gray-700",
+            "rounded-full"
+          );
           tagElement.innerHTML = `
             ${tag}
             <button type="button" class="text-gray-500 hover:text-gray-700">×</button>
           `;
-          tagElement.querySelector('button').addEventListener('click', () => {
+          tagElement.querySelector("button").addEventListener("click", () => {
             tags.delete(tag);
             tagElement.remove();
           });
           tagsContainer.insertBefore(tagElement, tagInput);
-          tagInput.value = '';
+          tagInput.value = "";
         }
       }
     });
 
     // Handle form submission with enhanced data
-    form.addEventListener('submit', (e) => this.handleBlogSubmit(e, Array.from(tags)));
+    form.addEventListener("submit", (e) =>
+      this.handleBlogSubmit(e, Array.from(tags))
+    );
 
     // Handle cancel
-    form.querySelectorAll('.cancel-btn').forEach(btn => {
-      btn.addEventListener('click', () => this.hideCreateBlogForm());
+    form.querySelectorAll(".cancel-btn").forEach((btn) => {
+      btn.addEventListener("click", () => this.hideCreateBlogForm());
     });
   }
 
   handleBlogSubmit(e, tags) {
     e.preventDefault();
-    
-    const coverImageInput = document.getElementById('coverImage');
-    const coverImage = coverImageInput.files[0] ? 
-      coverImageInput.parentElement.querySelector('img').src : 
-      null;
+
+    const coverImageInput = document.getElementById("coverImage");
+    const coverImage = coverImageInput.files[0]
+      ? coverImageInput.parentElement.querySelector("img").src
+      : null;
 
     const blog = {
       id: Date.now(),
-      title: document.getElementById('title').value,
-      category: document.getElementById('category').value,
-      content: document.querySelector('.prose-editor').innerHTML,
+      title: document.getElementById("title").value,
+      category: document.getElementById("category").value,
+      content: document.querySelector(".prose-editor").innerHTML,
       coverImage,
       tags,
       createdAt: new Date().toISOString(),
       author: "Anonymous",
       likes: 0,
-      comments: []
+      comments: [],
     };
 
-    let blogs = JSON.parse(localStorage.getItem('blogs') || '[]');
+    let blogs = JSON.parse(localStorage.getItem("blogs") || "[]");
     blogs.unshift(blog); // Add new blog at the beginning
-    localStorage.setItem('blogs', JSON.stringify(blogs));
+    localStorage.setItem("blogs", JSON.stringify(blogs));
 
     this.hideCreateBlogForm();
     this.displayBlogs();
   }
 
   hideCreateBlogForm() {
-    const content = document.getElementById('content');
-    const form = document.getElementById('createBlogFormContainer');
+    const content = document.getElementById("content");
+    const form = document.getElementById("createBlogFormContainer");
 
-    gsap.to(form, {
-      opacity: 0,
-      y: -20,
-      duration: 0.3,
-      onComplete: () => {
-        form.style.display = 'none';
-        content.style.display = 'block';
-        gsap.from(content, {
-          opacity: 0,
-          y: 20,
-          duration: 0.3
-        });
-      }
-    });
+    form.style.display = "none";
+    content.style.display = "block";
   }
 
   displayBlogs(blogsToShow) {
-    const content = document.getElementById('content');
-    const blogs = blogsToShow || JSON.parse(localStorage.getItem('blogs') || '[]');
+    const content = document.getElementById("content");
+    const blogs =
+      blogsToShow || JSON.parse(localStorage.getItem("blogs") || "[]");
 
     if (blogs.length === 0) {
       content.innerHTML = `
@@ -294,16 +323,19 @@ class BlogManager {
       return;
     }
 
-    content.innerHTML = blogs.map(blog => `
+    content.innerHTML = blogs
+      .map(
+        (blog) => `
       <article class="blog-card bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-all duration-200 hover:shadow-xl">
-        ${blog.coverImage ? 
-          `<img src="${blog.coverImage}" class="w-full h-48 object-cover">` : 
-          ''
+        ${
+          blog.coverImage
+            ? `<img src="${blog.coverImage}" class="w-full h-48 object-cover">`
+            : ""
         }
         <div class="p-6">
           <div class="flex items-center gap-4 mb-4">
             <span class="px-3 py-1 text-sm bg-orange-100 text-orange-800 rounded-full">
-              ${blog.category || 'Uncategorized'}
+              ${blog.category || "Uncategorized"}
             </span>
             <div class="flex items-center text-gray-500">
               <i class="fas fa-heart mr-1"></i>
@@ -314,15 +346,23 @@ class BlogManager {
           <h2 class="text-2xl font-bold mb-4">${blog.title}</h2>
           <div class="prose dark:prose-invert mb-4">${blog.content}</div>
           
-          ${blog.tags && blog.tags.length > 0 ? `
+          ${
+            blog.tags && blog.tags.length > 0
+              ? `
             <div class="flex flex-wrap gap-2 mb-4">
-              ${blog.tags.map(tag => `
+              ${blog.tags
+                .map(
+                  (tag) => `
                 <span class="px-2 py-1 text-sm bg-gray-200 dark:bg-gray-700 rounded-full">
                   ${tag}
                 </span>
-              `).join('')}
+              `
+                )
+                .join("")}
             </div>
-          ` : ''}
+          `
+              : ""
+          }
 
           <div class="flex items-center justify-between mt-4 text-sm text-gray-600 dark:text-gray-400">
             <span>Posted by ${blog.author}</span>
@@ -330,9 +370,9 @@ class BlogManager {
           </div>
         </div>
       </article>
-    `).join('');
-
-    this.setupAnimations();
+    `
+      )
+      .join("");
   }
 
   handleSearch(query) {
@@ -341,8 +381,8 @@ class BlogManager {
       return;
     }
 
-    const blogs = JSON.parse(localStorage.getItem('blogs') || '[]');
-    const results = blogs.filter(blog => {
+    const blogs = JSON.parse(localStorage.getItem("blogs") || "[]");
+    const results = blogs.filter((blog) => {
       const searchText = `${blog.title} ${blog.content}`.toLowerCase();
       return searchText.includes(query.toLowerCase());
     });
@@ -352,6 +392,6 @@ class BlogManager {
 }
 
 // Initialize the application
-document.addEventListener('DOMContentLoaded', () => {
-  new BlogManager();
+document.addEventListener("DOMContentLoaded", () => {
+  const blogManager = new BlogManager();
 });

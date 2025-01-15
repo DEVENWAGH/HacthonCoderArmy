@@ -6,18 +6,18 @@
     <meta name="description" content="EchoBlogs - A modern blogging platform" />
     <title>EchoBlogs</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="stylesheet" href="/src/output.css" />
+    <link rel="stylesheet" href="./src/output.css" />
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
       rel="stylesheet"
     />
     <script>
-      document.documentElement.classList.toggle(
-        "dark",
-        localStorage.theme === "dark" ||
-          (!("theme" in localStorage) &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches)
-      );
+      // Check for dark mode preference
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
     </script>
   </head>
   <body
@@ -26,7 +26,7 @@
     <div class="flex flex-col min-h-screen">
       <header>
         <nav
-          class="transition-colors duration-200 bg-white shadow-md dark:bg-black"
+          class="bg-white dark:bg-red-600"
         >
           <div
             class="container flex items-center justify-between px-4 py-2 mx-auto"
@@ -43,7 +43,7 @@
               <input
                 type="text"
                 id="search-input"
-                class="w-full p-2 pl-4 pr-10 bg-gray-100 rounded-lg dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                class="w-full p-2 pl-4 pr-10 bg-gray-100 rounded-lg dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 placeholder="Search posts..."
               />
               <i
@@ -58,9 +58,11 @@
                 Create Blog
               </button>
               <button
-                class="p-2 transition-colors duration-200 rounded-full dark-mode-toggle hover:bg-gray-200 dark:hover:bg-gray-700"
+                id="darkModeToggle"
+                class="p-2 transition-colors duration-200 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
+                aria-label="Toggle dark mode"
               >
-                <i id="mode-icon" class="text-xl fas fa-moon"></i>
+                <i id="mode-icon" class="text-xl fas fa-moon dark:text-white"></i>
               </button>
             </div>
           </div>
@@ -74,17 +76,27 @@
 
         <div
           id="createBlogFormContainer"
-          class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black bg-opacity-50"
+          class="fixed inset-0 z-50 items-center justify-center hidden bg-black bg-opacity-50"
         >
           <div
             class="w-full max-w-4xl mx-4 bg-white rounded-lg shadow-xl dark:bg-gray-800"
           >
-            <!-- Blog form will be populated here -->
+            <div class="p-6">
+              <!-- Blog form content will be here -->
+              <div class="flex justify-end gap-4 mt-6">
+                <button class="px-6 py-2 text-gray-600 transition-colors duration-200 bg-gray-200 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600" id="cancelBlog">
+                  Cancel
+                </button>
+                <button class="px-6 py-2 text-white transition-colors duration-200 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700" id="publishBlog">
+                  Publish
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </main>
 
-      <footer class="py-6 mt-8 bg-white dark:bg-black">
+      <footer class="py-6 mt-8 bg-white dark:bg-gray-800">
         <div class="container px-4 mx-auto text-center">
           <p class="text-gray-600 dark:text-gray-400">
             &copy; 2024 EchoBlogs. All rights reserved.

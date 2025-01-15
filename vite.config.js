@@ -2,27 +2,20 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
 export default defineConfig({
+  root: './', // Set root to project root
   server: {
     port: 3000,
-    host: true, // Add this to expose to network
+    host: true,
+    watch: {
+      ignored: ['**/src/output.css'],
+    }
   },
   css: {
-    postcss: './postcss.config.cjs',
-    devSourcemap: true
+    postcss: './postcss.config.cjs'
   },
   build: {
     outDir: 'dist',
-    minify: true,
-    sourcemap: true,
-    assetsDir: 'assets'
+    emptyOutDir: true
   },
-  publicDir: 'public',
-  optimizeDeps: {
-    include: ['gsap', 'lenis']
-  },
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, './src')
-    }
-  }
+  publicDir: 'public'
 });
