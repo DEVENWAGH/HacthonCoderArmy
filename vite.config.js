@@ -1,16 +1,28 @@
 import { defineConfig } from 'vite';
+import { resolve } from 'path';
 
 export default defineConfig({
-  define: {
-    'process.env': {}
-  },
-  envPrefix: 'VITE_', // This allows you to use environment variables in your code
-  build: {
-    outDir: 'dist'
-  },
   server: {
     port: 3000,
-    host: true,
-    strictPort: true // This ensures Vite only uses port 3000
+    host: true, // Add this to expose to network
+  },
+  css: {
+    postcss: './postcss.config.cjs',
+    devSourcemap: true
+  },
+  build: {
+    outDir: 'dist',
+    minify: true,
+    sourcemap: true,
+    assetsDir: 'assets'
+  },
+  publicDir: 'public',
+  optimizeDeps: {
+    include: ['gsap', 'lenis']
+  },
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src')
+    }
   }
 });
