@@ -6,101 +6,27 @@
     <meta name="description" content="EchoBlogs - A modern blogging platform" />
     <title>EchoBlogs</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- <link rel="stylesheet" href="./src/output.css" /> -->
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+     <link rel="stylesheet" href="./src/output.css" />
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
       rel="stylesheet"
     />
     <script>
-      // Check for dark mode preference
-      if (
-        localStorage.theme === "dark" ||
-        (!("theme" in localStorage) &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches)
-      ) {
-        document.documentElement.classList.add("dark");
+      // Check for dark mode preference on initial load
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+        document.documentElement.setAttribute('data-theme', 'dark')
       } else {
-        document.documentElement.classList.remove("dark");
+        document.documentElement.classList.remove('dark')
+        document.documentElement.removeAttribute('data-theme')
       }
     </script>
   </head>
   <body
-    class="min-h-screen text-black transition-colors duration-200 bg-white dark:bg-zinc-900 dark:text-white"
+    class="min-h-screen text-black transition-colors duration-200 bg-gray-100 dark:bg-zinc-900 dark:text-white"
   >
-    <div class="flex flex-col min-h-screen">
-      <header>
-        <nav class="w-full items-center justify-center px-2 shadow-sm bg-black">
-          <div
-            class="container relative h-48 lg:h-24 flex flex-col items-center lg:flex-row xl:gap-16 2xl:justify-around"
-          >
-            <a href="/" class="flex items-center">
-              <img
-                src="/logo.svg"
-                alt="Logo"
-                class="h-24 lg:h-20 transition-transform duration-200 hover:scale-105"
-              />
-            </a>
-
-            <div class="w-full md:flex-1 md:max-w-xl 2xl:max-w-2xl">
-              <div class="relative">
-                <input
-                  type="text"
-                  id="search-input"
-                  class="w-full lg:w-[80%] lg:mr-8 xl:w-[100%] p-2 md:p-4 pl-4 pr-10 bg-gray-100 rounded-lg dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  placeholder="Search posts..."
-                />
-                <i
-                  class="absolute text-gray-400 -translate-y-1/2 fas fa-search right-3 lg:right-28 xl:right-6 top-1/2"
-                ></i>
-              </div>
-            </div>
-
-            <div class="flex items-center justify-center w-full lg:w-auto">
-              <button
-                id="createBlogBtn"
-                class="create-blog-btn blog-button-trigger absolute lg:relative flex items-center justify-center text-xl md:text-4xl lg:text-2xl text-center -translate-x-1/2 translate-y-1/2 lg:-translate-y-[10%] md:top-32 md:mt-2 top-36 left-1/2 lg:left-12 lg:top-auto py-2 px-4 text-white transition-all duration-200 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 cursor-pointer"
-              >
-                Create Blog
-              </button>
-              <button
-                id="darkModeToggle"
-                class="absolute lg:relative lg:ml-4 sm:top-6 right-6 lg:top-auto lg:left-auto w-12 h-12 transition-colors duration-200 rounded-full text-white hover:bg-zinc-700"
-                aria-label="Toggle dark mode"
-              >
-                <i id="mode-icon" class="text-2xl fas fa-moon dark:text-white"></i>
-              </button>
-            </div>
-          </div>
-        </nav>
-      </header>
-
-      <main class="container flex-grow px-4 py-4 mx-auto md:py-8">
-        <div id="content" class="space-y-4 md:space-y-8">
-          <!-- Blog posts will be populated here -->
-        </div>
-
-        <div
-          id="createBlogFormContainer"
-          class="fixed inset-0 z-50 hidden bg-black bg-opacity-50"
-        >
-          <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="w-full max-w-4xl bg-white dark:bg-gray-800 rounded-lg">
-              <!-- Form will be inserted here -->
-            </div>
-          </div>
-        </div>
-      </main>
-
-      <footer class="py-6 mt-8 bg-white dark:bg-black md:py-6">
-        <div class="container px-4 mx-auto text-center">
-          <p class="text-gray-600 dark:text-gray-400">
-            &copy; 2024 EchoBlogs. All rights reserved.
-          </p>
-        </div>
-      </footer>
-    </div>
-
-    <script src="script.js"></script>  <!-- Updated path to use root -->
+    <div id="app" class="flex flex-col min-h-screen"></div>
+    <script type="module" src="./src/app.js"></script>
   </body>
 </html>

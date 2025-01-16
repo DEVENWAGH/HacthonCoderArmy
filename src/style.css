@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add smooth transitions for dark mode */
+:root {
+  --transition-duration: 200ms;
+}
+
+html {
+  transition: background-color var(--transition-duration) ease-in-out,
+              color var(--transition-duration) ease-in-out;
+}
+
+.dark #mode-icon {
+  transform: rotate(360deg);
+  transition: transform var(--transition-duration);
+}

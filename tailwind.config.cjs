@@ -4,7 +4,7 @@ module.exports = {
     "./*.{html,js}",
     "./src/**/*.{js,ts,jsx,tsx,html}"
   ],
-  darkMode: ['class', '[data-theme="dark"]'], // Support both class and data-theme
+  darkMode: ['class', '[data-theme="dark"]'],
   theme: {
     extend: {},
   },

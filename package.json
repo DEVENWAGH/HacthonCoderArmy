@@ -18,7 +18,7 @@
     "vite": "^6.0.5"
   },
   "dependencies": {
-    "gsap": "^3.12.5",
+    "gsap": "^3.12.7",
     "hacthoncoderarmy": "file:",
     "lenis": "^1.1.19"
   }
