@@ -1,16 +1,14 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  root: './', // Set root to project root
+  root: './',
   server: {
     port: 3000,
     host: true,
     watch: {
-      ignored: ['**/src/output.css'],
+      usePolling: true,
+      include: ['*.js', 'src/**/*']  // Watch root js files and src directory
     }
-  },
-  css: {
-    postcss: './postcss.config.cjs'
   },
   build: {
     outDir: 'dist',
