@@ -403,31 +403,6 @@ class App {
       clearInterval(autoSaveInterval);
     });
 
-    // Show draft notification on blog create form if exists
-    this.createBlogBtn?.addEventListener("click", () => {
-      const draft = localStorage.getItem("blogDraft");
-      if (draft) {
-        const notification = `
-        <div class="fixed top-36 right-4 bg-orange-600 text-white px-6 py-3 rounded-lg shadow-lg">
-        <p>You have a saved draft</p>
-        <button id="loadDraftInForm" class="underline hover:text-orange-300">Load Draft</button>
-        </div>
-        `;
-        document.body.insertAdjacentHTML("beforeend", notification);
-
-        document
-          .getElementById("loadDraftInForm")
-          ?.addEventListener("click", () => {
-            this.loadDraftToForm(JSON.parse(draft));
-            document.querySelector(".fixed.top-36")?.remove();
-          });
-
-        setTimeout(() => {
-          document.querySelector(".fixed.top-36")?.remove();
-        }, 5000);
-      }
-    });
-
     this.loadSavedTheme();
   }
 
@@ -503,11 +478,23 @@ class App {
     if (isDark) {
       document.documentElement.classList.remove("dark");
       document.documentElement.removeAttribute("data-theme");
+      gsap.to(this.modeIcon, {
+        rotation: 0,
+        color: "#ffffff", // White color for moon icon
+        duration: 0.5,
+        ease: "power2.out",
+      });
       this.modeIcon.className = "text-2xl fas fa-moon dark:text-white";
       localStorage.setItem("theme", "light");
     } else {
       document.documentElement.classList.add("dark");
       document.documentElement.setAttribute("data-theme", "dark");
+      gsap.to(this.modeIcon, {
+        rotation: 360,
+        color: "#fbbf24", // Tailwind amber-400
+        duration: 0.5,
+        ease: "power2.out",
+      });
       this.modeIcon.className = "text-2xl fas fa-sun dark:text-white";
       localStorage.setItem("theme", "dark");
     }

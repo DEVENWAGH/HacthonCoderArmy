@@ -1397,6 +1397,16 @@ html {
   /* Tailwind orange-500 */
 }
 
+#mode-icon {
+  color: #fbbf24;
+  /* Tailwind amber-400 for sun icon */
+}
+
+.dark #mode-icon {
+  color: #ffffff;
+  /* White color for moon icon */
+}
+
 [contenteditable="true"] h2 {
   font-size: 1.5rem;
   font-weight: bold;
