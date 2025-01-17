@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
   root: './',
@@ -7,12 +8,16 @@ export default defineConfig({
     host: true,
     watch: {
       usePolling: true,
-      include: ['*.js', 'src/**/*']  // Watch root js files and src directory
+      include: ['*.js', 'src/**/*']
     }
   },
   build: {
     outDir: 'dist',
     emptyOutDir: true
   },
-  publicDir: 'public'
+  publicDir: 'public',
+  plugins: [vue()],
+  css: {
+    postcss: './postcss.config.js',
+  },
 });
