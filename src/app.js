@@ -464,11 +464,13 @@ class App {
     if (isDark) {
       document.documentElement.classList.add("dark");
       document.documentElement.setAttribute("data-theme", "dark");
-      this.modeIcon.className = "text-2xl fas fa-sun dark:text-white";
+      this.modeIcon.className = "text-2xl fas fa-sun";
+      this.modeIcon.style.color = "#fbbf24"; // Tailwind amber-400 for sun icon
     } else {
       document.documentElement.classList.remove("dark");
       document.documentElement.removeAttribute("data-theme");
-      this.modeIcon.className = "text-2xl fas fa-moon dark:text-white";
+      this.modeIcon.className = "text-2xl fas fa-moon";
+      this.modeIcon.style.color = "#ffffff"; // White color for moon icon
     }
   }
 
@@ -484,7 +486,7 @@ class App {
         duration: 0.5,
         ease: "power2.out",
       });
-      this.modeIcon.className = "text-2xl fas fa-moon dark:text-white";
+      this.modeIcon.className = "text-2xl fas fa-moon";
       localStorage.setItem("theme", "light");
     } else {
       document.documentElement.classList.add("dark");
@@ -495,7 +497,7 @@ class App {
         duration: 0.5,
         ease: "power2.out",
       });
-      this.modeIcon.className = "text-2xl fas fa-sun dark:text-white";
+      this.modeIcon.className = "text-2xl fas fa-sun";
       localStorage.setItem("theme", "dark");
     }
   }

@@ -87,7 +87,7 @@ html {
 }
 
 #mode-icon {
-  color: #fbbf24; /* Tailwind amber-400 for sun icon */
+  color: #f7bf32; /* Tailwind amber-400 for sun icon */
 }
 
 .dark #mode-icon {
