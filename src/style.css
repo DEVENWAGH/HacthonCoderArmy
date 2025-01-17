@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 /* Add smooth transitions for dark mode */
 :root {
   --transition-duration: 200ms;
@@ -43,12 +42,13 @@ html {
 }
 
 /* Content Placeholder */
-[contenteditable="true"]:empty:not(:focus)::before {
+[contenteditable="true"]:empty::before {
   content: attr(data-placeholder);
   color: #9ca3af;
   pointer-events: none;
-  position: relative;
+  position: absolute;
   opacity: 0.8;
+  display: block; /* Ensure the placeholder is displayed */
 }
 
 [contenteditable="true"]:empty:focus::before {
@@ -59,7 +59,34 @@ html {
 [contenteditable="true"] {
   min-height: 200px;
   padding: 0.5rem;
+  width: 100%;
+  border: 1px solid #d1d5db; /* Tailwind gray-300 */
+  border-radius: 0.375rem; /* Tailwind rounded-md */
+  background-color: #ffffff; /* Tailwind white */
+  color: #111827; /* Tailwind gray-900 */
+  resize: vertical;
+  position: relative;
 }
+
+[contenteditable="true"]:focus {
+  outline: none;
+  border-color: #f97316; /* Tailwind orange-500 */
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.5); /* Tailwind orange-500 */
+}
+
+/* Dark mode styles */
+.dark [contenteditable="true"] {
+  background-color: #374151; /* Tailwind gray-700 */
+  color: #d1d5db; /* Tailwind gray-300 */
+  border-color: #4b5563; /* Tailwind gray-600 */
+}
+
+.dark [contenteditable="true"]:focus {
+  border-color: #f97316; /* Tailwind orange-500 */
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.5); /* Tailwind orange-500 */
+}
+
+
 
 [contenteditable="true"] h2 {
   font-size: 1.5rem;

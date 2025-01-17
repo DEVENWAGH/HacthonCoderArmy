@@ -5,10 +5,11 @@ export function BlogContent() {
         <div id="blogsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
           <!-- Blogs will be displayed here -->
         </div>
-        <div id="draftIndicator" class="hidden fixed bottom-4 left-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg">
+        <!-- Remove draft indicator -->
+        <!-- <div id="draftIndicator" class="hidden fixed bottom-4 left-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg">
           <p>You have a saved draft</p>
           <button id="loadDraftBtn" class="text-orange-400 hover:text-orange-300 ml-2">Load Draft</button>
-        </div>
+        </div> -->
       </div>
       ${CreateBlogForm()}
     </main>
@@ -19,29 +20,29 @@ export function BlogContent() {
 
 function CreateBlogForm() {
   return `
-    <div id="createBlogFormContainer" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50">
+    <div id="createBlogFormContainer" class="fixed inset-0 z-50 hidden bg-black">
       <div class="flex flex-col min-h-screen">
-        
+
         <!-- Content area with scrolling -->
         <div class="flex-grow bg-gray-100 dark:bg-zinc-900 overflow-y-auto">
           <div class="container mx-auto px-4 py-8">
             <div class="w-full lg:w-[60%] mx-auto">
               <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg mb-8">
-                <div class="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+                <div class="max-w-4xl mx-auto p-6 bg-white dark:bg-black rounded-lg shadow-lg">
                   <!-- Form Header with Logo -->
-                  <div class="flex items-center justify-center mb-6">
-                    <img src="/dark-logo.svg" alt="Logo" class="h-16 mb-4">
+                  <div class="flex items-center justify-center mb-6 form-element">
+                    <img src="/logo.svg" alt="Logo" class="h-16 mb-4">
                   </div>
                   <form id="blogForm" class="space-y-6">
                     <!-- Cover Image Upload -->
-                    <div class="relative group">
+                    <div class="relative group form-element">
                       <div id="coverImagePreview" class="hidden w-full h-64 bg-cover bg-center rounded-lg">
-                        <button type="button" id="removeImage" 
+                        <button type="button" id="removeImage"
                           class="absolute top-2 right-2 z-50 w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-red-500 bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-all duration-200">
                           <i class="fas fa-times text-xl"></i>
                         </button>
                       </div>
-                      <div id="coverImagePlaceholder" 
+                      <div id="coverImagePlaceholder"
                         class="w-full h-64 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex flex-col items-center justify-center text-gray-400 cursor-pointer group-hover:border-orange-500 group-hover:text-orange-500 transition-all duration-200">
                         <i class="fas fa-image text-4xl mb-3 transition-colors"></i>
                         <span class="transition-colors">Click or drag to add cover image</span>
@@ -51,14 +52,14 @@ function CreateBlogForm() {
                     </div>
 
                     <!-- Title -->
-                    <div>
-                      <input type="text" id="title" name="title" required 
+                    <div class="form-element">
+                      <input type="text" id="title" name="title" required
                         placeholder="Add a bold title that captures attention..."
                         class="mt-1 block w-full px-3 py-2 text-xl bg-white dark:bg-gray-700 border-0 border-b-2 border-gray-300 dark:border-gray-600 focus:border-orange-500 dark:focus:border-orange-500 focus:outline-none">
                     </div>
 
                     <!-- Category -->
-                    <div>
+                    <div class="form-element">
                       <select id="category" required
                         class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
                         <option value="">Select Category</option>
@@ -70,14 +71,14 @@ function CreateBlogForm() {
                     </div>
 
                     <!-- Tags -->
-                    <div>
+                    <div class="form-element">
                       <div class="flex flex-wrap gap-2 mb-2" id="tagContainer"></div>
                       <input type="text" id="tagInput" placeholder="Add up to 5 tags (press Enter)"
                         class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500">
                     </div>
 
                     <!-- Rich Text Editor Toolbar -->
-                    <div class="flex flex-wrap gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-t-lg border border-gray-200 dark:border-gray-600">
+                    <div class="flex flex-wrap gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-t-lg border border-gray-200 dark:border-gray-600 form-element">
                       <button type="button" data-format="bold" class="format-btn p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded text-gray-700 dark:text-gray-200">
                         <i class="fas fa-bold"></i>
                       </button>
@@ -100,13 +101,13 @@ function CreateBlogForm() {
                     </div>
 
                     <!-- Content -->
-                    <div contenteditable="true" id="content" 
-                      class="min-h-[200px] max-h-[400px] overflow-y-auto mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-b-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    <div contenteditable="true" id="content"
+                      class="min-h-[200px] max-h-[400px] overflow-y-auto mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-b-lg focus:outline-none focus:ring-2 focus:ring-orange-500 form-element"
                       data-placeholder="What's on your mind?">
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center form-element">
                       <button type="button" id="saveDraftBtn"
                         class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-orange-600 border border-orange-600 rounded-md hover:bg-orange-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
                         <i class="fas fa-save"></i>
