@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
   root: './',
@@ -16,8 +15,7 @@ export default defineConfig({
     emptyOutDir: true
   },
   publicDir: 'public',
-  plugins: [vue()],
   css: {
-    postcss: './postcss.config.js',
-  },
+    postcss: true
+  }
 });
