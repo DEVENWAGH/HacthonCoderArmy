@@ -207,9 +207,18 @@ class App {
     });
 
     // Search functionality
-    document
-      .getElementById("search-input")
-      ?.addEventListener("input", (e) => this.handleSearch(e.target.value));
+    const searchInput = document.getElementById("search-input");
+    const searchIcon = document.getElementById("search-icon");
+
+    searchInput?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        this.handleSearch(e.target.value);
+      }
+    });
+
+    searchIcon?.addEventListener("click", () => {
+      this.handleSearch(searchInput.value);
+    });
 
     // Create blog form handlers
     this.createBlogBtn?.addEventListener("click", () =>
@@ -503,8 +512,15 @@ class App {
   }
 
   handleSearch(query) {
-    // Add search functionality here
-    console.log("Search query:", query);
+    const filteredBlogs = this.blogs.filter(blog => {
+      const lowerQuery = query.toLowerCase();
+      return (
+        blog.title.toLowerCase().includes(lowerQuery) ||
+        blog.category.toLowerCase().includes(lowerQuery) ||
+        blog.tags.some(tag => tag.toLowerCase().includes(lowerQuery))
+      );
+    });
+    this.renderBlogs(filteredBlogs);
   }
 
   toggleCreateBlogForm() {
@@ -547,6 +563,9 @@ class App {
       formContainer?.classList.add("hidden");
       nav?.classList.remove("hidden");
       document.body.style.overflow = "auto";
+      // Clear form and draft
+      this.clearForm();
+      localStorage.removeItem("blogDraft");
     }
   }
 
@@ -643,6 +662,8 @@ class App {
     this.showNotification("Blog published successfully!");
     // Remove draft notification
     document.querySelector(".fixed.top-36")?.remove();
+    // Remove draft from localStorage
+    localStorage.removeItem("blogDraft");
 
     // Animate new blog card
     gsap.from(`#blogsList article:first-child`, {
@@ -653,11 +674,11 @@ class App {
     });
   }
 
-  renderBlogs() {
+  renderBlogs(blogs = this.blogs) {
     const blogsContainer = document.getElementById("blogsList");
     if (!blogsContainer) return;
 
-    blogsContainer.innerHTML = this.blogs
+    blogsContainer.innerHTML = blogs
       .map(
         (blog) => `
         <article class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 h-auto flex flex-col relative group">
@@ -690,6 +711,9 @@ class App {
             <h2 class="text-2xl font-bold text-gray-900 dark:text-white">${
               blog.title
             }</h2>
+            <div class="text-sm text-gray-500 dark:text-gray-400">
+              ${blog.category}
+            </div>
             <div class="prose dark:prose-invert text-gray-600 dark:text-gray-300">
               ${blog.content}
             </div>
