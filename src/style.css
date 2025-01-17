@@ -736,13 +736,15 @@ nts */ .form-group {
   right: 10px;
   background: white;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 8px; /* Ensure dropdown has rounded corners */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 3;
+  overflow: hidden; /* Prevent corners from being visible */
 }
 
 .menu-dropdown a {
-  display: block;
+  display: flex;
+  align-items: center;
   padding: 10px 20px;
   color: #333;
   text-decoration: none;
@@ -750,7 +752,38 @@ nts */ .form-group {
 }
 
 .menu-dropdown a:hover {
-  background: #f5f5f5;
+  background: #f5f5f5; /* Light background color on hover */
+  color: #ff8c00; /* Text color on hover */
+}
+
+.menu-dropdown a .icon {
+  margin-right: 10px; /* Ensure a small gap between the icon and the text */
+}
+
+.menu-dropdown a.edit .icon {
+  color: #4caf50 !important; /* Green color for edit icon */
+}
+
+.menu-dropdown a.delete .icon {
+  color: #ff4444 !important; /* Red color for delete icon */
+}
+
+body.dark-mode .menu-dropdown a.edit .icon {
+  color: #4caf50 !important; /* Green color for edit icon in dark mode */
+}
+
+body.dark-mode .menu-dropdown a.delete .icon {
+  color: #ff4444 !important; /* Red color for delete icon in dark mode */
+}
+
+body.dark-mode .menu-dropdown {
+  background: #333;
+  border-color: #444;
+}
+
+body.dark-mode .menu-dropdown a:hover {
+  background: #444; /* Dark background color on hover */
+  color: #ff8c00; /* Text color on hover */
 }
 
 /* Category styles */
@@ -767,16 +800,35 @@ nts */ .form-group {
   cursor: pointer;
   padding: 0.5rem;
   font-size: 18px;
-  color: #666;
-  transition: color 0.3s ease;
+  color: #666; /* Default color */
+  transition: color 0.3s ease, background-color 0.3s ease;
   position: absolute;
   top: 10px;
   right: 10px;
   z-index: 2;
+  padding: 10px;
+  background-color: #f0f0f0; /* Light background color */
+  display: none; /* Initially hidden */
+  border-radius: 8px;
 }
 
 .menu-icon:hover {
-  color: #ff8c00;
+  color: #ff8c00; /* Hover color */
+  background-color: #e0e0e0; /* Hover background color */
+}
+
+.blog-card:hover .menu-icon {
+  display: block; /* Show menu icon on blog card hover */
+}
+
+body.dark-mode .menu-icon {
+  color: #ccc; /* Dark mode color */
+  background-color: #333; /* Dark mode background color */
+}
+
+body.dark-mode .menu-icon:hover {
+  color: #ff8c00; /* Hover color in dark mode */
+  background-color: #444; /* Hover background color in dark mode */
 }
 
 /* Blog card styles */

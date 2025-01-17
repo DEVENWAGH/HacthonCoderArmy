@@ -189,12 +189,12 @@ window.displayBlogs = function (filteredBlogs = null) {
                     <div class="blog-header">
                         <i class="fas fa-ellipsis-v menu-icon"></i>
                         <div class="menu-dropdown">
-                            <a href="#" class="edit-blog" data-id="${
-                              blog.id
-                            }">Edit</a>
-                            <a href="#" class="delete-blog" data-id="${
-                              blog.id
-                            }">Delete</a>
+                            <a href="#" class="edit-blog" data-id="${blog.id}">
+                                <i class="fas fa-edit icon"></i> Edit
+                            </a>
+                            <a href="#" class="delete-blog" data-id="${blog.id}">
+                                <i class="fas fa-trash icon"></i> Delete
+                            </a>
                         </div>
                     </div>
                     ${

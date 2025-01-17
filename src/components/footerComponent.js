@@ -8,7 +8,7 @@ export function footerComponent() {
     <footer class="footer">
       <div class="footer-container">
         <div class="footer-content">
-          <p>&copy; <span class="year">2024</span> <span class="brand">EchoBlogs</span>. <span class="rights">All rights reserved</span>.</p>
+          <p>&copy; <span class="year"></span> <span class="brand">EchoBlogs</span>. <span class="rights">All rights reserved</span>.</p>
         </div>
       </div>
     </footer>
@@ -19,6 +19,9 @@ export function footerComponent() {
     const year = footer.querySelector(".year");
     const brand = footer.querySelector(".brand");
     const rights = footer.querySelector(".rights");
+
+    // Set the current year
+    year.textContent = new Date().getFullYear();
 
     // Initial state
     gsap.set([footer, year, brand, rights], {
