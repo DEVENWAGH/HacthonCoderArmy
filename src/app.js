@@ -282,26 +282,41 @@ class App {
   }
 
   executeFormat(format) {
-    const selection = window.getSelection();
-    const range = selection.getRangeAt(0);
-    
+    const content = document.getElementById('content');
+    content.focus();
+
     switch(format) {
       case 'heading':
-        if (this.isFormatActive('h2')) {
+        // Get current selection
+        const selection = window.getSelection();
+        const range = selection.getRangeAt(0);
+        const container = range.commonAncestorContainer;
+        
+        // Find the current block element
+        const currentBlock = container.nodeType === 1 ? container : container.parentElement;
+        
+        // Toggle between h2 and p
+        if (currentBlock.tagName === 'H2') {
           document.execCommand('formatBlock', false, 'p');
         } else {
           document.execCommand('formatBlock', false, 'h2');
         }
         break;
+
       case 'bullet':
         document.execCommand('insertUnorderedList', false, null);
         break;
+
       case 'number':
         document.execCommand('insertOrderedList', false, null);
         break;
+
       default:
         document.execCommand(format, false, null);
     }
+
+    // Ensure focus stays in editor
+    content.focus();
   }
 
   isFormatActive(tag) {

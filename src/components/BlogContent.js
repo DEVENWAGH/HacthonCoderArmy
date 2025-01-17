@@ -21,8 +21,6 @@ function CreateBlogForm() {
   return `
     <div id="createBlogFormContainer" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50">
       <div class="flex flex-col min-h-screen">
-        <!-- Hidden nav spacer -->
-        <div class="h-24 bg-gray-100 dark:bg-zinc-900"></div>
         
         <!-- Content area with scrolling -->
         <div class="flex-grow bg-gray-100 dark:bg-zinc-900 overflow-y-auto">
@@ -39,7 +37,7 @@ function CreateBlogForm() {
                     <div class="relative group">
                       <div id="coverImagePreview" class="hidden w-full h-64 bg-cover bg-center rounded-lg">
                         <button type="button" id="removeImage" 
-                          class="absolute top-2 right-2 p-2 rounded-full text-gray-400 hover:text-red-500 hover:bg-white/10 backdrop-blur-sm transition-all duration-200">
+                          class="absolute top-2 right-2 z-50 w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-red-500 bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-all duration-200">
                           <i class="fas fa-times text-xl"></i>
                         </button>
                       </div>

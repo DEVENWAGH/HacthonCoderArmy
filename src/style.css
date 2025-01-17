@@ -43,12 +43,43 @@ html {
 }
 
 /* Content Placeholder */
-[contenteditable="true"]:empty:not([data-empty="true"])::before {
+[contenteditable="true"]:empty:not(:focus)::before {
   content: attr(data-placeholder);
   color: #9ca3af;
   pointer-events: none;
+  position: relative;
+  opacity: 0.8;
 }
 
-[contenteditable="true"]:focus:empty::before {
+[contenteditable="true"]:empty:focus::before {
   content: '';
+}
+
+/* Rich Text Editor Styles */
+[contenteditable="true"] {
+  min-height: 200px;
+  padding: 0.5rem;
+}
+
+[contenteditable="true"] h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 1rem 0;
+  color: inherit;
+}
+
+[contenteditable="true"] ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+[contenteditable="true"] ol {
+  list-style-type: decimal;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+[contenteditable="true"] li {
+  margin-bottom: 0.5rem;
 }
