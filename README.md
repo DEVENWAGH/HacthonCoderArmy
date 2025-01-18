@@ -47,6 +47,23 @@ EchoBlogs is a lightning-fast, modern blogging platform built with vanilla JavaS
 - Search functionality
 - Draft system
 
+### 🔍 Enhanced Search
+
+- Real-time search results
+- Filter by title, category, and tags
+- Highlighted search terms
+
+### 🖼️ User Profile
+
+- Default profile image
+- Profile customization
+- Anonymous user support
+
+### 🌀 Smooth Scrolling
+
+- Lenis for smooth scrolling
+- ScrollTrigger for animations
+
 ## 🛠️ Installation
 
 ```bash
@@ -76,7 +93,7 @@ npm run dev
    - Underline: Ctrl/⌘ + U
    - Lists: Ctrl/⌘ + 1/8
 4. Add tags (up to 5)
-. Save draft or publish
+5. Save draft or publish
 
 ### Managing Content
 
@@ -85,13 +102,20 @@ npm run dev
 - Toggle dark mode for comfort
 - Drafts auto-save every minute
 
+### User Profile
+
+- Click on the profile image in the navbar
+- Customize your profile image and username
+- Option to skip profile setup and remain anonymous
+
 ## 🔧 Tech Stack
 
 - HTML5 & CSS3
 - Vanilla JavaScript (ES6+)
-- GSAP Animation
+- GSAP & ScrollTrigger Animation
 - Vite
 - LocalStorage/SessionStorage
+- Lenis for smooth scrolling
 
 ## 🔮 Future Enhancements <a name="future-enhancements"></a>
 
