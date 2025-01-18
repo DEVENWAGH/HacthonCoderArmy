@@ -1186,6 +1186,13 @@ body.dark-mode .menu-icon:hover {
 /* Media Queries */
 
 @media (max-width: 375px) {
+  .user-profile-nav {
+    display: flex;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+
   .darklogo {
     height: 4rem;
   }
@@ -1306,6 +1313,11 @@ body.dark-mode .menu-icon:hover {
   .remove-cover-image-btn {
     background: rgba(255, 0, 0, 0.6);
   }
+  .user-profile-nav {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
   .logo {
     position: absolute;
     top: 0;
@@ -1405,9 +1417,14 @@ body.dark-mode .menu-icon:hover {
   }
 }
 @media (max-width: 1024px) and (min-width: 769px) {
+  .user-profile-nav {
+    position: absolute;
+    top: 1rem;
+    right: 5rem;
+  }
   .search-bar i {
     top: 50%;
-    left: 90%;
+    left: 92%;
   }
   .search-bar {
     position: absolute;
@@ -1434,6 +1451,12 @@ body.dark-mode .menu-icon:hover {
   }
 }
 @media (max-width: 767px) and (min-width: 425px) {
+  .user-profile-nav {
+    position: absolute;
+    top: 4rem;
+    right: .5rem;
+    z-index: 1000;
+  }
   .logo {
     position: absolute;
     top: 0;
@@ -1635,4 +1658,11 @@ body.dark-mode .skip-profile-btn {
 
 body.dark-mode .nav-profile-image {
   border-color: #ff8c00;
+}
+
+@media (max-width: 1440px) and (min-width: 1280px){
+  .search-bar i {
+    top: 50%;
+    left: 83%;
+  }
 }
