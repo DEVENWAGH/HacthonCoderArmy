@@ -1,9 +1,12 @@
 import { createBlogComponent } from "./createBlogComponent.js";
+import { userProfileComponent } from "./userProfileComponent.js"; // Add this import
 import { gsap } from "gsap";
 
 let navbarInitialized = false; // Add this flag at the top level
 
 export function navbarComponent() {
+  const userData = JSON.parse(localStorage.getItem('userData') || '{"isAnonymous": true, "profileImage": "./user.svg"}');
+
   const template = `
     <nav class="navbar">
       <div class="navbar-container">
@@ -12,9 +15,10 @@ export function navbarComponent() {
           <input type="text" placeholder="Search posts..." id="search-input" />
           <i class="fas fa-search" id="search-icon"></i>
         </div>
-        <button class="create-blog-btn" id="loadCreateBlogBtn">
-          Create Blog
-        </button>
+        <button class="create-blog-btn" id="loadCreateBlogBtn">Create Blog</button>
+        <div class="user-profile-nav" id="userProfileNav">
+          <img src="${userData.profileImage}" alt="Profile" class="nav-profile-image">
+        </div>
         <div class="dark-mode-toggle">
           <i id="mode-icon" class="fas fa-moon"></i>
         </div>
@@ -24,6 +28,18 @@ export function navbarComponent() {
 
   const initializeNavbar = async () => {
     if (navbarInitialized) return;
+
+    // Add click handler for user profile
+    const userProfileNav = document.getElementById('userProfileNav');
+    if (userProfileNav) {
+      userProfileNav.addEventListener('click', () => {
+        const { template, initializeUserProfile } = userProfileComponent();
+        const modalContainer = document.createElement('div');
+        modalContainer.innerHTML = template;
+        document.body.appendChild(modalContainer);
+        initializeUserProfile();
+      });
+    }
 
     // Dark mode toggle
     const darkModeToggle = document.querySelector(".dark-mode-toggle");

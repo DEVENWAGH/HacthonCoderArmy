@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import Lenis from "lenis";
 import { ScrollTrigger } from "gsap/ScrollTrigger"; // Add this import
 import { navbarComponent } from "./components/navbarComponent.js";
+import { userProfileComponent } from "./components/userProfileComponent.js";
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -183,6 +184,8 @@ window.displayBlogs = function (filteredBlogs = null) {
     // Sort blogs by date (newest first)
     blogs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
+    const userData = JSON.parse(localStorage.getItem('userData') || '{"username": "Anonymous"}');
+
     blogsContainer.innerHTML = blogs
       .map(
         (blog) => `
@@ -210,7 +213,7 @@ window.displayBlogs = function (filteredBlogs = null) {
                     <div class="blog-content">
                         <h2 class="blog-title">${blog.title}</h2>
                         <div class="blog-metadata">
-                            <span class="blog-author">${blog.author}</span>
+                            <span class="blog-author">${userData.username}</span>
                             <span class="blog-date">${
                               blog.updatedAt
                                 ? `${new Date(
@@ -1041,12 +1044,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Initialize app
 async function initializeApp() {
-  // Initialize navbar
-  const navbar = navbarComponent();
-  document.getElementById("navbarContainer").innerHTML = navbar.template;
-  await navbar.initializeNavbar();
-  // Display blog content
-  window.displayBlogs?.();
+  // Check if user data exists
+  const userData = localStorage.getItem('userData');
+  if (!userData) {
+    // Show user profile modal
+    const { template, initializeUserProfile } = userProfileComponent();
+    const modalContainer = document.createElement('div');
+    modalContainer.innerHTML = template;
+    document.body.appendChild(modalContainer);
+    initializeUserProfile();
+  } else {
+    // Initialize navbar and other components
+    const navbar = navbarComponent();
+    document.getElementById("navbarContainer").innerHTML = navbar.template;
+    await navbar.initializeNavbar();
+    window.displayBlogs?.();
+  }
 }
 // Initialize and display footer
 const footer = footerComponent();

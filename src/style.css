@@ -1507,3 +1507,132 @@ body.dark-mode .menu-icon:hover {
   background: #ffebee;
   color: #ff4444;
 }
+
+/* Profile Modal Styles */
+.profile-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.profile-container {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+.profile-image-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 1.5rem auto;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ff8c00;
+}
+
+.upload-label {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #ff8c00;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+}
+
+#usernameInput {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #ddd;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+  font-size: 1rem;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.submit-profile-btn, .skip-profile-btn {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.submit-profile-btn {
+  background: #ff8c00;
+  color: white;
+}
+
+.skip-profile-btn {
+  background: #f0f0f0;
+  color: #666;
+}
+
+.user-profile-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 1rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.user-profile-nav:hover {
+  transform: scale(1.1);
+}
+
+.nav-profile-image {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ff8c00;
+}
+
+/* Dark mode styles */
+body.dark-mode .profile-container {
+  background: #1e1e1e;
+  color: white;
+}
+
+body.dark-mode #usernameInput {
+  background: #333;
+  color: white;
+  border-color: #444;
+}
+
+body.dark-mode .skip-profile-btn {
+  background: #333;
+  color: #ccc;
+}
+
+body.dark-mode .nav-profile-image {
+  border-color: #ff8c00;
+}
