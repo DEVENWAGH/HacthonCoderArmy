@@ -14,6 +14,7 @@ class App {
     this.createBlogBtn = null;
     this.formContainer = null;
     this.blogs = JSON.parse(sessionStorage.getItem("blogs") || "[]");
+    this.currentTags = new Set(); // Add this line to store tags at instance level
     this.render();
     this.initializeEventListeners();
     this.renderBlogs(); // Render blogs from session storage on init
@@ -283,14 +284,13 @@ class App {
     });
 
     // Tags handling
-    let tags = new Set();
     document.getElementById("tagInput")?.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
         const tag = e.target.value.trim();
-        if (tag && tags.size < 5) {
-          tags.add(tag);
-          this.updateTags(tags);
+        if (tag && this.currentTags.size < 5) {
+          this.currentTags.add(tag);
+          this.updateTags(this.currentTags);
           e.target.value = "";
         }
       }
@@ -531,8 +531,17 @@ class App {
       // Opening form
       formContainer.classList.remove("hidden");
       nav?.classList.add("hidden");
-      // Allow scrolling within the form container
       document.body.style.overflow = "hidden";
+      
+      // Load draft when opening form
+      const draft = localStorage.getItem('blogDraft');
+      if (draft) {
+        const draftData = JSON.parse(draft);
+        this.loadDraftToForm(draftData);
+        this.showNotification('Draft restored successfully!', 'success');
+      }
+
+      // Allow scrolling within the form container
       const contentArea = formContainer.querySelector(".overflow-y-auto");
       if (contentArea) {
         contentArea.style.height = "calc(100vh - 144px)"; // 24px nav + 96px footer
@@ -563,32 +572,31 @@ class App {
       formContainer?.classList.add("hidden");
       nav?.classList.remove("hidden");
       document.body.style.overflow = "auto";
-      // Clear form and draft
       this.clearForm();
-      localStorage.removeItem("blogDraft");
+      // Don't remove draft when just closing form
     }
   }
 
   updateTags(tags) {
+    this.currentTags = new Set(tags); // Update instance tags
     const container = document.getElementById("tagContainer");
-    container.innerHTML = Array.from(tags)
+    container.innerHTML = Array.from(this.currentTags)
       .map(
         (tag) => `
       <span class="inline-flex items-center gap-1 px-2 py-1 bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-100 rounded">
-      ${tag}
-      <button type="button" class="remove-tag" data-tag="${tag}">
-      <i class="fas fa-times"></i>
-      </button>
-      </span>
-      `
+        ${tag}
+        <button type="button" class="remove-tag" data-tag="${tag}">
+          <i class="fas fa-times"></i>
+        </button>
+      </span>`
       )
       .join("");
 
     // Add remove tag handlers
     container.querySelectorAll(".remove-tag").forEach((btn) => {
       btn.addEventListener("click", () => {
-        tags.delete(btn.dataset.tag);
-        this.updateTags(tags);
+        this.currentTags.delete(btn.dataset.tag);
+        this.updateTags(this.currentTags);
       });
     });
   }
@@ -623,9 +631,7 @@ class App {
       title: document.getElementById("title").value,
       content: document.getElementById("content").innerHTML,
       category: document.getElementById("category").value,
-      tags: Array.from(document.querySelectorAll("#tagContainer span")).map(
-        (span) => span.textContent.trim().replace(/×$/, "")
-      ),
+      tags: Array.from(this.currentTags), // Use instance tags
       coverImage: imageUrl, // Store just the URL
       timestamp: new Date().toISOString(),
     };
@@ -638,13 +644,13 @@ class App {
     document.getElementById("category").value = draft.category || "";
     if (draft.coverImage) {
       const preview = document.getElementById("coverImagePreview");
-      preview.style.backgroundImage = draft.coverImage;
+      preview.style.backgroundImage = `url(${draft.coverImage})`;
       preview.classList.remove("hidden");
       document.getElementById("coverImagePlaceholder").classList.add("hidden");
     }
     if (draft.tags?.length) {
-      const tags = new Set(draft.tags);
-      this.updateTags(tags);
+      this.currentTags = new Set(draft.tags);
+      this.updateTags(this.currentTags);
     }
   }
 
@@ -828,8 +834,8 @@ class App {
     preview.classList.add("hidden");
     document.getElementById("coverImagePlaceholder").classList.remove("hidden");
     document.getElementById("tagContainer").innerHTML = "";
-    // Reset any stored tags
-    this.currentTags = new Set();
+    this.currentTags.clear(); // Clear instance tags
+    document.getElementById("blogForm").removeAttribute('data-blog-id'); // Remove any stored blog ID
   }
 }
 
