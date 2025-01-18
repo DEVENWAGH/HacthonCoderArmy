@@ -107,8 +107,8 @@ export function footerComponent() {
 
       timeline
         .to(footer, {
-          backgroundColor: isDarkMode ? "#000000" : "#ffffff",
-          color: isDarkMode ? "#ffffff" : "#000000",
+          backgroundColor: isDarkMode ? "#0000000" : "#ffffff",
+          color: isDarkMode ? "#fffffff" : "#000000",
           duration: 0.8,
           ease: "power2.inOut",
         })

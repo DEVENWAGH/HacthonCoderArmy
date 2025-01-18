@@ -162,6 +162,7 @@ window.displayBlogs = function (filteredBlogs = null) {
     if (blogs.length === 0) {
       blogsContainer.innerHTML = `
                 <div class="no-blogs">
+                    <i class="fas fa-pen-fancy"></i>
                     <h2>No blogs found</h2>
                     <p>${
                       filteredBlogs
@@ -192,7 +193,9 @@ window.displayBlogs = function (filteredBlogs = null) {
                             <a href="#" class="edit-blog" data-id="${blog.id}">
                                 <i class="fas fa-edit icon"></i> Edit
                             </a>
-                            <a href="#" class="delete-blog" data-id="${blog.id}">
+                            <a href="#" class="delete-blog" data-id="${
+                              blog.id
+                            }">
                                 <i class="fas fa-trash icon"></i> Delete
                             </a>
                         </div>
@@ -378,7 +381,7 @@ async function handleEditSubmit(e) {
     category: document.getElementById("category").value,
     tags: JSON.parse(document.getElementById("tags-hidden").value || "[]"),
     coverImage: document.getElementById("coverImagePreview").src,
-    author:"Anonymous",
+    author: "Anonymous",
     createdAt: existingBlog?.createdAt || new Date().toISOString(), // Preserve original creation date
     updatedAt: new Date().toISOString(), // Add update date
   };

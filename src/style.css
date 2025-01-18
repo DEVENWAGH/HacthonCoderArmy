@@ -42,6 +42,20 @@ body:not(.dark-mode) .blog-category.technology,
 body:not(.dark-mode) .blog-category.lifestyle {
   color: #000;
 }
+body:not(.dark-mode) .cover-image-container:hover {
+  border-color: #ff8c00;
+}
+body:not(.dark-mode) .cover-image-placeholder:hover {
+  color: #ff8c00;
+}
+body:not(.dark-mode) .footer-container {
+  background-color: #ffffff;
+  color: #000000;
+}
+body.dark-mode .footer-container {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
 body.dark-mode .editor-notification {
   background: #0ab113;
   color: #fff;
@@ -104,6 +118,9 @@ body.dark-mode .cover-image-container {
   border-color: #444;
   background-color: rgba(255, 255, 255, 0.03);
 }
+body.dark-mode .cover-image-container:hover {
+  border-color: #ff8c00;
+}
 
 body.dark-mode .cover-image-placeholder {
   color: #888;
@@ -114,7 +131,7 @@ body.dark-mode .cover-image-placeholder:hover {
 }
 
 body.dark-mode .dark-mode-toggle i.fa-sun {
-  color: #ffeb3b;
+  color: #fbbf24;
 }
 body.dark-mode .darklogo {
   filter: brightness(1);
@@ -131,7 +148,7 @@ body.dark-mode #tags-input:disabled {
 }
 
 body.dark-mode .tag-item {
-  background: #444;
+  background: #ff8c00;
   color: #fff;
 }
 
@@ -185,14 +202,6 @@ body.dark-mode .search-result-item i {
   color: #fff;
 }
 
-body.dark-mode .footer-container::before {
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-body.dark-mode .footer-container:hover::before {
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
 body.dark-mode .search-bar input {
   background-color: #1e1e1e;
 }
@@ -214,10 +223,7 @@ body.dark-mode .search-bar input {
   background-color: #000000;
   color: #ffffff;
 }
-.dark-mode .tag-item {
-  background: #555;
-  color: #fff;
-}
+
 .editor-btn.active {
   background-color: #ff8c00;
   color: #fff;
@@ -252,7 +258,7 @@ body.dark-mode .search-bar input {
 }
 
 .darklogo {
-  height: 4rem;
+  height: 6rem;
   display: block;
   z-index: 1000;
   filter: brightness(0.9);
@@ -356,7 +362,7 @@ body.dark-mode .search-bar input {
   text-decoration: none;
   display: block;
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 1rem;
 }
 
 #createBlogFormContainer {
@@ -413,20 +419,19 @@ body.dark-mode .search-bar input {
 
 .tag-item {
   background: #f0f0f0;
-  padding: 5px 10px;
-  border-radius: 15px;
+  padding: 0.5rem 1rem;
   display: flex;
   align-items: center;
-  gap: 5px;
-  font-size: 14px;
-  border-radius: 3px;
+  gap: 0.2rem;
+  font-size: 1rem;
+  border-radius: 1rem;
 }
 
 .tag-remove {
   cursor: pointer;
   color: #ff4444;
   font-weight: bold;
-  margin-left: 5px;
+  margin-left: 0.5rem;
 }
 
 .tag-remove:hover {
@@ -545,25 +550,6 @@ nts */ .form-group {
   margin-bottom: 10px;
 }
 
-/* Cover Image */
-.cover-image-container {
-  position: relative;
-  width: 100%;
-  height: 150px;
-  margin-top: 0;
-  border: 2px dashed #666;
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  background-color: rgba(0, 0, 0, 0.03);
-}
-
-.cover-image-container.drag-over {
-  border-color: #ff8c00;
-  background-color: rgba(255, 140, 0, 0.1);
-}
-
 .cover-image-placeholder {
   display: flex;
   flex-direction: column;
@@ -585,7 +571,6 @@ nts */ .form-group {
   font-weight: 500;
 }
 
-/* Prevent unwanted clicks on cover image container */
 .cover-image-container img {
   pointer-events: none;
 }
@@ -722,7 +707,6 @@ nts */ .form-group {
 
 /* Fix for iOS Safari 100vh issue */
 @supports (-webkit-touch-callout: none) {
-
   .navbar {
     padding-bottom: env(safe-area-inset-bottom);
   }
@@ -853,7 +837,7 @@ body.dark-mode .menu-icon:hover {
 /* Cover image container in edit form */
 .cover-image-container {
   width: 100%;
-  height: 300px;
+  height: 20rem;
   position: relative;
   overflow: hidden;
   background-color: #f5f5f5;
@@ -904,6 +888,12 @@ body.dark-mode .menu-icon:hover {
   align-items: center;
   min-height: calc(100vh - 100px - 64px);
   text-align: center;
+}
+
+.no-blogs i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #ff8c00;
 }
 
 .logo {
@@ -1069,24 +1059,21 @@ body.dark-mode .menu-icon:hover {
 
 .footer-container {
   height: 2.5rem;
-  background-color: #ffffff;
-  color: #fff;
-  padding: 20px;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 2rem;
   position: relative;
-  transition: background-color 0.3s ease;
 }
 
 .footer-container p {
   margin: 0;
   font-size: 1rem;
 }
-/* Footer Styles */
+
 .footer {
+  height: auto;
   position: relative;
   width: 100%;
   overflow: hidden;
@@ -1199,6 +1186,9 @@ body.dark-mode .menu-icon:hover {
 /* Media Queries */
 
 @media (max-width: 375px) {
+  .darklogo {
+    height: 4rem;
+  }
   .logo {
     position: absolute;
     top: 1rem;
@@ -1485,9 +1475,35 @@ body.dark-mode .menu-icon:hover {
   .dark-mode-toggle {
     position: absolute;
     top: 0.8rem;
-    right: .5rem;
+    right: 0.5rem;
     background: none;
     margin-right: 0.5rem;
     padding: 0.8rem;
   }
+}
+
+/* Add red color for delete button on mobile and tablet */
+@media (max-width: 1024px) {
+  .menu-dropdown a.delete-blog {
+    color: #ff4444;
+  }
+
+  .menu-dropdown a.delete-blog:hover {
+    background: #ffebee;
+    color: #ff0000;
+  }
+
+  body.dark-mode .menu-dropdown a.delete-blog {
+    color: #ff4444;
+  }
+
+  body.dark-mode .menu-dropdown a.delete-blog:hover {
+    background: rgba(255, 0, 0, 0.1);
+    color: #ff0000;
+  }
+}
+
+.menu-dropdown a.delete-blog:hover {
+  background: #ffebee;
+  color: #ff4444;
 }
