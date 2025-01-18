@@ -166,6 +166,9 @@ class App {
     try {
       const draftData = this.collectFormData();
       if (draftData.title || draftData.content) {
+        // Show saving animation first
+        this.showNotification("Saving draft...", "info", true);
+        
         // If there's a cover image, optimize it before saving
         if (draftData.coverImage) {
           const response = await fetch(draftData.coverImage);
@@ -191,7 +194,7 @@ class App {
         );
 
         if (isDraft) {
-          this.showNotification("Draft saved successfully!", "info", true);
+          this.showNotification("Draft saved successfully!", "success", true);
         }
       }
     } catch (error) {
@@ -207,18 +210,30 @@ class App {
       this.toggleDarkMode();
     });
 
-    // Search functionality
+    // Search functionality - simplified to auto-search
     const searchInput = document.getElementById("search-input");
-    const searchIcon = document.getElementById("search-icon");
-
-    searchInput?.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        this.handleSearch(e.target.value);
+    
+    const performSearch = () => {
+      const query = searchInput.value.trim();
+      if (query) {
+        this.handleSearch(query);
+      } else {
+        this.renderBlogs(); // Show all blogs if search is empty
       }
+    };
+
+    // Auto search on typing with debounce
+    searchInput?.addEventListener("input", () => {
+      clearTimeout(this.searchTimeout);
+      this.searchTimeout = setTimeout(performSearch, 300);
     });
 
-    searchIcon?.addEventListener("click", () => {
-      this.handleSearch(searchInput.value);
+    // Also allow Enter key for immediate search
+    searchInput?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        clearTimeout(this.searchTimeout);
+        performSearch();
+      }
     });
 
     // Create blog form handlers
@@ -520,7 +535,48 @@ class App {
         blog.tags.some(tag => tag.toLowerCase().includes(lowerQuery))
       );
     });
-    this.renderBlogs(filteredBlogs);
+
+    const blogsContainer = document.getElementById("blogsList");
+    
+    // Fade out existing blogs
+    gsap.to(blogsContainer.children, {
+      opacity: 0,
+      y: 20,
+      duration: 0.3,
+      stagger: 0.05,
+      onComplete: () => {
+        // Render new filtered blogs
+        this.renderBlogs(filteredBlogs);
+        
+        // Animate new blogs appearing
+        gsap.from("#blogsList article", {
+          opacity: 0,
+          y: 50,
+          duration: 0.5,
+          stagger: 0.1,
+          ease: "back.out(1.2)"
+        });
+
+        // Show "no results" message if no blogs found
+        if (filteredBlogs.length === 0) {
+          const noResults = document.createElement('div');
+          noResults.className = 'py-8 text-center text-gray-500 dark:text-gray-400';
+          noResults.innerHTML = `
+            <i class="fas fa-search mb-2 text-3xl"></i>
+            <p class="text-lg">No blogs found for "${query}"</p>
+          `;
+          blogsContainer.appendChild(noResults);
+          
+          // Animate no results message
+          gsap.from(noResults, {
+            opacity: 0,
+            y: 20,
+            duration: 0.5,
+            ease: "power2.out"
+          });
+        }
+      }
+    });
   }
 
   toggleCreateBlogForm() {
@@ -533,7 +589,7 @@ class App {
       nav?.classList.add("hidden");
       document.body.style.overflow = "hidden";
       
-      // Load draft when opening form
+      // Load draft immediately and show notification
       const draft = localStorage.getItem('blogDraft');
       if (draft) {
         const draftData = JSON.parse(draft);
@@ -546,14 +602,15 @@ class App {
       if (contentArea) {
         contentArea.style.height = "calc(100vh - 144px)"; // 24px nav + 96px footer
       }
-      // Animate form opening
+      
+      // Form opening animations
       gsap.from(formContainer, {
         y: -100,
         opacity: 0,
         duration: 1,
         ease: "power2.out",
       });
-      // Animate each part of the form
+      
       gsap.from("#createBlogFormContainer .form-element", {
         y: -50,
         opacity: 0,
@@ -561,7 +618,6 @@ class App {
         duration: 1,
         ease: "power2.out",
         onComplete: () => {
-          // Ensure buttons are visible after animation
           document.querySelectorAll("#createBlogFormContainer .form-element").forEach(el => {
             el.style.opacity = 1;
           });
@@ -601,25 +657,87 @@ class App {
     });
   }
 
-  showNotification(message, type = "success", isPersistent = false) {
+  showNotification(message, type = "success", withProgress = false) {
+    // Don't show notifications outside the form container context
+    if (!this.formContainer || this.formContainer.classList.contains('hidden')) {
+      return;
+    }
+  
     const notification = document.createElement("div");
     const bgColor = {
       success: "bg-green-500",
       error: "bg-red-500",
       info: "bg-orange-600",
     }[type];
-
-    notification.className = `fixed bottom-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg transform transition-transform duration-300 translate-y-0`;
-    notification.textContent = message;
+  
+    // Changed from top-20 to bottom-4
+    notification.className = `fixed bottom-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 overflow-hidden`;
+    
+    if (withProgress) {
+      notification.innerHTML = `
+        <div class="flex flex-col min-w-[300px]">
+          <span class="font-medium">${message}</span>
+          <div class="h-0.5 bg-white/30 absolute bottom-0 left-0 right-0">
+            <div class="progress-bar h-full bg-white w-0"></div>
+          </div>
+        </div>
+      `;
+    } else {
+      notification.innerHTML = `
+        <div class="flex items-center gap-2">
+          <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-info-circle'} text-xl"></i>
+          <span class="font-medium">${message}</span>
+        </div>
+      `;
+    }
+  
     document.body.appendChild(notification);
-
-    if (!isPersistent) {
-      setTimeout(() => {
-        notification.classList.add("translate-y-full");
-        setTimeout(() => notification.remove(), 300);
-      }, 3000);
+  
+    // Animation timeline
+    const tl = gsap.timeline({
+      onComplete: () => notification.remove()
+    });
+  
+    // Initial state and slide in from right
+    gsap.set(notification, { 
+      x: 100,
+      opacity: 0,
+    });
+  
+    // Slide in animation
+    tl.to(notification, {
+      x: 0,
+      opacity: 1,
+      duration: 0.5,
+      ease: "power2.out"
+    });
+  
+    if (withProgress) {
+      // Animate progress bar
+      tl.to(notification.querySelector('.progress-bar'), {
+        width: "100%",
+        duration: 5,
+        ease: "none"
+      }, "<");
+  
+      // Slide out to right
+      tl.to(notification, {
+        x: 100,
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2.in"
+      }, ">");
+    } else {
+      // For non-progress notifications, show for 2 seconds then slide out
+      tl.to(notification, {
+        x: 100,
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2.in"
+      }, "+=2");
     }
   }
+  
 
   collectFormData() {
     const backgroundImage =
@@ -655,30 +773,120 @@ class App {
   }
 
   publishBlog(blogData) {
+    const blogId = document.getElementById('blogForm').dataset.blogId;
+    
+    // If blogId exists, it's an edit operation
+    if (blogId) {
+      // Remove the old blog with animation
+      const oldBlogElement = document.querySelector(`article[data-blog-id="${blogId}"]`);
+      if (oldBlogElement) {
+        gsap.to(oldBlogElement, {
+          opacity: 0,
+          y: -20,
+          duration: 0.3,
+          ease: "power2.in",
+          onComplete: () => {
+            oldBlogElement.remove();
+            // Filter out the old blog
+            this.blogs = this.blogs.filter(blog => blog.id !== blogId);
+          }
+        });
+      }
+    }
+  
     const blogWithMetadata = {
       ...blogData,
-      id: Date.now().toString(),
-      publishedAt: new Date().toISOString(),
+      id: blogId || Date.now().toString(),
+      publishedAt: blogId ? this.blogs.find(b => b.id === blogId)?.publishedAt : new Date().toISOString(),
       lastModified: new Date().toISOString(),
     };
-
+  
     this.blogs.unshift(blogWithMetadata);
     sessionStorage.setItem("blogs", JSON.stringify(this.blogs));
     this.renderBlogs();
-    this.showNotification("Blog published successfully!");
-    // Remove draft notification
-    document.querySelector(".fixed.top-36")?.remove();
-    // Remove draft from localStorage
+    this.showNotification(blogId ? "Blog updated successfully!" : "Blog published successfully!");
     localStorage.removeItem("blogDraft");
-
-    // Animate new blog card
+  
+    // Animate new/updated blog card
     gsap.from(`#blogsList article:first-child`, {
       y: 50,
       opacity: 0,
-      duration: 1,
-      ease: "power2.out",
+      duration: 0.5,
+      ease: "back.out(1.2)",
     });
   }
+  
+  deleteBlog(blogId) {
+    const blogElement = document.querySelector(`article[data-blog-id="${blogId}"]`);
+    
+    if (blogElement) {
+      // Animate blog removal
+      gsap.to(blogElement, {
+        opacity: 0,
+        y: -20,
+        duration: 0.5,
+        ease: "power2.in",
+        onComplete: () => {
+          // Remove from DOM and update state
+          blogElement.remove();
+          this.blogs = this.blogs.filter(blog => blog.id !== blogId);
+          sessionStorage.setItem('blogs', JSON.stringify(this.blogs));
+          
+          // Show empty state if no blogs left
+          if (this.blogs.length === 0) {
+            const blogsContainer = document.getElementById("blogsList");
+            const emptyState = document.createElement('div');
+            emptyState.className = 'text-center py-8 text-gray-500 dark:text-gray-400';
+            emptyState.innerHTML = `
+              <i class="fas fa-pen-fancy text-4xl mb-2"></i>
+              <p class="text-lg">No blogs yet. Create your first blog!</p>
+            `;
+            blogsContainer.appendChild(emptyState);
+            
+            gsap.from(emptyState, {
+              opacity: 0,
+              y: 20,
+              duration: 0.5,
+              ease: "power2.out"
+            });
+          }
+          
+          this.showNotification('Blog deleted successfully!', 'info');
+        }
+      });
+    }
+  }
+  
+  renderBlogs(blogs = this.blogs) {
+    const blogsContainer = document.getElementById("blogsList");
+    if (!blogsContainer) return;
+  
+    blogsContainer.innerHTML = blogs.length ? blogs
+      .map(
+        (blog) => `
+        <article data-blog-id="${blog.id}" class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 h-auto flex flex-col relative group">
+          <!-- Rest of the blog article HTML -->
+          ${blog.coverImage ? `
+            <div class="h-56 bg-cover bg-center flex-shrink-0" 
+              style="background-image: url('${blog.coverImage}')"
+              role="img" 
+              aria-label="Cover image for ${blog.title}">
+            </div>
+          ` : ''}
+          <!-- ...rest of existing blog article template... -->
+        </article>`
+      )
+      .join("") : `
+        <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+          <i class="fas fa-pen-fancy text-4xl mb-2"></i>
+          <p class="text-lg">No blogs yet. Create your first blog!</p>
+        </div>
+      `;
+  
+    // Add event listeners for menu interactions
+    this.initializeBlogMenus();
+  }
+  
 
   renderBlogs(blogs = this.blogs) {
     const blogsContainer = document.getElementById("blogsList");

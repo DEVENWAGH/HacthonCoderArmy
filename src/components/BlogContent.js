@@ -2,14 +2,9 @@ export function BlogContent() {
   const template = `
     <main class="flex-grow py-4 md:py-8 bg-gray-100 dark:bg-zinc-900">
       <div class="container mx-auto px-4">
-        <div id="blogsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+        <div id="blogsList" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
           <!-- Blogs will be displayed here -->
         </div>
-        <!-- Remove draft indicator -->
-        <!-- <div id="draftIndicator" class="hidden fixed bottom-4 left-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg">
-          <p>You have a saved draft</p>
-          <button id="loadDraftBtn" class="text-orange-400 hover:text-orange-300 ml-2">Load Draft</button>
-        </div> -->
       </div>
       ${CreateBlogForm()}
     </main>

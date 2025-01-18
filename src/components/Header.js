@@ -27,10 +27,12 @@ function SearchBar() {
   return `
     <div class="w-full md:flex-1 md:max-w-xl 2xl:max-w-2xl">
       <div class="relative">
-        <input type="text" id="search-input"
-          class="w-full lg:w-[80%] lg:mr-8 xl:w-[100%] p-2 md:p-4 pl-4 pr-10 bg-gray-100 rounded-lg dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
-          placeholder="Search posts...">
-        <i class="absolute text-gray-400 -translate-y-1/2 fas fa-search right-3 lg:right-28 xl:right-6 top-1/2"></i>
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search blogs..."
+          class="w-full px-4 py-2 text-sm bg-gray-100 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+        />
       </div>
     </div>
   `;
