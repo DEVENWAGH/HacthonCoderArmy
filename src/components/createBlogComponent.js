@@ -809,44 +809,53 @@ export function createBlogComponent(blogData = {}) {
     let tags = [];
 
     if (tagsInput) {
-      // Handle Enter key press
+      // Enhanced mobile keyboard handling
       tagsInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
+        if (e.key === "Enter" || e.key === "," || e.keyCode === 13) {
           e.preventDefault();
           addTagFromInput();
         }
       });
 
-      // Handle form submission (for mobile)
+      // Handle input for mobile devices
       tagsInput.addEventListener("input", (e) => {
         const value = e.target.value;
-        if (value.endsWith(" ")) {
-          // Check for space key
+        // Check for space, comma, or Enter key from virtual keyboard
+        if (value.endsWith(" ") || value.endsWith(",")) {
           e.preventDefault();
           addTagFromInput();
         }
       });
 
-      // Add submit event on parent form for mobile
-      const form = tagsInput.closest("form");
-      if (form) {
-        form.addEventListener("submit", (e) => {
-          if (document.activeElement === tagsInput && tagsInput.value.trim()) {
-            e.preventDefault();
-            addTagFromInput();
-          }
-        });
-      }
+      // Add blur event to handle unfocus on mobile
+      tagsInput.addEventListener("blur", (e) => {
+        if (tagsInput.value.trim()) {
+          addTagFromInput();
+        }
+      });
+
+      // Prevent form submission when adding tags
+      tagsInput.closest("form")?.addEventListener("submit", (e) => {
+        if (document.activeElement === tagsInput && tagsInput.value.trim()) {
+          e.preventDefault();
+          addTagFromInput();
+        }
+      });
     }
 
     function addTagFromInput() {
-      const value = tagsInput.value.trim();
+      const value = tagsInput.value.replace(/[\s,]+$/, '').trim(); // Remove trailing spaces and commas
       if (value) {
         const tag = value.toLowerCase().replace(/[^a-z0-9-]/g, "");
         if (tag && !tags.includes(tag) && tags.length < 5) {
           tags.push(tag);
           updateTags();
           tagsInput.value = "";
+          
+          // Add haptic feedback for mobile devices
+          if (window.navigator.vibrate) {
+            window.navigator.vibrate(50);
+          }
         }
       }
     }
