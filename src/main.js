@@ -1048,6 +1048,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Initialize app
 async function initializeApp() {
+  // Ensure page starts at top
+  window.scrollTo(0, 0);
   // Check if user data exists
   const userData = localStorage.getItem("userData");
   if (!userData) {
