@@ -1814,7 +1814,7 @@ body.dark-mode .nav-profile-image {
 
   .dark-mode-toggle {
     position: absolute;
-    top: 0.8rem;
+    top: 1rem;
     right: 0.5rem;
     padding: 0.5rem;
   }
@@ -1915,7 +1915,7 @@ body.dark-mode .nav-profile-image {
   .user-profile-nav {
     position: absolute;
     top: 0.7rem;
-    right: 3.2rem;
+    right: 3.5rem;
     margin: 0;
   }
 
@@ -2012,7 +2012,7 @@ body.dark-mode .nav-profile-image {
   .user-profile-nav {
     position: absolute;
     top: 0.7rem;
-    right: 3.2rem;
+    right: 3.5rem;
     margin: 0;
   }
 
