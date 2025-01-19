@@ -24,23 +24,23 @@ export function userProfileComponent() {
   `;
 
   const initializeUserProfile = () => {
-    const modal = document.querySelector('.profile-modal');
-    const profileUpload = document.getElementById('profileUpload');
-    const profilePreview = document.getElementById('profilePreview');
-    const usernameInput = document.getElementById('usernameInput');
-    const submitBtn = document.querySelector('.submit-profile-btn');
-    const skipBtn = document.querySelector('.skip-profile-btn');
+    const modal = document.querySelector(".profile-modal");
+    const profileUpload = document.getElementById("profileUpload");
+    const profilePreview = document.getElementById("profilePreview");
+    const usernameInput = document.getElementById("usernameInput");
+    const submitBtn = document.querySelector(".submit-profile-btn");
+    const skipBtn = document.querySelector(".skip-profile-btn");
 
     // Show modal with animation
     gsap.from(modal, {
       opacity: 0,
       y: -50,
       duration: 0.5,
-      ease: "power3.out"
+      ease: "power3.out",
     });
 
     // Handle image upload
-    profileUpload.addEventListener('change', (e) => {
+    profileUpload.addEventListener("change", (e) => {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
@@ -49,7 +49,7 @@ export function userProfileComponent() {
           gsap.from(profilePreview, {
             scale: 0.5,
             opacity: 0,
-            duration: 0.3
+            duration: 0.3,
           });
         };
         reader.readAsDataURL(file);
@@ -57,27 +57,27 @@ export function userProfileComponent() {
     });
 
     // Handle form submission
-    submitBtn.addEventListener('click', () => {
+    submitBtn.addEventListener("click", () => {
       const username = usernameInput.value.trim();
       if (username) {
         const userData = {
           username,
           profileImage: profilePreview.src,
-          isAnonymous: false
+          isAnonymous: false,
         };
-        localStorage.setItem('userData', JSON.stringify(userData));
+        localStorage.setItem("userData", JSON.stringify(userData));
         closeProfileModal(modal);
       }
     });
 
     // Handle skip
-    skipBtn.addEventListener('click', () => {
+    skipBtn.addEventListener("click", () => {
       const userData = {
-        username: 'Anonymous',
-        profileImage: './user.svg',
-        isAnonymous: true
+        username: "Anonymous",
+        profileImage: "./user.svg",
+        isAnonymous: true,
       };
-      localStorage.setItem('userData', JSON.stringify(userData));
+      localStorage.setItem("userData", JSON.stringify(userData));
       closeProfileModal(modal);
     });
   };
@@ -90,8 +90,20 @@ export function userProfileComponent() {
       ease: "power3.in",
       onComplete: () => {
         modal.remove();
-        window.location.reload();
-      }
+        document.body.style.overflow = "hidden";
+
+        // Ensure window is scrolled to top before reload
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "instant",
+        });
+
+        // Add a minimal delay and reload with replace to prevent history entry
+        setTimeout(() => {
+          window.location.replace(window.location.href);
+        }, 50);
+      },
     });
   };
 

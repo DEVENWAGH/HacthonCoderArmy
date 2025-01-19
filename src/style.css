@@ -1527,6 +1527,13 @@ body.dark-mode .menu-icon:hover {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  overflow: hidden; /* Prevent scrolling when modal is open */
+}
+
+body.modal-open {
+  overflow: hidden; /* Prevent body scroll when modal is open */
+  position: fixed;
+  width: 100%;
 }
 
 .profile-container {
@@ -1694,5 +1701,77 @@ body.dark-mode .nav-profile-image {
   .search-bar i {
     top: 50%;
     left: 83%;
+  }
+}
+
+@media screen and (width: 412px) and (height: 718px),
+       screen and (max-width: 412px) and (max-height: 718px) {
+  .navbar {
+    padding: 0;
+    margin: 0;
+    height: 8rem;
+  }
+
+  .navbar-container {
+    padding: 0;
+    height: 8rem;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .logo {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    height: 3.5rem;
+    padding: 0;
+    margin: 0;
+  }
+
+  .logo:hover {
+    transform: none;
+  }
+
+  .search-bar {
+    position: absolute;
+    top: 4rem;
+    left: 0;
+    width: 100%;
+    padding: 0 1rem;
+  }
+
+  .search-bar input {
+    height: 2rem;
+    width: 100%;
+    padding: 0 2rem 0 1rem;
+    border-radius: 1rem;
+  }
+
+  .search-bar i {
+    top: 50%;
+    left: auto;
+    right: 2rem;
+  }
+
+  .user-profile-nav {
+    position: absolute;
+    top: 1rem;
+    right: 4rem;
+  }
+
+  .dark-mode-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .create-blog-btn {
+    position: absolute;
+    top: 9.3rem;
+    right: 1rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    margin: 0;
   }
 }

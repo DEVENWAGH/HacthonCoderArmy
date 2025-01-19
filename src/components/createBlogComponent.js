@@ -429,58 +429,7 @@ export function createBlogComponent(blogData = {}) {
     }
 
     // Initialize tags input with correct scope
-    const tagsInput = document.getElementById("tags-input");
-    const tagsList = document.getElementById("tags-list");
-    const tagsHidden = document.getElementById("tags-hidden");
-    let tags = [];
-
-    if (tagsInput) {
-      tagsInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && tagsInput.value.trim()) {
-          e.preventDefault();
-          const tag = tagsInput.value
-            .trim()
-            .toLowerCase()
-            .replace(/[^a-z0-9-]/g, "");
-          if (tag && !tags.includes(tag) && tags.length < 5) {
-            tags.push(tag);
-            updateTags();
-            tagsInput.value = "";
-          }
-        }
-      });
-    }
-
-    function updateTags() {
-      tagsHidden.value = JSON.stringify(tags);
-      tagsList.innerHTML = tags
-        .map(
-          (tag) => `
-        <span class="tag-item">
-          <i class="fas fa-hashtag"></i>${tag}
-          <span class="tag-remove" data-tag="${tag}">×</span>
-        </span>
-      `
-        )
-        .join("");
-
-      // Add click handlers for remove buttons
-      document.querySelectorAll(".tag-remove").forEach((button) => {
-        button.addEventListener("click", (e) => {
-          const tagToRemove = e.target.dataset.tag;
-          tags = tags.filter((t) => t !== tagToRemove);
-          updateTags();
-        });
-      });
-
-      // Animate new tag
-      gsap.from(tagsList.lastElementChild, {
-        opacity: 0,
-        scale: 0.5,
-        duration: 0.3,
-        ease: "back.out(1.7)",
-      });
-    }
+    initializeTagsInput();
   };
 
   // Move editor initialization into a separate function
@@ -552,25 +501,50 @@ export function createBlogComponent(blogData = {}) {
     const toolbarButtons = document.querySelectorAll(".editor-toolbar button");
 
     toolbarButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const command = button.getAttribute("data-command");
-        const value = button.getAttribute("data-value") || "";
+      // Use touchstart and click for better mobile response
+      ["touchstart", "click"].forEach((eventType) => {
+        button.addEventListener(
+          eventType,
+          (e) => {
+            e.preventDefault(); // Prevent double-firing on devices that support both
 
-        if (commands.includes(command)) {
-          if (command === "formatBlock") {
-            const isHeading =
-              document.queryCommandValue("formatBlock") === "h2";
-            document.execCommand("formatBlock", false, isHeading ? "p" : "h2");
-            button.classList.toggle("active", !isHeading);
-          } else {
-            document.execCommand(command, false, value);
-            button.classList.toggle(
-              "active",
-              document.queryCommandState(command)
-            );
-          }
-        }
-        editor.focus();
+            // Save current selection before executing command
+            const selection = document.getSelection();
+            const range = selection.getRangeAt(0);
+
+            // Focus editor first
+            editor.focus();
+
+            // Restore selection
+            selection.removeAllRanges();
+            selection.addRange(range);
+
+            const command = button.getAttribute("data-command");
+            const value = button.getAttribute("data-value") || "";
+
+            if (commands.includes(command)) {
+              if (command === "formatBlock") {
+                const isHeading =
+                  document.queryCommandValue("formatBlock") === "h2";
+                document.execCommand(
+                  "formatBlock",
+                  false,
+                  isHeading ? "p" : "h2"
+                );
+                button.classList.toggle("active", !isHeading);
+              } else {
+                document.execCommand(command, false, value);
+                button.classList.toggle(
+                  "active",
+                  document.queryCommandState(command)
+                );
+              }
+              updateButtonStates();
+              editor.focus();
+            }
+          },
+          { passive: false }
+        );
       });
     });
 
@@ -767,6 +741,88 @@ export function createBlogComponent(blogData = {}) {
 
       notification.addEventListener("mouseleave", () => {
         gsap.getTweensOf(progress).forEach((t) => t.resume());
+      });
+    }
+  }
+
+  // Initialize tags input
+  function initializeTagsInput() {
+    const tagsInput = document.getElementById("tags-input");
+    const tagsList = document.getElementById("tags-list");
+    const tagsHidden = document.getElementById("tags-hidden");
+    let tags = [];
+
+    if (tagsInput) {
+      // Handle Enter key press
+      tagsInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          addTagFromInput();
+        }
+      });
+
+      // Handle form submission (for mobile)
+      tagsInput.addEventListener("input", (e) => {
+        const value = e.target.value;
+        if (value.endsWith(" ")) {
+          // Check for space key
+          e.preventDefault();
+          addTagFromInput();
+        }
+      });
+
+      // Add submit event on parent form for mobile
+      const form = tagsInput.closest("form");
+      if (form) {
+        form.addEventListener("submit", (e) => {
+          if (document.activeElement === tagsInput && tagsInput.value.trim()) {
+            e.preventDefault();
+            addTagFromInput();
+          }
+        });
+      }
+    }
+
+    function addTagFromInput() {
+      const value = tagsInput.value.trim();
+      if (value) {
+        const tag = value.toLowerCase().replace(/[^a-z0-9-]/g, "");
+        if (tag && !tags.includes(tag) && tags.length < 5) {
+          tags.push(tag);
+          updateTags();
+          tagsInput.value = "";
+        }
+      }
+    }
+
+    function updateTags() {
+      tagsHidden.value = JSON.stringify(tags);
+      tagsList.innerHTML = tags
+        .map(
+          (tag) => `
+        <span class="tag-item">
+          <i class="fas fa-hashtag"></i>${tag}
+          <span class="tag-remove" data-tag="${tag}">×</span>
+        </span>
+      `
+        )
+        .join("");
+
+      // Add click handlers for remove buttons
+      document.querySelectorAll(".tag-remove").forEach((button) => {
+        button.addEventListener("click", (e) => {
+          const tagToRemove = e.target.dataset.tag;
+          tags = tags.filter((t) => t !== tagToRemove);
+          updateTags();
+        });
+      });
+
+      // Animate new tag
+      gsap.from(tagsList.lastElementChild, {
+        opacity: 0,
+        scale: 0.5,
+        duration: 0.3,
+        ease: "back.out(1.7)",
       });
     }
   }
