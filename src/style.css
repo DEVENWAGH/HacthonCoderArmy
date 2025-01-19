@@ -2076,3 +2076,50 @@ body.dark-mode .nav-profile-image {
     height: 3.5rem;
   }
 }
+
+/* Enhanced mobile touch styles */
+@media (hover: none) {
+    .save-draft-btn {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .save-draft-btn:active,
+    .save-draft-btn.active {
+        background-color: #45a049 !important;
+        transform: scale(0.95);
+        transition: transform 0.1s ease;
+    }
+
+    .editor-btn {
+        min-height: 44px;
+        min-width: 44px;
+        margin: 2px;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .editor-notification {
+        padding: 1rem 2rem;
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 414px) {
+  #createBlogFormContainer {
+    margin-top: .5rem;
+    padding: 0.5rem;
+  }
+
+  .create-blog-container {
+    margin-top: 1rem;
+  }
+
+  .logo-container {
+    margin-bottom: 0.5rem;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  #createBlogFormContainer {
+    margin-top: .5rem;
+  }
+}

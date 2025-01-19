@@ -593,6 +593,69 @@ export function createBlogComponent(blogData = {}) {
       }
     });
 
+    // Manual save draft button with touch support
+    const saveDraftBtn = document.querySelector('.save-draft-btn');
+    if (saveDraftBtn) {
+        saveDraftBtn.title = "Save Draft (Ctrl+S)";
+        
+        // Remove previous click handler and add both touch and click events
+        const saveHandler = (e) => {
+            e.preventDefault(); // Prevent default behavior
+            e.stopPropagation(); // Stop event bubbling
+            saveDraft();
+        };
+
+        // Add both touch and click events
+        saveDraftBtn.addEventListener('touchstart', saveHandler, { passive: false });
+        saveDraftBtn.addEventListener('click', saveHandler);
+
+        // Add active state for touch devices
+        saveDraftBtn.addEventListener('touchstart', function(e) {
+            this.classList.add('active');
+        });
+
+        saveDraftBtn.addEventListener('touchend', function(e) {
+            this.classList.remove('active');
+        });
+    }
+
+    // Update the saveDraft function to provide better feedback on mobile
+    function saveDraft() {
+        // Get all form values
+        const title = document.getElementById("title").value.trim();
+        const content = editor.innerHTML.trim();
+        const category = document.getElementById("category").value.trim();
+        const tags = JSON.parse(document.getElementById("tags-hidden").value || "[]");
+        const coverImage = document.getElementById("coverImagePreview").src || "";
+
+        // Check if draft has any meaningful content
+        const hasContent = title || content || category || tags.length > 0 || coverImage;
+
+        if (!hasContent) {
+            showNotification("Cannot save an empty draft.");
+            navigator.vibrate && navigator.vibrate(100); // Vibrate on mobile if available
+            return;
+        }
+
+        const draftData = {
+            title,
+            content,
+            category,
+            tags,
+            coverImage,
+            lastSaved: new Date().toISOString(),
+        };
+
+        try {
+            localStorage.setItem("blog-draft", JSON.stringify(draftData));
+            showNotification("Draft saved successfully!");
+            navigator.vibrate && navigator.vibrate([50, 50]); // Success vibration pattern
+        } catch (error) {
+            showNotification("Failed to save draft. Storage might be full.");
+            navigator.vibrate && navigator.vibrate([100, 50, 100]); // Error vibration pattern
+        }
+    }
+
     function saveDraft() {
       // Get all form values
       const title = document.getElementById("title").value.trim();
@@ -623,13 +686,6 @@ export function createBlogComponent(blogData = {}) {
 
       localStorage.setItem("blog-draft", JSON.stringify(draftData));
       showNotification("Draft saved successfully!");
-    }
-
-    // Manual save draft button
-    const saveDraftBtn = document.querySelector(".save-draft-btn");
-    if (saveDraftBtn) {
-      saveDraftBtn.title = "Save Draft (Ctrl+S)";
-      saveDraftBtn.addEventListener("click", saveDraft);
     }
 
     // Only load draft when creating new blog
